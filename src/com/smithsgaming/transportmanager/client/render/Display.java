@@ -693,13 +693,16 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Display implements Runnable
 {
-    boolean resized = false;
-    int WIDTH = 600;
-    int HEIGHT = 600;
-    private Thread runningThread;
+    private int resolutionHorizontal = 1920;
+    private int resolutionVertical = 1080;
+    private boolean fullScreen = true;
+
+    private int sizeHorizontal = resolutionHorizontal;
+    private int sizeVertical = resolutionVertical;
+    private boolean resized = false;
+
     private GLFWErrorCallback errorCallback;
     private long window;
-
 
     public Display(){
     }
@@ -715,18 +718,25 @@ public class Display implements Runnable
             glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
             glfwWindowHint(GLFW_RESIZABLE, GL11.GL_TRUE);
 
-            window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL);
-            if (window == MemoryUtil.NULL)
-                throw new RuntimeException("Failed to create the GLFW window");
-
             // Get the resolution of the primary monitor
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            // Center our window
-            glfwSetWindowPos(
-                    window,
-                    ( vidmode.width() - WIDTH ) / 2,
-                    ( vidmode.height() - HEIGHT ) / 2
-            );
+
+            if (fullScreen) {
+                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello World!", glfwGetPrimaryMonitor(), MemoryUtil.NULL);
+                if (window == MemoryUtil.NULL)
+                    throw new RuntimeException("Failed to create the GLFW window");
+            } else {
+                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL);
+                if (window == MemoryUtil.NULL)
+                    throw new RuntimeException("Failed to create the GLFW window");
+
+                // Center our window
+                glfwSetWindowPos(
+                        window,
+                        ( vidmode.width() - sizeHorizontal ) / 2,
+                        ( vidmode.height() - sizeVertical ) / 2
+                );
+            }
 
             glfwMakeContextCurrent(window);
             glfwSwapInterval(1);
@@ -742,11 +752,9 @@ public class Display implements Runnable
     }
 
     private void runRender () {
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             if (resized) {
-                GL11.glViewport(0, 0, WIDTH, HEIGHT);
+                GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
                 resized = false;
             }
 
@@ -756,8 +764,6 @@ public class Display implements Runnable
 
             glfwSwapBuffers(window); // swap the color buffers
 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
             glfwPollEvents();
         }
 
@@ -782,10 +788,8 @@ public class Display implements Runnable
             init();
             runRender();
 
-            // Destroy window and window callbacks
             glfwDestroyWindow(window);
         } finally {
-            // Terminate GLFW and free the GLFWErrorCallback
             glfwTerminate();
             errorCallback.release();
         }
