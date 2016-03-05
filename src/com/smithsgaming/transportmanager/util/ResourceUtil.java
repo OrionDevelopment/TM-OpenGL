@@ -675,120 +675,44 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.client.render;
-
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+package com.smithsgaming.transportmanager.util;
 
 import java.io.*;
-
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import java.util.*;
 
 /**
- * Main class that handles the Rendering of the Game.
- *
  * @Author Marc (Created on: 05.03.2016)
  */
-public class Display implements Runnable
-{
-    boolean resized = false;
-    int WIDTH = 600;
-    int HEIGHT = 600;
-    private Thread runningThread;
-    private GLFWErrorCallback errorCallback;
-    private long window;
-
-
-    public Display(){
-    }
-
-    private void init () {
-        System.out.println("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("java.library.path")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
-
-        try {
-            glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint());
-            if (glfwInit() != GL11.GL_TRUE) throw new IllegalStateException("Unable to initialize GLFW");
-
-            glfwDefaultWindowHints();
-            glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, GL11.GL_TRUE);
-
-            window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL);
-            if (window == MemoryUtil.NULL)
-                throw new RuntimeException("Failed to create the GLFW window");
-
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            // Center our window
-            glfwSetWindowPos(
-                    window,
-                    ( vidmode.width() - WIDTH ) / 2,
-                    ( vidmode.height() - HEIGHT ) / 2
-            );
-
-            glfwMakeContextCurrent(window);
-            glfwSwapInterval(1);
-
-            // Make the window visible
-            glfwShowWindow(window);
-
-            GL.createCapabilities();
-            glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void runRender () {
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
-            if (resized) {
-                GL11.glViewport(0, 0, WIDTH, HEIGHT);
-                resized = false;
-            }
-
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-            doRenderLoop();
-
-            glfwSwapBuffers(window); // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
-
-
-    }
-
-    private void doRenderLoop () {
-
-    }
+public class ResourceUtil {
 
     /**
-     * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
-     * causes the object's <code>run</code> method to be called in that separately executing thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may take any action whatsoever.
+     * Method to load the contents of a File in the Resources of the GameJar into memory.
      *
-     * @see Thread#run()
+     * @param filePath The path to the file in the jar.
+     *
+     * @return A String with the contents of the specific jar.
+     *
+     * @throws FileNotFoundException Exception thrown when the file does not exist.
      */
-    @Override
-    public void run () {
-        try {
-            init();
-            runRender();
+    public static String getFileContents (String filePath) throws FileNotFoundException {
+        StringBuilder result = new StringBuilder("");
 
-            // Destroy window and window callbacks
-            glfwDestroyWindow(window);
-        } finally {
-            // Terminate GLFW and free the GLFWErrorCallback
-            glfwTerminate();
-            errorCallback.release();
+        ClassLoader classLoader = ResourceUtil.class.getClassLoader();
+        File file = new File(classLoader.getResource(filePath).getFile());
+
+        try (Scanner scanner = new Scanner(file)) {
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                result.append(line).append("\n");
+            }
+
+            scanner.close();
+
+        } catch (IOException e) {
+            throw e;
         }
 
+        return result.toString();
     }
 }

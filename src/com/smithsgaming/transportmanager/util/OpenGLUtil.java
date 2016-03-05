@@ -675,120 +675,28 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.client.render;
-
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+package com.smithsgaming.transportmanager.util;
 
 import java.io.*;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-
 /**
- * Main class that handles the Rendering of the Game.
- *
  * @Author Marc (Created on: 05.03.2016)
  */
-public class Display implements Runnable
-{
-    boolean resized = false;
-    int WIDTH = 600;
-    int HEIGHT = 600;
-    private Thread runningThread;
-    private GLFWErrorCallback errorCallback;
-    private long window;
-
-
-    public Display(){
-    }
-
-    private void init () {
-        System.out.println("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("java.library.path")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
-
-        try {
-            glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint());
-            if (glfwInit() != GL11.GL_TRUE) throw new IllegalStateException("Unable to initialize GLFW");
-
-            glfwDefaultWindowHints();
-            glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, GL11.GL_TRUE);
-
-            window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL);
-            if (window == MemoryUtil.NULL)
-                throw new RuntimeException("Failed to create the GLFW window");
-
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            // Center our window
-            glfwSetWindowPos(
-                    window,
-                    ( vidmode.width() - WIDTH ) / 2,
-                    ( vidmode.height() - HEIGHT ) / 2
-            );
-
-            glfwMakeContextCurrent(window);
-            glfwSwapInterval(1);
-
-            // Make the window visible
-            glfwShowWindow(window);
-
-            GL.createCapabilities();
-            glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void runRender () {
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
-            if (resized) {
-                GL11.glViewport(0, 0, WIDTH, HEIGHT);
-                resized = false;
-            }
-
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-            doRenderLoop();
-
-            glfwSwapBuffers(window); // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
-
-
-    }
-
-    private void doRenderLoop () {
-
-    }
+public class OpenGLUtil {
 
     /**
-     * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
-     * causes the object's <code>run</code> method to be called in that separately executing thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may take any action whatsoever.
+     * Method to load a ShaderProgramm from disk. Will return the uncompiled string version of the Sourcecode. Pass this
+     * to OpenGL to make it compile the code and push it to the GPU.
      *
-     * @see Thread#run()
+     * @param shaderName The name of the Shader to load, should be the File name of the shader in the shaders directory
+     *                   without the ending. So if the filename equals: shaders/vertexshader.glsl the string that should
+     *                   be passed here is vertexshader.
+     *
+     * @return A String containing the uncompiled shader code.
+     *
+     * @throws FileNotFoundException Exception when the shader code file does not exist.
      */
-    @Override
-    public void run () {
-        try {
-            init();
-            runRender();
-
-            // Destroy window and window callbacks
-            glfwDestroyWindow(window);
-        } finally {
-            // Terminate GLFW and free the GLFWErrorCallback
-            glfwTerminate();
-            errorCallback.release();
-        }
-
+    public static String loadShader (String shaderName) throws FileNotFoundException {
+        return ResourceUtil.getFileContents("shaders/" + shaderName + ".glsl");
     }
 }
