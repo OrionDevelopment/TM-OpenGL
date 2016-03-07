@@ -835,10 +835,10 @@ public class GeometryRegistry {
     }
 
     public static class QuadGeometry extends Geometry {
-        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 0);
-        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 1).setXYZ(1, 1, 0);
-        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 0);
-        private static final TexturedVertex bottemRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 0).setRGB(1, 0, 0);
+        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
+        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 1).setXYZ(1, 1, 1);
+        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
+        private static final TexturedVertex bottemRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 0).setRGB(1, 0, 1);
 
         public QuadGeometry () {
             super(GeometryType.QUAD, new TexturedVertex[]{topLeft, topRight, bottemRight, bottomLeft});

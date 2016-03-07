@@ -756,6 +756,9 @@ public class OpenGLUtil {
 
             System.err.println("Compile failure in " + ShaderTypeString + " shader:\n" + error);
         }
+
+        checkGlState("Compile Shader");
+
         return shader;
     }
 
@@ -782,19 +785,23 @@ public class OpenGLUtil {
         GL20.glLinkProgram(program);
         GL20.glValidateProgram(program);
 
+        String log = GL20.glGetProgramInfoLog(program);
+
+        if (!log.equals("")) {
+            System.err.println("Warning OpenGL log was not empty:");
+            System.err.println(log);
+        }
+
         // Get matrices uniform locations
         projectionMatrixAdress = GL20.glGetUniformLocation(program, "projectionMatrix");
         viewMatrixAdress = GL20.glGetUniformLocation(program, "viewMatrix");
         modelMatrixAdress = GL20.glGetUniformLocation(program, "modelMatrix");
 
-        int status = GL20.glGetShaderi(program, GL20.GL_LINK_STATUS);
-        if (status == GL11.GL_FALSE) {
-            String error = GL20.glGetProgramInfoLog(program);
-            System.err.println("Linker failure: " + error);
-        }
         for (int i = 0; i < shaders.length; i++) {
             GL20.glDetachShader(program, shaders[i]);
         }
+
+        checkGlState("Link Shader Program");
 
         return program;
     }
@@ -816,6 +823,9 @@ public class OpenGLUtil {
         shaders[1] = compileShader(GL20.GL_FRAGMENT_SHADER, loadShaderSourceCode("fragmentShaderColor"));
 
         Shaders.defaultShader = linkShaders(shaders);
+
+        checkGlState("Load default shader:");
+
         return Shaders.defaultShader;
     }
 
@@ -853,11 +863,13 @@ public class OpenGLUtil {
         geometry.setOpenGLVertaxArrayId(arrayBuffer);
         geometry.setOpenGLVertexDataId(dataBuffer);
         geometry.setOpenGLVertexIndexID(indicesBuffer);
+
+        checkGlState("Load Geometry");
     }
 
     public static void loadTextureIntoGPU (TextureRegistry.Texture texture) {
         int texId = GL11.glGenTextures();
-        GL13.glActiveTexture(0);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
 
         // All RGB bytes are aligned to each other and each component is 1 byte
@@ -879,7 +891,9 @@ public class OpenGLUtil {
                 GL11.GL_LINEAR_MIPMAP_LINEAR);
 
         texture.setOpenGLTextureId(texId);
-        texture.setBoundTextureUnit(0);
+        texture.setBoundTextureUnit(GL13.GL_TEXTURE0);
+
+        checkGlState("Load Texture");
     }
 
     /**
@@ -928,6 +942,7 @@ public class OpenGLUtil {
 
         GL20.glUseProgram(0);
 
+        checkGlState("Render Geometry");
     }
 
 
@@ -1038,6 +1053,14 @@ public class OpenGLUtil {
 
         modelMatrix.store(modelMatrixBuffer);
         modelMatrixBuffer.flip();
+    }
+
+    private static void checkGlState (String snapshotMoment) {
+        int errorValue = GL11.glGetError();
+
+        if (errorValue != GL11.GL_NO_ERROR) {
+            System.err.println("ERROR - " + snapshotMoment + ": " + errorValue);
+        }
     }
 
     public static class Shaders {

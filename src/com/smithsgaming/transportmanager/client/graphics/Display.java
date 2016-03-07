@@ -705,6 +705,8 @@ public class Display implements Runnable
 
     private GLFWErrorCallback errorCallback;
     private GLFWFramebufferSizeCallback resizeWindow;
+    private GLDebugMessageCallback debugMessageKHRCallback;
+
     private long window;
 
     public Display(){
@@ -715,6 +717,14 @@ public class Display implements Runnable
 
         try {
             glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint());
+
+            debugMessageKHRCallback = new GLDebugMessageCallback() {
+                @Override
+                public void invoke (int source, int type, int id, int severity, int length, long message, long userParam) {
+                    System.out.println(GLDebugMessageCallback.getMessage(length, message));
+                }
+            };
+
             if (glfwInit() != GL11.GL_TRUE) throw new IllegalStateException("Unable to initialize GLFW");
 
             glfwDefaultWindowHints();
@@ -759,6 +769,9 @@ public class Display implements Runnable
             glfwShowWindow(window);
 
             GL.createCapabilities();
+
+            KHRDebug.glDebugMessageCallback(debugMessageKHRCallback, 0);
+
             glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         } catch (Exception ex) {
             ex.printStackTrace();
