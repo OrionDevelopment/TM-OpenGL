@@ -675,78 +675,85 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.util;
+package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import de.matthiasmann.twl.utils.*;
+import com.smithsgaming.transportmanager.util.*;
 
-import java.io.*;
 import java.nio.*;
 import java.util.*;
 
 /**
- * @Author Marc (Created on: 05.03.2016)
+ * @Author Marc (Created on: 06.03.2016)
  */
-public class ResourceUtil {
+public class TextureRegistry {
+    public static final TextureRegistry instance = new TextureRegistry();
 
-    /**
-     * Method to load the contents of a File in the Resources of the GameJar into memory.
-     *
-     * @param filePath The path to the file in the jar.
-     *
-     * @return A String with the contents of the specific jar.
-     *
-     * @throws FileNotFoundException Exception thrown when the file does not exist.
-     */
-    public static String getFileContents (String filePath) throws FileNotFoundException {
-        StringBuilder result = new StringBuilder("");
+    public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
 
-        ClassLoader classLoader = ResourceUtil.class.getClassLoader();
-        File file = new File(classLoader.getResource(filePath).getFile());
-
-        try (Scanner scanner = new Scanner(file)) {
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                result.append(line).append("\n");
-            }
-
-            scanner.close();
-
-        } catch (IOException e) {
-            throw e;
-        }
-
-        return result.toString();
+    private TextureRegistry () {
     }
 
-    public static TextureRegistry.Texture loadPNGTexture (String fileName) {
-        ByteBuffer buf = null;
-        int width = 0;
-        int height = 0;
+    public Texture loadTexture (String fileName) {
+        Texture texture = ResourceUtil.loadPNGTexture(fileName);
+        OpenGLUtil.loadTextureIntoGPU(texture);
 
-        try {
-            // Open the PNG file as an InputStream
-            InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
-            // Link the PNG decoder to this stream
-            PNGDecoder decoder = new PNGDecoder(in);
+        bufferedTextures.put(texture.getOpenGLTextureId(), texture);
 
-            // Get the width and height of the texture
-            width = decoder.getWidth();
-            height = decoder.getHeight();
+        return texture;
+    }
 
+    public Texture getTextureForOpenGLID (int id) {
+        return bufferedTextures.get(id);
+    }
 
-            // Decode the PNG file in a ByteBuffer
-            buf = ByteBuffer.allocateDirect(
-                    4 * decoder.getWidth() * decoder.getHeight());
-            decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            buf.flip();
+    public static class Texture {
+        private ByteBuffer data;
+        private int width;
+        private int height;
 
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        private int openGLTextureId;
+        private int boundTextureUnit;
+
+        public Texture (ByteBuffer data, int width, int height) {
+            this.data = data;
+            this.width = width;
+            this.height = height;
         }
 
-        return new TextureRegistry.Texture(buf, width, height);
+        public ByteBuffer getData () {
+            return data;
+        }
+
+        public int getWidth () {
+            return width;
+        }
+
+        public int getHeight () {
+            return height;
+        }
+
+        public int getOpenGLTextureId () {
+            return openGLTextureId;
+        }
+
+        public void setOpenGLTextureId (int openGLTextureId) {
+            this.openGLTextureId = openGLTextureId;
+        }
+
+        public int getBoundTextureUnit () {
+            return boundTextureUnit;
+        }
+
+        public void setBoundTextureUnit (int boundTextureUnit) {
+            this.boundTextureUnit = boundTextureUnit;
+        }
+    }
+
+    public static class Textures {
+        public static Texture deepWater;
+
+        public static void init () {
+            deepWater = TextureRegistry.instance.loadTexture("/textures/deepWater_0.png");
+        }
     }
 }

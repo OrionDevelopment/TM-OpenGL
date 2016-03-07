@@ -677,76 +677,106 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import de.matthiasmann.twl.utils.*;
-
-import java.io.*;
-import java.nio.*;
-import java.util.*;
-
 /**
- * @Author Marc (Created on: 05.03.2016)
+ * @Author Marc (Created on: 06.03.2016)
  */
-public class ResourceUtil {
+public class TexturedVertex {
+    // The amount of bytes an element has
+    public static final int elementBytes = 4;
+    // Elements per parameter
+    public static final int positionElementCount = 4;
+    public static final int colorElementCount = 4;
+    public static final int textureElementCount = 2;
+    // Bytes per parameter
+    public static final int positionBytesCount = positionElementCount * elementBytes;
+    public static final int colorByteCount = colorElementCount * elementBytes;
+    public static final int textureByteCount = textureElementCount * elementBytes;
+    // Byte offsets per parameter
+    public static final int positionByteOffset = 0;
+    public static final int colorByteOffset = positionByteOffset + positionBytesCount;
+    public static final int textureByteOffset = colorByteOffset + colorByteCount;
+    // The amount of elements that a vertex has
+    public static final int elementCount = positionElementCount +
+            colorElementCount + textureElementCount;
+    // The size of a vertex in bytes, like in C/C++: sizeof(Vertex)
+    public static final int stride = positionBytesCount + colorByteCount +
+            textureByteCount;
+    // Vertex data
+    private float[] xyzw = new float[]{0f, 0f, 0f, 1f};
+    private float[] rgba = new float[]{1f, 1f, 1f, 1f};
+    private float[] st = new float[]{0f, 0f};
 
-    /**
-     * Method to load the contents of a File in the Resources of the GameJar into memory.
-     *
-     * @param filePath The path to the file in the jar.
-     *
-     * @return A String with the contents of the specific jar.
-     *
-     * @throws FileNotFoundException Exception thrown when the file does not exist.
-     */
-    public static String getFileContents (String filePath) throws FileNotFoundException {
-        StringBuilder result = new StringBuilder("");
+    // Setters
+    public TexturedVertex setXYZ (float x, float y, float z) {
+        this.setXYZW(x, y, z, 1f);
 
-        ClassLoader classLoader = ResourceUtil.class.getClassLoader();
-        File file = new File(classLoader.getResource(filePath).getFile());
-
-        try (Scanner scanner = new Scanner(file)) {
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                result.append(line).append("\n");
-            }
-
-            scanner.close();
-
-        } catch (IOException e) {
-            throw e;
-        }
-
-        return result.toString();
+        return this;
     }
 
-    public static TextureRegistry.Texture loadPNGTexture (String fileName) {
-        ByteBuffer buf = null;
-        int width = 0;
-        int height = 0;
+    public TexturedVertex setRGB (float r, float g, float b) {
+        this.setRGBA(r, g, b, 1f);
 
-        try {
-            // Open the PNG file as an InputStream
-            InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
-            // Link the PNG decoder to this stream
-            PNGDecoder decoder = new PNGDecoder(in);
-
-            // Get the width and height of the texture
-            width = decoder.getWidth();
-            height = decoder.getHeight();
-
-
-            // Decode the PNG file in a ByteBuffer
-            buf = ByteBuffer.allocateDirect(
-                    4 * decoder.getWidth() * decoder.getHeight());
-            decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            buf.flip();
-
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new TextureRegistry.Texture(buf, width, height);
+        return this;
     }
+
+    public TexturedVertex setST (float s, float t) {
+        this.st = new float[]{s, t};
+
+        return this;
+    }
+
+    public TexturedVertex setXYZW (float x, float y, float z, float w) {
+        this.xyzw = new float[]{x, y, z, w};
+
+        return this;
+    }
+
+    public TexturedVertex setRGBA (float r, float g, float b, float a) {
+        this.rgba = new float[]{r, g, b, a};
+
+        return this;
+    }
+
+    // Getters
+    public float[] getElements () {
+        float[] out = new float[TexturedVertex.elementCount];
+        int i = 0;
+
+        // Insert XYZW elements
+        out[i++] = this.xyzw[0];
+        out[i++] = this.xyzw[1];
+        out[i++] = this.xyzw[2];
+        out[i++] = this.xyzw[3];
+        // Insert RGBA elements
+        out[i++] = this.rgba[0];
+        out[i++] = this.rgba[1];
+        out[i++] = this.rgba[2];
+        out[i++] = this.rgba[3];
+        // Insert ST elements
+        out[i++] = this.st[0];
+        out[i++] = this.st[1];
+
+        return out;
+    }
+
+    public float[] getXYZW () {
+        return new float[]{this.xyzw[0], this.xyzw[1], this.xyzw[2], this.xyzw[3]};
+    }
+
+    public float[] getXYZ () {
+        return new float[]{this.xyzw[0], this.xyzw[1], this.xyzw[2]};
+    }
+
+    public float[] getRGBA () {
+        return new float[]{this.rgba[0], this.rgba[1], this.rgba[2], this.rgba[3]};
+    }
+
+    public float[] getRGB () {
+        return new float[]{this.rgba[0], this.rgba[1], this.rgba[2]};
+    }
+
+    public float[] getST () {
+        return new float[]{this.st[0], this.st[1]};
+    }
+
 }

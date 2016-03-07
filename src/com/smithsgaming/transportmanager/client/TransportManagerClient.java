@@ -677,6 +677,13 @@
 
 package com.smithsgaming.transportmanager.client;
 
+import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.util.*;
+
+import java.io.*;
+
+
 /**
  * This class is responsible for handling all the parts of Transport Manager that you can see and interact with. It
  * handle the communication between You and the program in the form of Key and Mouse inputs as well as outputs through
@@ -686,6 +693,10 @@ package com.smithsgaming.transportmanager.client;
  */
 public class TransportManagerClient implements Runnable {
 
+    public static TransportManagerClient instance = new TransportManagerClient();
+
+    static Display display;
+    static Thread displayThread;
 
     /**
      * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
@@ -697,6 +708,19 @@ public class TransportManagerClient implements Runnable {
      */
     @Override
     public void run () {
+        display = new Display();
+        displayThread = new Thread(display, "TM-OpenGL - Display");
 
+        displayThread.start();
+    }
+
+    public void initGraphics () {
+        TextureRegistry.Textures.init();
+        try {
+            OpenGLUtil.loadDefaultShaderProgramm();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 }

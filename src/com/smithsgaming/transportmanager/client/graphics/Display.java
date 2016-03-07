@@ -675,8 +675,10 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.client.render;
+package com.smithsgaming.transportmanager.client.graphics;
 
+import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.render.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -693,15 +695,16 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Display implements Runnable
 {
-    private int resolutionHorizontal = 1920;
-    private int resolutionVertical = 1080;
-    private boolean fullScreen = true;
+    private int resolutionHorizontal = 1240;
+    private int resolutionVertical = 720;
+    private boolean fullScreen = false;
 
     private int sizeHorizontal = resolutionHorizontal;
     private int sizeVertical = resolutionVertical;
     private boolean resized = false;
 
     private GLFWErrorCallback errorCallback;
+    private GLFWFramebufferSizeCallback resizeWindow;
     private long window;
 
     public Display(){
@@ -738,6 +741,17 @@ public class Display implements Runnable
                 );
             }
 
+            resizeWindow = new GLFWFramebufferSizeCallback() {
+                @Override
+                public void invoke (long window, int width, int height) {
+                    resized = true;
+                    sizeVertical = height;
+                    sizeHorizontal = width;
+                }
+            };
+
+            glfwSetFramebufferSizeCallback(window, resizeWindow);
+
             glfwMakeContextCurrent(window);
             glfwSwapInterval(1);
 
@@ -745,7 +759,7 @@ public class Display implements Runnable
             glfwShowWindow(window);
 
             GL.createCapabilities();
-            glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
+            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -771,7 +785,7 @@ public class Display implements Runnable
     }
 
     private void doRenderLoop () {
-
+        RenderHandler.doRender();
     }
 
     /**
@@ -786,6 +800,9 @@ public class Display implements Runnable
     public void run () {
         try {
             init();
+
+            TransportManagerClient.instance.initGraphics();
+
             runRender();
 
             glfwDestroyWindow(window);
