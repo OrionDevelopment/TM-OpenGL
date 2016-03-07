@@ -692,5 +692,6 @@ public class WorldRenderer implements IRenderer {
     @Override
     public void render () {
         OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, OpenGLUtil.Shaders.defaultShader);
+        OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultTriangleGeometry(), TextureRegistry.Textures.deepWater, OpenGLUtil.Shaders.defaultShader);
     }
 }

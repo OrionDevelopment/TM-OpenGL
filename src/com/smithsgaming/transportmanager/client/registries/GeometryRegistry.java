@@ -735,6 +735,12 @@ public class GeometryRegistry {
         return openGLGeometryMap.get(openGLID);
     }
 
+    public void unLoad () {
+        openGLGeometryMap.values().forEach(OpenGLUtil::deleteGeometry);
+
+        openGLGeometryMap.clear();
+    }
+
     public enum GeometryType {
         TRIANGLE(3, GL11.GL_TRIANGLES, (byte) 0, (byte) 1, (byte) 2),
         QUAD(6, GL11.GL_TRIANGLE_STRIP, (byte) 0, (byte) 1, (byte) 2, (byte) 0, (byte) 2, (byte) 3);
@@ -785,9 +791,9 @@ public class GeometryRegistry {
         }
 
         public FloatBuffer getBufferData () {
-            FloatBuffer data = FloatBuffer.allocate(type.vertexOrder.length * TexturedVertex.stride);
-            for (byte vertexIndex : type.vertexOrder) {
-                data.put(vertices[(int) vertexIndex].getElements());
+            FloatBuffer data = BufferUtils.createFloatBuffer(TexturedVertex.stride * vertices.length);
+            for (TexturedVertex vertex : vertices) {
+                data.put(vertex.getElements());
             }
 
             data.flip();
@@ -825,9 +831,9 @@ public class GeometryRegistry {
     }
 
     public static class TriangleGeometry extends Geometry {
-        private static final TexturedVertex top = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 0);
-        private static final TexturedVertex left = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 0);
-        private static final TexturedVertex right = new TexturedVertex().setRGB(1f, 1f, 1f).setST(1, 0).setRGB(1, 0, 0);
+        private static final TexturedVertex top = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
+        private static final TexturedVertex left = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
+        private static final TexturedVertex right = new TexturedVertex().setRGB(1f, 1f, 1f).setST(1, 0).setXYZ(1, 0, 1);
 
         public TriangleGeometry () {
             super(GeometryType.TRIANGLE, new TexturedVertex[]{top, right, left});
@@ -835,10 +841,10 @@ public class GeometryRegistry {
     }
 
     public static class QuadGeometry extends Geometry {
-        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
-        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 1).setXYZ(1, 1, 1);
-        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
-        private static final TexturedVertex bottemRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 0).setRGB(1, 0, 1);
+        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 0);
+        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 1).setXYZ(1, 1, 0);
+        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 0);
+        private static final TexturedVertex bottemRight = new TexturedVertex().setRGB(0f, 1f, 1f).setST(1, 0).setXYZ(0, 1, 0);
 
         public QuadGeometry () {
             super(GeometryType.QUAD, new TexturedVertex[]{topLeft, topRight, bottemRight, bottomLeft});

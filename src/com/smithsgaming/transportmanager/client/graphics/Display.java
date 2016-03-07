@@ -814,12 +814,14 @@ public class Display implements Runnable
         try {
             init();
 
-            TransportManagerClient.instance.initGraphics();
+            TransportManagerClient.instance.loadGraphics();
 
             runRender();
 
             glfwDestroyWindow(window);
         } finally {
+
+
             glfwTerminate();
             errorCallback.release();
         }

@@ -706,6 +706,12 @@ public class TextureRegistry {
         return bufferedTextures.get(id);
     }
 
+    public void unLoad () {
+        bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);
+
+        bufferedTextures.clear();
+    }
+
     public static class Texture {
         private ByteBuffer data;
         private int width;

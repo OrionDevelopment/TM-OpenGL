@@ -714,7 +714,7 @@ public class TransportManagerClient implements Runnable {
         displayThread.start();
     }
 
-    public void initGraphics () {
+    public void loadGraphics () {
         TextureRegistry.Textures.init();
         try {
             OpenGLUtil.loadDefaultShaderProgramm();
@@ -722,5 +722,12 @@ public class TransportManagerClient implements Runnable {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    public void unLoadGraphics () {
+        TextureRegistry.instance.unLoad();
+        GeometryRegistry.instance.unLoad();
+
+        OpenGLUtil.deleteShader(OpenGLUtil.Shaders.defaultShader);
     }
 }

@@ -824,7 +824,7 @@ public class OpenGLUtil {
 
         Shaders.defaultShader = linkShaders(shaders);
 
-        checkGlState("Load default shader:");
+        checkGlState("Load Default Shader");
 
         return Shaders.defaultShader;
     }
@@ -926,18 +926,17 @@ public class OpenGLUtil {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexDataId());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());
-
         GL11.glDrawArrays(geometry.getType().getOpenGLRenderType(), 0, geometry.getType().getVertexCount());
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
 
         GL20.glUseProgram(0);
@@ -996,7 +995,7 @@ public class OpenGLUtil {
     @JavadocExclude
     private static void createProjectionMatrix () {
         Matrix4f matrix4f = new Matrix4f();
-        float near_plane = 0.1f;
+        float near_plane = 0f;
         float far_plane = 100f;
 
         float y_scale = (float) ( 1f / ( Math.tan(( FOV / 2 ) * ( Math.PI / 180 )) ) );
@@ -1055,6 +1054,39 @@ public class OpenGLUtil {
         modelMatrixBuffer.flip();
     }
 
+    public static void destroyTexture (TextureRegistry.Texture texture) {
+        GL11.glDeleteTextures(texture.getOpenGLTextureId());
+    }
+
+    public static void deleteGeometry (GeometryRegistry.Geometry geometry) {
+        // Select the VAO
+        GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
+
+        // Disable the VBO index from the VAO attributes list
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+
+        // Delete the vertex VBO
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL15.glDeleteBuffers(geometry.getOpenGLVertexDataId());
+
+        // Delete the index VBO
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+        GL15.glDeleteBuffers(geometry.getOpenGLVertexIndexID());
+
+        // Delete the VAO
+        GL30.glBindVertexArray(0);
+        GL30.glDeleteVertexArrays(geometry.getOpenGLVertaxArrayId());
+
+    }
+
+    public static void deleteShader (int programmId) {
+        GL20.glUseProgram(0);
+        GL20.glDeleteProgram(programmId);
+
+    }
+
     private static void checkGlState (String snapshotMoment) {
         int errorValue = GL11.glGetError();
 
@@ -1066,10 +1098,5 @@ public class OpenGLUtil {
     public static class Shaders {
         public static Integer defaultShader = null;
     }
-
-    public static class VertexBuffers {
-        public static Integer triangle = null;
-    }
-
 
 }
