@@ -772,7 +772,7 @@ public class Display implements Runnable
 
             KHRDebug.glDebugMessageCallback(debugMessageKHRCallback, 0);
 
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
