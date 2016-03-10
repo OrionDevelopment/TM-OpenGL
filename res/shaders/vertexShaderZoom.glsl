@@ -1,4 +1,4 @@
-#version 150 core
+#version 330
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -13,7 +13,7 @@ out vec2 pass_TextureCoord;
 
 void main(void) {
 	// Override gl_Position with our new calculated position
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * in_Position;
+	gl_Position = projectionMatrix * in_Position;
 	
 	pass_Color = in_Color;
 	pass_TextureCoord = in_TextureCoord;
