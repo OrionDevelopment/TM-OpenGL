@@ -995,7 +995,7 @@ public class OpenGLUtil {
     @JavadocExclude
     private static void createProjectionMatrix () {
         Matrix4f matrix4f = new Matrix4f();
-        float near_plane = -1f;
+        float near_plane = 0.1f;
         float far_plane = 100f;
 
         float y_scale = (float) ( 1f / ( Math.tan(( FOV / 2 ) * ( Math.PI / 180 )) ) );
@@ -1008,8 +1008,6 @@ public class OpenGLUtil {
         matrix4f.m23 = -1;
         matrix4f.m32 = -( ( 2 * near_plane * far_plane ) / frustrum_length );
         matrix4f.m33 = 0;
-
-        matrix4f.setIdentity();
 
         setProjectionMatrix(matrix4f);
     }
