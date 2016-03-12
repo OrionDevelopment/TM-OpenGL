@@ -1002,7 +1002,7 @@ public class OpenGLUtil {
     private static void createCameraMatrix () {
         Matrix4f matrix4f = new Matrix4f();
 
-        matrix4f.rotate((float) Math.PI, new Vector3f(1,0,0));
+        matrix4f.translate(new Vector3f(0,0,10f));
 
         setViewMatrix(matrix4f);
     }

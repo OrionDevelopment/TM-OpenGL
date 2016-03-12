@@ -11,8 +11,10 @@ out vec4 pass_Color;
 out vec2 pass_TextureCoord;
 
 void main(void) {
+    vec4 flippedPosition = vec4(in_Position.x, in_Position.y, -1 * in_Position.z, in_Position.w);
+
 	// Override gl_Position with our new calculated position
-	gl_Position = projectionMatrix * in_Position;
+	gl_Position = viewMatrix * projectionMatrix * flippedPosition;
     //gl_Position = in_Position;
 
 
