@@ -679,6 +679,7 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -757,6 +758,8 @@ public class Display implements Runnable
                     resized = true;
                     sizeVertical = height;
                     sizeHorizontal = width;
+
+                    OpenGLUtil.setAspectRatio(((float) width / (float) height));
                 }
             };
 

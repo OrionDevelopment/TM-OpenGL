@@ -927,12 +927,12 @@ public class OpenGLUtil {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexDataId());
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        GL11.glDrawArrays(geometry.getType().getOpenGLRenderType(), 0, geometry.getType().getVertexCount());
+        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getType().getVertexCount(), GL11.GL_UNSIGNED_BYTE, 0);
 
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
@@ -970,7 +970,7 @@ public class OpenGLUtil {
     public static void setFOV (float FOV) {
         OpenGLUtil.FOV = FOV;
 
-        projectionMatrix = null;
+        createProjectionMatrix();
     }
 
     /**
@@ -990,7 +990,7 @@ public class OpenGLUtil {
     public static void setAspectRatio (float aspectRatio) {
         OpenGLUtil.aspectRatio = aspectRatio;
 
-        projectionMatrix = null;
+        createProjectionMatrix();
     }
 
     @JavadocExclude
