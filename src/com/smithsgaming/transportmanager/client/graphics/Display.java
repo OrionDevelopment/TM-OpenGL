@@ -793,8 +793,6 @@ public class Display implements Runnable
 
             glfwPollEvents();
         }
-
-
     }
 
     private void doRenderLoop () {
@@ -820,11 +818,18 @@ public class Display implements Runnable
 
             glfwDestroyWindow(window);
         } finally {
-
+            TransportManagerClient.instance.unLoadGraphics();
 
             glfwTerminate();
             errorCallback.release();
         }
+    }
 
+    public int getResolutionHorizontal() {
+        return resolutionHorizontal;
+    }
+
+    public int getResolutionVertical() {
+        return resolutionVertical;
     }
 }

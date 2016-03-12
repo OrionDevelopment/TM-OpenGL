@@ -695,8 +695,8 @@ public class TransportManagerClient implements Runnable {
 
     public static TransportManagerClient instance = new TransportManagerClient();
 
-    static Display display;
-    static Thread displayThread;
+    private static Display display;
+    private static Thread displayThread;
 
     /**
      * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
@@ -729,5 +729,9 @@ public class TransportManagerClient implements Runnable {
         GeometryRegistry.instance.unLoad();
 
         OpenGLUtil.deleteShader(OpenGLUtil.Shaders.defaultShader);
+    }
+
+    public static Display getDisplay() {
+        return display;
     }
 }

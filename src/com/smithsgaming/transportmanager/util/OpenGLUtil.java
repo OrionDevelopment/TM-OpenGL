@@ -677,6 +677,7 @@
 
 package com.smithsgaming.transportmanager.util;
 
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.registries.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
@@ -694,7 +695,7 @@ import java.nio.*;
 public class OpenGLUtil {
 
     private static float FOV = 60f;
-    private static float aspectRatio = 1920F / 1080F;
+    private static float aspectRatio = ((float) TransportManagerClient.getDisplay().getResolutionHorizontal() / (float)TransportManagerClient.getDisplay().getResolutionVertical());
 
     private static Matrix4f projectionMatrix;
     private static Matrix4f viewMatrix;
@@ -994,27 +995,16 @@ public class OpenGLUtil {
 
     @JavadocExclude
     private static void createProjectionMatrix () {
-        Matrix4f matrix4f = new Matrix4f();
-        float near_plane = 0.1f;
-        float far_plane = 100f;
-
-        float y_scale = (float) ( 1f / ( Math.tan(( FOV / 2 ) * ( Math.PI / 180 )) ) );
-        float x_scale = y_scale / aspectRatio;
-        float frustrum_length = far_plane - near_plane;
-
-        matrix4f.m00 = x_scale;
-        matrix4f.m11 = y_scale;
-        matrix4f.m22 = -( ( far_plane + near_plane ) / frustrum_length );
-        matrix4f.m23 = -1;
-        matrix4f.m32 = -( ( 2 * near_plane * far_plane ) / frustrum_length );
-        matrix4f.m33 = 0;
-
-        setProjectionMatrix(matrix4f);
+        setProjectionMatrix(MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(FOV), aspectRatio, 0.1f, 100f));
     }
 
     @JavadocExclude
     private static void createCameraMatrix () {
-        setViewMatrix(new Matrix4f());
+        Matrix4f matrix4f = new Matrix4f();
+
+        matrix4f.rotate((float) Math.PI, new Vector3f(1,0,0));
+
+        setViewMatrix(matrix4f);
     }
 
     private static void createModelMatrix () {
