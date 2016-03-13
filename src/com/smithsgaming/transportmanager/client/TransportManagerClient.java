@@ -677,11 +677,12 @@
 
 package com.smithsgaming.transportmanager.client;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.graphics.Display;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
 
-import java.io.*;
+import java.io.FileNotFoundException;
 
 
 /**
@@ -697,6 +698,10 @@ public class TransportManagerClient implements Runnable {
 
     private static Display display;
     private static Thread displayThread;
+
+    public static Display getDisplay() {
+        return display;
+    }
 
     /**
      * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
@@ -729,9 +734,5 @@ public class TransportManagerClient implements Runnable {
         GeometryRegistry.instance.unLoad();
 
         OpenGLUtil.deleteShader(OpenGLUtil.Shaders.defaultShader);
-    }
-
-    public static Display getDisplay() {
-        return display;
     }
 }

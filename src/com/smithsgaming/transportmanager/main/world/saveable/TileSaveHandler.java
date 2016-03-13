@@ -675,181 +675,126 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.client.registries;
+package com.smithsgaming.transportmanager.main.world.saveable;
 
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.TexturedVertex;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
+import com.smithsgaming.transportmanager.main.world.tiles.ITileEntityProvider;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
+import org.jnbt.CompoundTag;
+import org.jnbt.IntTag;
+import org.jnbt.StringTag;
+import org.jnbt.Tag;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @Author Marc (Created on: 06.03.2016)
+ * Created by marcf on 3/13/2016.
  */
-public class GeometryRegistry {
-    public static final GeometryRegistry instance = new GeometryRegistry();
+public class TileSaveHandler {
 
-    private static Integer triangleOpenGLID = null;
-    private static Integer quadOpenGLID = null;
+    private World world;
 
-    private HashMap<Integer, Geometry> openGLGeometryMap = new HashMap<>();
-
-    private GeometryRegistry () {
+    public TileSaveHandler(World world) {
+        this.world = world;
     }
 
-    public static int getDefaultTriangleGeometryOpenGLID () {
-        if (triangleOpenGLID != null)
-            return triangleOpenGLID;
+    public CompoundTag getTagForTile(Chunk chunk, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+        Map<String, Tag> dataMap = new HashMap<>();
 
-        triangleOpenGLID = instance.registerNewGeometry(new TriangleGeometry());
+        dataMap.put(Tags.TILECHUNKPOSX, new IntTag(Tags.TILECHUNKPOSX, tileChunkPosX));
+        dataMap.put(Tags.TILECHUNKPOSY, new IntTag(Tags.TILECHUNKPOSY, tileChunkPosY));
+        dataMap.put(Tags.TILECHUNKPOSZ, new IntTag(Tags.TILECHUNKPOSZ, tileChunkPosZ));
 
-        return triangleOpenGLID;
-    }
+        Tile tile = chunk.getTileOnPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        if (tile == null) {
+            dataMap.put(Tags.TILEIDENTITY, new StringTag(Tags.TILEIDENTITY, TileRegistry.NULLTILEIDENTITY));
+        } else {
+            dataMap.put(Tags.TILEIDENTITY, new StringTag(Tags.TILEIDENTITY, tile.getIdentity()));
 
-    public static TriangleGeometry getDefaultTriangleGeometry () {
-        return (TriangleGeometry) instance.getGeometryForOpenGLID(getDefaultTriangleGeometryOpenGLID());
-    }
+            if (tile instanceof ITileEntityProvider) {
+                ITileEntityProvider iTileEntityProvider = (ITileEntityProvider) tile;
 
-    public static int getDefaultQuadGeometryOpenGLID () {
-        if (quadOpenGLID != null)
-            return quadOpenGLID;
-
-        quadOpenGLID = instance.registerNewGeometry(new QuadGeometry());
-
-        return quadOpenGLID;
-    }
-
-    public static QuadGeometry getDefaultQuadGeometry () {
-        return (QuadGeometry) instance.getGeometryForOpenGLID(getDefaultQuadGeometryOpenGLID());
-    }
-
-    public int registerNewGeometry (Geometry geometry) {
-        OpenGLUtil.loadGeometryIntoGPU(geometry);
-        openGLGeometryMap.put(geometry.getOpenGLVertaxArrayId(), geometry);
-
-        return geometry.getOpenGLVertaxArrayId();
-    }
-
-    public Geometry getGeometryForOpenGLID (int openGLID) {
-        return openGLGeometryMap.get(openGLID);
-    }
-
-    public void unLoad () {
-        openGLGeometryMap.values().forEach(OpenGLUtil::deleteGeometry);
-
-        openGLGeometryMap.clear();
-    }
-
-    public enum GeometryType {
-        TRIANGLE(3, GL11.GL_TRIANGLES, (byte) 0, (byte) 1, (byte) 2),
-        QUAD(4, GL11.GL_TRIANGLE_STRIP, (byte) 0, (byte) 1, (byte) 2, (byte) 3);
-
-        private int vertexCount;
-        private byte[] vertexOrder;
-        private int openGLRenderType;
-
-        GeometryType (int vertexCount, int openGLRenderType, byte... vertexOrder) {
-            this.vertexCount = vertexCount;
-            this.openGLRenderType = openGLRenderType;
-            this.vertexOrder = vertexOrder;
-        }
-
-        public int getOpenGLRenderType () {
-            return openGLRenderType;
-        }
-
-        public byte[] getVertexOrder () {
-            return vertexOrder;
-        }
-
-        public int getVertexCount () {
-
-            return vertexCount;
-        }
-
-        public ByteBuffer getIndicesBuffer () {
-            ByteBuffer indicesBuffer = BufferUtils.createByteBuffer(vertexOrder.length);
-            indicesBuffer.put(vertexOrder);
-            indicesBuffer.flip();
-
-            return indicesBuffer;
-        }
-    }
-
-    public static class Geometry {
-        GeometryType type;
-        TexturedVertex[] vertices;
-
-        int openGLVertaxArrayId;
-        int openGLVertexDataId;
-        int openGLVertexIndexID;
-
-        public Geometry (GeometryType type, TexturedVertex[] vertices) {
-            this.type = type;
-            this.vertices = vertices;
-        }
-
-        public FloatBuffer getBufferData () {
-            FloatBuffer data = BufferUtils.createFloatBuffer(TexturedVertex.stride * vertices.length);
-            for (TexturedVertex vertex : vertices) {
-                data.put(vertex.getElements());
+                dataMap.put(Tags.TILEENTITYDATA, getTagForTileEntity(chunk, tileChunkPosX, tileChunkPosY, tileChunkPosZ));
             }
-
-            data.flip();
-
-            return data;
         }
 
-        public GeometryType getType () {
-            return type;
-        }
-
-        public int getOpenGLVertaxArrayId () {
-            return openGLVertaxArrayId;
-        }
-
-        public void setOpenGLVertaxArrayId (int openGLVertaxArrayId) {
-            this.openGLVertaxArrayId = openGLVertaxArrayId;
-        }
-
-        public int getOpenGLVertexDataId () {
-            return openGLVertexDataId;
-        }
-
-        public void setOpenGLVertexDataId (int openGLVertexDataId) {
-            this.openGLVertexDataId = openGLVertexDataId;
-        }
-
-        public int getOpenGLVertexIndexID () {
-            return openGLVertexIndexID;
-        }
-
-        public void setOpenGLVertexIndexID (int openGLVertexIndexID) {
-            this.openGLVertexIndexID = openGLVertexIndexID;
-        }
+        return new CompoundTag(Tags.TILE + "-" + tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ, dataMap);
     }
 
-    public static class TriangleGeometry extends Geometry {
-        private static final TexturedVertex top = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
-        private static final TexturedVertex left = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
-        private static final TexturedVertex right = new TexturedVertex().setRGB(1f, 1f, 1f).setST(1, 0).setXYZ(1, 0, 1);
+    public CompoundTag getTagForTileEntity(Chunk chunk, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+        Map<String, Tag> dataMap = new HashMap<>();
 
-        public TriangleGeometry () {
-            super(GeometryType.TRIANGLE, new TexturedVertex[]{top, right, left});
+        TileEntity tileEntity = chunk.getTileEntityOnPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        if (tileEntity == null) {
+            throw new IllegalArgumentException("The given chunk pos does not contain a TE!");
+        } else {
+            dataMap.put(Tags.TILEENTITYIDENTITY, new StringTag(Tags.TILEENTITYIDENTITY, tileEntity.getIdentity()));
+
+            try {
+                dataMap.putAll(tileEntity.writeDataToDisk());
+                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 0));
+            } catch (Exception ex) {
+                System.err.println("Exception while attempting to write TE on Pos: " + tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ() + " has been caught: ");
+                System.err.println();
+
+                ex.printStackTrace();
+
+                System.err.println();
+                System.err.println("On load of this world the TE will be replaced with a new one!");
+
+                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 1));
+            }
         }
+
+        return new CompoundTag(Tags.TILEENTITYDATA, dataMap);
     }
 
-    public static class QuadGeometry extends Geometry {
-        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 0f, 0f).setST(0, 1).setXYZ(-0.5f, 0.5f, -1);
-        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 0f).setST(1, 1).setXYZ(0.5f, 0.5f, -1);
-        private static final TexturedVertex bottomRight = new TexturedVertex().setRGB(0f, 0f, 0f).setST(1, 0).setXYZ(0.5f, -0.5f, -1);
-        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 0f, 1f).setST(0, 0).setXYZ(-0.5f, -0.5f, -1);
+    public CompoundTag getTagForChunk(World world, int chunkPosX, int chunkPosZ) {
+        Chunk chunk = world.getChunkForPos(chunkPosX, chunkPosZ);
 
-        public QuadGeometry () {
-            super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
+        Map<String, Tag> dataMap = new HashMap<>();
+
+        for (int x = 0; x < Chunk.chunkSize; x++) {
+            for (int y = 0; y < World.WORLDHEIGHT; y++) {
+                for (int z = 0; z < Chunk.chunkSize; z++) {
+                    Tag tag = getTagForTile(chunk, x, y, z);
+
+                    dataMap.put(tag.getName(), tag);
+                }
+            }
         }
+
+        return new CompoundTag(Tags.CHUNK, dataMap);
+    }
+
+    public CompoundTag getTagForWorld(World world) {
+        Map<String, Tag> dataMap = new HashMap<>();
+
+        for (int x = 0; x < World.WORLDWIDTH / Chunk.chunkSize + 1; x++) {
+            for (int z = 0; z < World.WORLDLENGTH / Chunk.chunkSize + 1; z++) {
+                Tag tag = getTagForChunk(world, x, z);
+
+                dataMap.put(tag.getName(), tag);
+            }
+        }
+
+        return new CompoundTag(Tags.WORLD, dataMap);
+    }
+
+    public static class Tags {
+        public static final String WORLD = "world";
+        public static final String CHUNK = "chunk";
+        public static final String TILE = "tile";
+        public static final String TILEIDENTITY = "tileIdentity";
+        public static final String TILECHUNKPOSX = "tileChunkPosX";
+        public static final String TILECHUNKPOSY = "tileChunkPosY";
+        public static final String TILECHUNKPOSZ = "tileChunkPosZ";
+        public static final String TILEENTITYDATA = "tileEntityData";
+        public static final String TILEENTITYIDENTITY = "tileEntityIdentity";
+        public static final String TILEENTITYDATAERRORED = "tileEntityErrored";
     }
 }

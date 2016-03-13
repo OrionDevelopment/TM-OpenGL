@@ -675,181 +675,64 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.client.registries;
+package com.smithsgaming.transportmanager.main.world;
 
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.TexturedVertex;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.HashMap;
+import static com.smithsgaming.transportmanager.main.world.tiles.TileRegistry.TileNames;
 
 /**
- * @Author Marc (Created on: 06.03.2016)
+ * Created by marcf on 3/13/2016.
  */
-public class GeometryRegistry {
-    public static final GeometryRegistry instance = new GeometryRegistry();
+public class World {
 
-    private static Integer triangleOpenGLID = null;
-    private static Integer quadOpenGLID = null;
+    public static final int WORLDHEIGHT = 256;
+    public static int WORLDWIDTH;
+    public static int WORLDLENGTH;
 
-    private HashMap<Integer, Geometry> openGLGeometryMap = new HashMap<>();
+    private Chunk[][] chunks = new Chunk[WORLDWIDTH / Chunk.chunkSize + 1][WORLDLENGTH / Chunk.chunkSize + 1];
 
-    private GeometryRegistry () {
+    public World() {
+
     }
 
-    public static int getDefaultTriangleGeometryOpenGLID () {
-        if (triangleOpenGLID != null)
-            return triangleOpenGLID;
-
-        triangleOpenGLID = instance.registerNewGeometry(new TriangleGeometry());
-
-        return triangleOpenGLID;
+    public Chunk getChunkForPos(int chunkPosX, int chunkPosZ) {
+        return chunks[chunkPosX][chunkPosZ];
     }
 
-    public static TriangleGeometry getDefaultTriangleGeometry () {
-        return (TriangleGeometry) instance.getGeometryForOpenGLID(getDefaultTriangleGeometryOpenGLID());
+    public Tile getTileForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public static int getDefaultQuadGeometryOpenGLID () {
-        if (quadOpenGLID != null)
-            return quadOpenGLID;
-
-        quadOpenGLID = instance.registerNewGeometry(new QuadGeometry());
-
-        return quadOpenGLID;
+    public TileEntity getTileEntityForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public static QuadGeometry getDefaultQuadGeometry () {
-        return (QuadGeometry) instance.getGeometryForOpenGLID(getDefaultQuadGeometryOpenGLID());
-    }
-
-    public int registerNewGeometry (Geometry geometry) {
-        OpenGLUtil.loadGeometryIntoGPU(geometry);
-        openGLGeometryMap.put(geometry.getOpenGLVertaxArrayId(), geometry);
-
-        return geometry.getOpenGLVertaxArrayId();
-    }
-
-    public Geometry getGeometryForOpenGLID (int openGLID) {
-        return openGLGeometryMap.get(openGLID);
-    }
-
-    public void unLoad () {
-        openGLGeometryMap.values().forEach(OpenGLUtil::deleteGeometry);
-
-        openGLGeometryMap.clear();
-    }
-
-    public enum GeometryType {
-        TRIANGLE(3, GL11.GL_TRIANGLES, (byte) 0, (byte) 1, (byte) 2),
-        QUAD(4, GL11.GL_TRIANGLE_STRIP, (byte) 0, (byte) 1, (byte) 2, (byte) 3);
-
-        private int vertexCount;
-        private byte[] vertexOrder;
-        private int openGLRenderType;
-
-        GeometryType (int vertexCount, int openGLRenderType, byte... vertexOrder) {
-            this.vertexCount = vertexCount;
-            this.openGLRenderType = openGLRenderType;
-            this.vertexOrder = vertexOrder;
-        }
-
-        public int getOpenGLRenderType () {
-            return openGLRenderType;
-        }
-
-        public byte[] getVertexOrder () {
-            return vertexOrder;
-        }
-
-        public int getVertexCount () {
-
-            return vertexCount;
-        }
-
-        public ByteBuffer getIndicesBuffer () {
-            ByteBuffer indicesBuffer = BufferUtils.createByteBuffer(vertexOrder.length);
-            indicesBuffer.put(vertexOrder);
-            indicesBuffer.flip();
-
-            return indicesBuffer;
-        }
-    }
-
-    public static class Geometry {
-        GeometryType type;
-        TexturedVertex[] vertices;
-
-        int openGLVertaxArrayId;
-        int openGLVertexDataId;
-        int openGLVertexIndexID;
-
-        public Geometry (GeometryType type, TexturedVertex[] vertices) {
-            this.type = type;
-            this.vertices = vertices;
-        }
-
-        public FloatBuffer getBufferData () {
-            FloatBuffer data = BufferUtils.createFloatBuffer(TexturedVertex.stride * vertices.length);
-            for (TexturedVertex vertex : vertices) {
-                data.put(vertex.getElements());
+    protected void initializeChunkMap() {
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
+                chunks[x][z] = new Chunk(this, x, z);
             }
-
-            data.flip();
-
-            return data;
-        }
-
-        public GeometryType getType () {
-            return type;
-        }
-
-        public int getOpenGLVertaxArrayId () {
-            return openGLVertaxArrayId;
-        }
-
-        public void setOpenGLVertaxArrayId (int openGLVertaxArrayId) {
-            this.openGLVertaxArrayId = openGLVertaxArrayId;
-        }
-
-        public int getOpenGLVertexDataId () {
-            return openGLVertexDataId;
-        }
-
-        public void setOpenGLVertexDataId (int openGLVertexDataId) {
-            this.openGLVertexDataId = openGLVertexDataId;
-        }
-
-        public int getOpenGLVertexIndexID () {
-            return openGLVertexIndexID;
-        }
-
-        public void setOpenGLVertexIndexID (int openGLVertexIndexID) {
-            this.openGLVertexIndexID = openGLVertexIndexID;
         }
     }
 
-    public static class TriangleGeometry extends Geometry {
-        private static final TexturedVertex top = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
-        private static final TexturedVertex left = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
-        private static final TexturedVertex right = new TexturedVertex().setRGB(1f, 1f, 1f).setST(1, 0).setXYZ(1, 0, 1);
+    public void generate() {
+        for (int x = 0; x < chunks.length; x++) {
+            for (int z = 0; z < chunks[0].length; z++) {
+                Chunk chunk = chunks[x][z];
 
-        public TriangleGeometry () {
-            super(GeometryType.TRIANGLE, new TexturedVertex[]{top, right, left});
+                for (int cx = 0; cx < Chunk.chunkSize; cx++) {
+                    for (int cy = 0; cy < WORLDHEIGHT; cy++) {
+                        for (int cz = 0; cz < Chunk.chunkSize; cz++) {
+                            chunk.setTileOnPos(TileRegistry.instance.getTileForIdentity(TileNames.OCEAN), cx, cy, cz);
+                        }
+                    }
+                }
+            }
         }
     }
 
-    public static class QuadGeometry extends Geometry {
-        private static final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 0f, 0f).setST(0, 1).setXYZ(-0.5f, 0.5f, -1);
-        private static final TexturedVertex topRight = new TexturedVertex().setRGB(0f, 1f, 0f).setST(1, 1).setXYZ(0.5f, 0.5f, -1);
-        private static final TexturedVertex bottomRight = new TexturedVertex().setRGB(0f, 0f, 0f).setST(1, 0).setXYZ(0.5f, -0.5f, -1);
-        private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(0f, 0f, 1f).setST(0, 0).setXYZ(-0.5f, -0.5f, -1);
-
-        public QuadGeometry () {
-            super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
-        }
-    }
 }

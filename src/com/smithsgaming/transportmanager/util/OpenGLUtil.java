@@ -678,14 +678,17 @@
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.registries.*;
-import org.lwjgl.*;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
-import org.lwjgl.util.vector.*;
+import org.lwjgl.system.JavadocExclude;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
-import java.io.*;
-import java.nio.*;
+import java.io.FileNotFoundException;
+import java.nio.FloatBuffer;
+import java.util.Stack;
 
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
@@ -704,6 +707,11 @@ public class OpenGLUtil {
     private static int projectionMatrixAdress;
     private static int viewMatrixAdress;
     private static int modelMatrixAdress;
+
+    private static Vector3f cameraPosition = new Vector3f(0, 0, 0);
+
+    private static Stack<Matrix4f> modelMatrixStack = new Stack<>();
+    private static Matrix4f renderingModelMatrix = new Matrix4f();
 
     private static FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private static FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
@@ -904,7 +912,7 @@ public class OpenGLUtil {
      * @param texture  The Texture to render the geometry with.
      * @param shaderId The OpenGL Shader Programm ID to use.
      */
-    public static void drawGeometryWithShader (GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, int shaderId) {
+    public static void drawGeometryWithShader(GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, Matrix4f renderMatrix, int shaderId) {
         if (geometry == null)
             return;
 
@@ -914,10 +922,9 @@ public class OpenGLUtil {
         if (viewMatrix == null)
             createCameraMatrix();
 
-        if (modelMatrix == null)
-            createModelMatrix();
-
         GL20.glUseProgram(shaderId);
+
+        setModelMatrix(renderMatrix);
 
         GL20.glUniformMatrix4fv(projectionMatrixAdress, false, projectionMatrixBuffer);
         GL20.glUniformMatrix4fv(viewMatrixAdress, false, viewMatrixBuffer);
@@ -993,6 +1000,16 @@ public class OpenGLUtil {
         createProjectionMatrix();
     }
 
+    public static Vector3f getCameraPosition() {
+        return cameraPosition;
+    }
+
+    public static void setCameraPosition(Vector3f cameraPosition) {
+        OpenGLUtil.cameraPosition = cameraPosition;
+
+        createCameraMatrix();
+    }
+
     @JavadocExclude
     private static void createProjectionMatrix () {
         setProjectionMatrix(MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(FOV), aspectRatio, 0.1f, 100f));
@@ -1002,7 +1019,7 @@ public class OpenGLUtil {
     private static void createCameraMatrix () {
         Matrix4f matrix4f = new Matrix4f();
 
-        matrix4f.translate(new Vector3f(0,0,10f));
+        matrix4f.translate(cameraPosition);
 
         setViewMatrix(matrix4f);
     }
@@ -1044,6 +1061,10 @@ public class OpenGLUtil {
 
         modelMatrix.store(modelMatrixBuffer);
         modelMatrixBuffer.flip();
+    }
+
+    public static void pushMatrix() {
+        modelMatrixStack.push(modelMatrix);
     }
 
     public static void destroyTexture (TextureRegistry.Texture texture) {

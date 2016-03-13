@@ -677,8 +677,10 @@
 
 package com.smithsgaming.transportmanager.client.render;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import org.lwjgl.util.vector.Matrix4f;
 
 /**
  * Class used to render the world.
@@ -691,7 +693,7 @@ public class WorldRenderer implements IRenderer {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, OpenGLUtil.Shaders.defaultShader);
+        OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, new Matrix4f(), OpenGLUtil.Shaders.defaultShader);
         //OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultTriangleGeometry(), TextureRegistry.Textures.deepWater, OpenGLUtil.Shaders.defaultShader);
     }
 }

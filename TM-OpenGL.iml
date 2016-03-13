@@ -21,6 +21,15 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/JNBT/jnbt-1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.21.0" level="project" />
@@ -46,5 +55,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.java.jinput:jinput-platform:natives-windows:2.0.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.java.jinput:jinput-platform:natives-osx:2.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.l33tlabs.twl:pngdecoder:1.0" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:5.0.0.Alpha2" level="project" />
   </component>
 </module>
