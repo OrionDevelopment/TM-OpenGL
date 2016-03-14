@@ -680,7 +680,10 @@ package com.smithsgaming.transportmanager.client;
 import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
+import com.smithsgaming.transportmanager.network.message.NBTPayloadMessage;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import org.jnbt.StringTag;
 
 import java.io.FileNotFoundException;
 
@@ -695,7 +698,7 @@ import java.io.FileNotFoundException;
 public class TransportManagerClient implements Runnable {
 
     public static TransportManagerClient instance = new TransportManagerClient();
-
+    static Thread clientNetworkThread;
     private static Display display;
     private static Thread displayThread;
 
@@ -715,8 +718,22 @@ public class TransportManagerClient implements Runnable {
     public void run () {
         display = new Display();
         displayThread = new Thread(display, "TM-OpenGL - Display");
-
         displayThread.start();
+
+        clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
+        clientNetworkThread.start();
+
+        while (TMNetworkingClient.activeComChannel == null) {
+            try {
+                System.out.println("No active network connection found, retrying in a second...");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Active connection found sending payload...");
+        TMNetworkingClient.sendMessage(new NBTPayloadMessage(new StringTag("Test", "Hello Server!")));
     }
 
     public void loadGraphics () {

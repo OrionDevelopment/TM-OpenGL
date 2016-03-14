@@ -675,41 +675,43 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.network.client;
+package com.smithsgaming.transportmanager.network.server;
 
-
-import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.local.LocalAddress;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 /**
- * Created by marcf on 3/13/2016.
+ * Created by marcf on 3/14/2016.
  */
-public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
+public class TMNetworkingServer implements Runnable {
+
+    private int hostPort;
+
+    public TMNetworkingServer(int hostPort) {
+        this.hostPort = hostPort;
+    }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.CLIENT);
+    public void run() {
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-        if (returnMessage != null) {
-            channelHandlerContext.write(returnMessage);
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new TMNetworkingServerHandler());
+
+            b.localAddress(LocalAddress.ANY).bind(hostPort).syncUninterruptibly();
+        } catch (Exception e) {
+            e.printStackTrace();
+            bossGroup.shutdownGracefully();
         }
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        TMNetworkingClient.setActiveComChannel(ctx.channel());
-    }
-
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);
-    }
-
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
     }
 }

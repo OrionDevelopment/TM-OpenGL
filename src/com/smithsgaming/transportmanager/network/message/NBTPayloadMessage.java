@@ -675,41 +675,34 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.network.client;
+package com.smithsgaming.transportmanager.network.message;
 
-
-import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.Channel;
+import org.jnbt.Tag;
 
 /**
- * Created by marcf on 3/13/2016.
+ * Created by marcf on 3/14/2016.
  */
-public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
+public class NBTPayloadMessage extends TMNetworkingMessage {
+    private Tag nbtTag;
 
-    @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.CLIENT);
+    public NBTPayloadMessage() {
+    }
 
-        if (returnMessage != null) {
-            channelHandlerContext.write(returnMessage);
-        }
+    public NBTPayloadMessage(Tag payload) {
+        nbtTag = payload;
+    }
+
+    public Tag getPayLoad() {
+        return nbtTag;
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        TMNetworkingClient.setActiveComChannel(ctx.channel());
-    }
+    public TMNetworkingMessage onReceived(Channel channel, NetworkingSide side) {
+        System.out.println("Message Handled!");
 
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);
-    }
+        System.err.println(nbtTag.toString());
 
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
+        return null;
     }
 }

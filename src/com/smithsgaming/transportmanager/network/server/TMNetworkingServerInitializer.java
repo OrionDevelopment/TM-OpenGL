@@ -675,41 +675,27 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.network.client;
+package com.smithsgaming.transportmanager.network.server;
 
-
-import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 
 /**
- * Created by marcf on 3/13/2016.
+ * Created by marcf on 3/14/2016.
  */
-public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
-
+public class TMNetworkingServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.CLIENT);
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        ChannelPipeline channelPipeline = socketChannel.pipeline();
 
-        if (returnMessage != null) {
-            channelHandlerContext.write(returnMessage);
-        }
-    }
+        channelPipeline.addLast(new ObjectEncoder());
+        channelPipeline.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())));
+        channelPipeline.addLast(new TMNetworkingServerHandler());
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        TMNetworkingClient.setActiveComChannel(ctx.channel());
-    }
-
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);
-    }
-
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
+        System.out.println("Server channel pipeline initialized.");
     }
 }

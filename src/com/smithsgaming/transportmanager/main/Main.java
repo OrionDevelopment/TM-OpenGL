@@ -677,7 +677,7 @@
 
 package com.smithsgaming.transportmanager.main;
 
-import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 
 /**
  * Main class for the TransportManager game, responsible for starting and running an instance of the TransportManager
@@ -688,12 +688,21 @@ import com.smithsgaming.transportmanager.client.*;
 public class Main {
 
     static TransportManagerClient client;
+    static TransportManager server;
+
     static Thread clientThread;
+    static Thread serverThread;
 
     public static void main(String[] args) {
+        server = new TransportManager();
+
+        serverThread = new Thread(server, "TM-OpenGL -  Server");
+        serverThread.start();
+
         client = new TransportManagerClient();
 
         clientThread = new Thread(client, "TM-OpenGL - Client");
         clientThread.start();
+
     }
 }

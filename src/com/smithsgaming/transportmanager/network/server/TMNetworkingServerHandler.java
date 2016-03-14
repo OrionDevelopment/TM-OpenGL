@@ -675,9 +675,9 @@
  * <http://www.gnu.org/philosophy/why-not-lgpl.html>.
  */
 
-package com.smithsgaming.transportmanager.network.client;
+package com.smithsgaming.transportmanager.network.server;
 
-
+import com.smithsgaming.transportmanager.network.message.NBTPayloadMessage;
 import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -685,22 +685,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
- * Created by marcf on 3/13/2016.
+ * Created by marcf on 3/14/2016.
  */
-public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
-
+public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<NBTPayloadMessage> {
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.CLIENT);
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, NBTPayloadMessage tmNetworkingMessage) throws Exception {
+        System.out.println("Attempting to handle NBTPayLoad...");
+        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.SERVER);
 
         if (returnMessage != null) {
             channelHandlerContext.write(returnMessage);
         }
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        TMNetworkingClient.setActiveComChannel(ctx.channel());
     }
 
     public void channelReadComplete(ChannelHandlerContext ctx) {
