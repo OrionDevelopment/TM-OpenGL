@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.main.player.*;
+import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
 /**
@@ -17,7 +18,7 @@ public class ConnectClient extends TMNetworkingMessage
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, NetworkingSide side) {
+    public TMNetworkingMessage onReceived (Channel channel, Side side) {
         connectingPlayer = new GamePlayer(connectingPlayer.getDisplayName(), channel);
         PlayerManager.instance.onPlayerConnected(connectingPlayer);
         System.out.println("[Server] Player: " + connectingPlayer.getDisplayName() + " connected!");

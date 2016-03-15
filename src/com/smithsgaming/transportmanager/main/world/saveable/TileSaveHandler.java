@@ -76,7 +76,7 @@ public class TileSaveHandler {
         Map<String, Tag> dataMap = new HashMap<>();
 
         for (int x = 0; x < Chunk.chunkSize; x++) {
-            for (int y = 0; y < World.WORLDHEIGHT; y++) {
+            for (int y = 0; y < world.getCoreData().getWorldHeight(); y++) {
                 for (int z = 0; z < Chunk.chunkSize; z++) {
                     Tag tag = getTagForTile(chunk, x, y, z);
 
@@ -85,14 +85,14 @@ public class TileSaveHandler {
             }
         }
 
-        return new CompoundTag(Tags.CHUNK, dataMap);
+        return new CompoundTag(Tags.CHUNK + "-" + chunkPosX + "-" + chunkPosZ, dataMap);
     }
 
     public CompoundTag getTagForWorld(World world) {
         Map<String, Tag> dataMap = new HashMap<>();
 
-        for (int x = 0; x < World.WORLDWIDTH / Chunk.chunkSize + 1; x++) {
-            for (int z = 0; z < World.WORLDLENGTH / Chunk.chunkSize + 1; z++) {
+        for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
+            for (int z = 0; z < world.getCoreData().getWorldLength() / Chunk.chunkSize + 1; z++) {
                 Tag tag = getTagForChunk(world, x, z);
 
                 dataMap.put(tag.getName(), tag);
@@ -100,6 +100,83 @@ public class TileSaveHandler {
         }
 
         return new CompoundTag(Tags.WORLD, dataMap);
+    }
+
+    public void loadTileForTagIntoChunk (Chunk chunk, Tag tag) {
+        if (!( tag instanceof CompoundTag ))
+            throw new IllegalArgumentException("tag");
+
+        Map<String, Tag> dataMap = ( (CompoundTag) tag ).getValue();
+
+        int tileChunkPosX = (int) dataMap.get(Tags.TILECHUNKPOSX).getValue();
+        int tileChunkPosY = (int) dataMap.get(Tags.TILECHUNKPOSY).getValue();
+        int tileChunkPosZ = (int) dataMap.get(Tags.TILECHUNKPOSZ).getValue();
+
+        Tile tile = TileRegistry.instance.getTileForIdentity((String) dataMap.get(Tags.TILEIDENTITY).getValue());
+        if (tile == null) {
+            chunk.setTileOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        } else {
+            if (tile instanceof ITileEntityProvider) {
+                loadTileEntityForTagIntoChunk(chunk, dataMap.get(Tags.TILEENTITYDATA), tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+            }
+        }
+    }
+
+    public void loadTileEntityForTagIntoChunk (Chunk chunk, Tag teTag, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+        if (!( teTag instanceof CompoundTag ))
+            throw new IllegalArgumentException("teTag");
+
+        Map<String, Tag> dataMap = ( (CompoundTag) teTag ).getValue();
+
+        TileEntity tileEntity = TileEntityRegistry.instance.getTileEntityForIdentity((String) dataMap.get(Tags.TILEENTITYIDENTITY).getValue());
+        if (tileEntity == null) {
+            chunk.setTileEntityOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        } else {
+            if (( (int) dataMap.get(Tags.TILEENTITYDATAERRORED).getValue() ) == 1) {
+                System.err.println("Loading errored TE on pos: " + +tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ());
+                chunk.setTileEntityOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+
+                return;
+            }
+
+            tileEntity.readDataFromDisk((Map<String, Tag>) dataMap.get(Tags.TILEENTITYDATA).getValue());
+
+            chunk.setTileEntityOnPos(tileEntity, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        }
+    }
+
+    public void loadChunkForTagIntoWorld (World world, Tag chunkTag, int chunkPosX, int chunkPosZ) {
+        if (!( chunkTag instanceof CompoundTag ))
+            throw new IllegalArgumentException("teTag");
+
+        Chunk chunk = world.getChunkForPos(chunkPosX, chunkPosZ);
+
+        Map<String, Tag> dataMap = ( (CompoundTag) chunkTag ).getValue();
+
+        for (int x = 0; x < Chunk.chunkSize; x++) {
+            for (int y = 0; y < world.getCoreData().getWorldHeight(); y++) {
+                for (int z = 0; z < Chunk.chunkSize; z++) {
+                    Tag tag = dataMap.get(Tags.TILE + "-" + x + "-" + y + "-" + z);
+
+                    loadTileForTagIntoChunk(chunk, tag);
+                }
+            }
+        }
+    }
+
+    public void loadWorldFromTag (World world, Tag worldTag) {
+        if (!( worldTag instanceof CompoundTag ))
+            throw new IllegalArgumentException("teTag");
+
+        Map<String, Tag> dataMap = ( (CompoundTag) worldTag ).getValue();
+
+        for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
+            for (int z = 0; z < world.getCoreData().getWorldLength() / Chunk.chunkSize + 1; z++) {
+                Tag chunkTag = dataMap.get(Tags.CHUNK + "-" + x + "-" + z);
+
+                loadChunkForTagIntoWorld(world, chunkTag, x, z);
+            }
+        }
     }
 
     public static class Tags {

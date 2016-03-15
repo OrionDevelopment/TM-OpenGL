@@ -3,7 +3,6 @@
 package com.smithsgaming.transportmanager.main.world;
 
 import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.saveable.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
@@ -14,11 +13,14 @@ import static com.smithsgaming.transportmanager.main.world.tiles.TileRegistry.*;
  */
 public class World {
 
-    public static final int WORLDHEIGHT = 256;
-    public static int WORLDWIDTH;
-    public static int WORLDLENGTH;
+    WorldCoreData coreData;
 
-    private Chunk[][] chunks = new Chunk[WORLDWIDTH / Chunk.chunkSize + 1][WORLDLENGTH / Chunk.chunkSize + 1];
+    private Chunk[][] chunks;
+
+    public World (WorldCoreData data) {
+        coreData = data;
+        initializeChunkMap();
+    }
 
     public Chunk getChunkForPos(int chunkPosX, int chunkPosZ) {
         return chunks[chunkPosX][chunkPosZ];
@@ -40,7 +42,13 @@ public class World {
         getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityOnPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
+    public WorldCoreData getCoreData () {
+        return coreData;
+    }
+
     protected void initializeChunkMap() {
+        chunks = new Chunk[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
+        
         for (int x = 0; x < chunks.length; x++) {
             for (int z = 0; z < chunks[0].length; z++) {
                 chunks[x][z] = new Chunk(this, x, z);
@@ -54,7 +62,7 @@ public class World {
                 Chunk chunk = chunks[x][z];
 
                 for (int cx = 0; cx < Chunk.chunkSize; cx++) {
-                    for (int cy = 0; cy < WORLDHEIGHT; cy++) {
+                    for (int cy = 0; cy < coreData.getWorldHeight(); cy++) {
                         for (int cz = 0; cz < Chunk.chunkSize; cz++) {
                             chunk.setTileOnPos(TileRegistry.instance.getTileForIdentity(TileNames.OCEAN), cx, cy, cz);
                         }

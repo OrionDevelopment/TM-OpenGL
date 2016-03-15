@@ -2,6 +2,7 @@
 
 package com.smithsgaming.transportmanager.network.message;
 
+import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
 import java.io.*;
@@ -11,10 +12,5 @@ import java.io.*;
  */
 public abstract class TMNetworkingMessage implements Serializable {
 
-    public abstract TMNetworkingMessage onReceived(Channel channel, NetworkingSide side);
-
-    public enum NetworkingSide {
-        CLIENT,
-        SERVER
-    }
+    public abstract TMNetworkingMessage onReceived (Channel channel, Side side);
 }

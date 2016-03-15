@@ -3,6 +3,8 @@ package com.smithsgaming.transportmanager.main.world;
 
 import com.smithsgaming.transportmanager.main.world.saveable.*;
 
+import java.util.*;
+
 /**
  * Created by marcf on 3/13/2016.
  */
@@ -27,9 +29,11 @@ public class WorldManager {
 
         isWorldBeingLoaded = true;
 
-        loadedWorld = new World();
+        loadedWorld = new World(new WorldCoreData(500, 256, 500, new Random().nextLong()));
         loadedWorld.initializeChunkMap();
         loadedWorld.generate();
+
+        saveHandler = new TileSaveHandler(loadedWorld);
 
         isWorldBeingLoaded = false;
     }
@@ -37,4 +41,6 @@ public class WorldManager {
     public World getLoadedWorld () {
         return loadedWorld;
     }
+
+
 }

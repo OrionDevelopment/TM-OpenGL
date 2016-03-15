@@ -5,8 +5,6 @@ import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import org.jnbt.*;
 
-import javax.swing.text.html.*;
-
 /**
  * Created by marcf on 3/13/2016.
  */
@@ -19,13 +17,16 @@ public class Chunk {
     private int chunkX;
     private int chunkZ;
 
-    private Tile[][][] tiles = new Tile[chunkSize][chunkSize][World.WORLDHEIGHT];
-    private TileEntity[][][] tileEntities = new TileEntity[chunkSize][chunkSize][World.WORLDHEIGHT];
+    private Tile[][][] tiles;
+    private TileEntity[][][] tileEntities;
 
     public Chunk(World world, int chunkX, int chunkZ) {
         this.world = world;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+
+        tiles = new Tile[chunkSize][chunkSize][world.getCoreData().getWorldHeight()];
+        tileEntities = new TileEntity[chunkSize][chunkSize][world.getCoreData().getWorldHeight()];
     }
 
     public int getChunkX() {

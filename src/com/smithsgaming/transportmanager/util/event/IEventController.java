@@ -10,7 +10,7 @@ public interface IEventController
 
     Queue<TMEvent> eventQueu = new ArrayDeque<>();
 
-    static void registerEvent(TMEvent event)
+    default void registerEvent (TMEvent event)
     {
         synchronized (eventQueu)
         {

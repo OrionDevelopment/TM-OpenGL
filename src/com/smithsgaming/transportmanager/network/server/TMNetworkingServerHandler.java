@@ -3,6 +3,7 @@
 package com.smithsgaming.transportmanager.network.server;
 
 import com.smithsgaming.transportmanager.network.message.*;
+import com.smithsgaming.transportmanager.util.*;
 import io.netty.buffer.*;
 import io.netty.channel.*;
 
@@ -13,7 +14,7 @@ public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<TMNet
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
         System.out.println("Attempting to handle NBTPayLoad...");
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.SERVER);
+        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), Side.SERVER);
 
         if (returnMessage != null) {
             channelHandlerContext.write(returnMessage);

@@ -2,11 +2,10 @@ package com.smithsgaming.transportmanager.client;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
-import com.smithsgaming.transportmanager.network.message.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
-import org.jnbt.*;
 
 import java.io.*;
 
@@ -21,9 +20,13 @@ import java.io.*;
 public class TransportManagerClient implements Runnable, IEventController {
 
     public static TransportManagerClient instance = new TransportManagerClient();
-    static Thread clientNetworkThread;
-    private static Display display;
+
+    private static Thread clientNetworkThread;
     private static Thread displayThread;
+
+    private static Display display;
+
+    private static int targetUPS = 60;
 
     public static Display getDisplay() {
         return display;
@@ -46,8 +49,39 @@ public class TransportManagerClient implements Runnable, IEventController {
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
         clientNetworkThread.start();
 
+        long lastTime = System.nanoTime();
+        final double ns = 1000000000 / targetUPS;
+        double delta = 0;
 
+        while (TransportManager.isRunning) {
+            long now = System.nanoTime();
+            delta += ( now - lastTime ) / ns;
+            lastTime = now;
 
+            while (delta >= 1) {
+                updateClient();
+                delta--;
+
+                synchronized (eventQueu) {
+                    if (eventQueu.size() == 0)
+                        continue;
+
+                    for (TMEvent event : eventQueu) {
+                        try {
+                            if (!TransportManager.isRunning)
+                                return;
+
+                            event.processEvent(Side.SERVER);
+                        } catch (Exception ex) {
+                            System.err.println("Exception while trying to process event: " + event.toString());
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    eventQueu.clear();
+                }
+            }
+        }
     }
 
     public void loadGraphics () {
@@ -65,5 +99,9 @@ public class TransportManagerClient implements Runnable, IEventController {
         GeometryRegistry.instance.unLoad();
 
         OpenGLUtil.deleteShader(OpenGLUtil.Shaders.defaultShader);
+    }
+
+    private void updateClient () {
+
     }
 }

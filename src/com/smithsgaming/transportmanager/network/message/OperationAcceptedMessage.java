@@ -1,5 +1,7 @@
 package com.smithsgaming.transportmanager.network.message;
 
+import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
@@ -17,8 +19,9 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, NetworkingSide side) {
-        System.out.println("Serversided operation completed: " + operation.toString());
+    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+        if (operation == Operation.PLAYERCONNECTED)
+            TransportManagerClient.instance.registerEvent(new ClientConnectedEvent());
 
         return null;
     }

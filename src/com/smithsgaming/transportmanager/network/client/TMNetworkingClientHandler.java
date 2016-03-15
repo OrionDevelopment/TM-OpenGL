@@ -5,7 +5,7 @@ package com.smithsgaming.transportmanager.network.client;
 
 import com.smithsgaming.transportmanager.main.player.*;
 import com.smithsgaming.transportmanager.network.message.*;
-import io.netty.buffer.*;
+import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
 /**
@@ -15,7 +15,7 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
 
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.CLIENT);
+        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), Side.CLIENT);
 
         if (returnMessage != null) {
             channelHandlerContext.write(returnMessage);
@@ -26,11 +26,6 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
     public void channelActive(ChannelHandlerContext ctx) {
         TMNetworkingClient.setActiveComChannel(ctx.channel());
         ctx.writeAndFlush(new ConnectClient(GamePlayer.current));
-    }
-
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);
     }
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
