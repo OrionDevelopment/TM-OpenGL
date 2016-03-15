@@ -30,7 +30,7 @@ public class TMNetworkingServer implements Runnable {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new TMNetworkingServerHandler());
+                    .childHandler(new TMNetworkingServerInitializer());
 
             b.localAddress(LocalAddress.ANY).bind(hostPort).syncUninterruptibly();
         } catch (Exception e) {

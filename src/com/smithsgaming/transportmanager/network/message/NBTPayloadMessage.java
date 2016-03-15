@@ -2,13 +2,14 @@
 
 package com.smithsgaming.transportmanager.network.message;
 
-import io.netty.channel.*;
 import org.jnbt.*;
+
+import java.io.*;
 
 /**
  * Created by marcf on 3/14/2016.
  */
-public class NBTPayloadMessage extends TMNetworkingMessage {
+public abstract class NBTPayloadMessage extends TMNetworkingMessage {
     private Tag nbtTag;
 
     public NBTPayloadMessage() {
@@ -22,12 +23,16 @@ public class NBTPayloadMessage extends TMNetworkingMessage {
         return nbtTag;
     }
 
-    @Override
-    public TMNetworkingMessage onReceived(Channel channel, NetworkingSide side) {
-        System.out.println("Message Handled!");
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        NBTOutputStream stream = new NBTOutputStream(out);
+        stream.writeTag(nbtTag);
+        stream.close();
+    }
 
-        System.err.println(nbtTag.toString());
-
-        return null;
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
+    {
+        NBTInputStream stream = new NBTInputStream(in);
+        nbtTag = stream.readTag();
+        stream.close();
     }
 }

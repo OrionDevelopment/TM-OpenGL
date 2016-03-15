@@ -5,6 +5,7 @@ package com.smithsgaming.transportmanager.network.server;
 import io.netty.channel.*;
 import io.netty.channel.socket.*;
 import io.netty.handler.codec.serialization.*;
+import io.netty.handler.logging.*;
 
 /**
  * Created by marcf on 3/14/2016.
