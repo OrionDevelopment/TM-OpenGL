@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -148,6 +149,8 @@ public class Display implements Runnable
 
             glfwTerminate();
             errorCallback.release();
+
+            TransportManager.isRunning = false;
         }
     }
 

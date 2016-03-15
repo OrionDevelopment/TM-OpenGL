@@ -19,11 +19,6 @@ public class World {
     public static int WORLDLENGTH;
 
     private Chunk[][] chunks = new Chunk[WORLDWIDTH / Chunk.chunkSize + 1][WORLDLENGTH / Chunk.chunkSize + 1];
-    private TileSaveHandler saveHandler;
-
-    public World() {
-        saveHandler = new TileSaveHandler(this);
-    }
 
     public Chunk getChunkForPos(int chunkPosX, int chunkPosZ) {
         return chunks[chunkPosX][chunkPosZ];
@@ -37,8 +32,12 @@ public class World {
         return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public TileSaveHandler getSaveHandler() {
-        return saveHandler;
+    public void setTileOnPos(Tile tile, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileOnPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    }
+
+    public void setTileEntityOnPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityOnPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
     protected void initializeChunkMap() {

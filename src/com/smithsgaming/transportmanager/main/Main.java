@@ -1,5 +1,3 @@
-
-
 package com.smithsgaming.transportmanager.main;
 
 import com.smithsgaming.transportmanager.client.*;

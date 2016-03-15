@@ -5,6 +5,7 @@ import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.network.message.*;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.event.*;
 import org.jnbt.*;
 
 import java.io.*;
@@ -17,7 +18,7 @@ import java.io.*;
  *
  * @Author Marc (Created on: 05.03.2016)
  */
-public class TransportManagerClient implements Runnable {
+public class TransportManagerClient implements Runnable, IEventController {
 
     public static TransportManagerClient instance = new TransportManagerClient();
     static Thread clientNetworkThread;
@@ -44,6 +45,9 @@ public class TransportManagerClient implements Runnable {
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
         clientNetworkThread.start();
+
+
+
     }
 
     public void loadGraphics () {

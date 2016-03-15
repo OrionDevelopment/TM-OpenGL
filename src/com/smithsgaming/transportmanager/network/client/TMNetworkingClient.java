@@ -13,7 +13,7 @@ import io.netty.channel.socket.nio.*;
  */
 public class TMNetworkingClient implements Runnable {
 
-    public static Channel activeComChannel;
+    private static Channel activeComChannel;
     private String host;
     private int hostPort;
 
@@ -37,6 +37,11 @@ public class TMNetworkingClient implements Runnable {
         synchronized (activeComChannel) {
             activeComChannel = null;
         }
+    }
+
+    public static boolean isConnectionEstablished()
+    {
+        return activeComChannel != null;
     }
 
     public static void sendMessage(TMNetworkingMessage message) {

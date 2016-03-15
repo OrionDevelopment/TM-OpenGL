@@ -13,9 +13,16 @@ public class TransportManager implements Runnable {
 
     static Thread serverNetworkThread;
 
+    public static boolean isRunning = true;
+
     @Override
     public void run() {
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));
         serverNetworkThread.start();
+
+        while(isRunning)
+        {
+
+        }
     }
 }

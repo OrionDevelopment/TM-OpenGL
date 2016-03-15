@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.render;
 
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.util.vector.*;
 
@@ -10,6 +11,9 @@ import org.lwjgl.util.vector.*;
  * @Author Marc (Created on: 06.03.2016)
  */
 public class WorldRenderer implements IRenderer {
+
+    WorldClient worldClient;
+
     /**
      * Method called by the RenderManager to process the rendering for this renderer.
      */

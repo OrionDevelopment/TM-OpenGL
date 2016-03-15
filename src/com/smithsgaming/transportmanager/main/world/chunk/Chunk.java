@@ -48,7 +48,7 @@ public class Chunk {
         return tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
     }
 
-    public void setTileEntitieOnPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+    public void setTileEntityOnPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tileEntity;
     }
 
@@ -58,6 +58,6 @@ public class Chunk {
 
     public Tag getDataTag()
     {
-        return  getWorld().getSaveHandler().getTagForChunk(world, chunkX, chunkZ);
+        return  WorldManager.instance.getSaveHandler().getTagForChunk(world, chunkX, chunkZ);
     }
 }
