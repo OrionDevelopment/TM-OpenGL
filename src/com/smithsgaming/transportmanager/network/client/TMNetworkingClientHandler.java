@@ -3,6 +3,7 @@
 package com.smithsgaming.transportmanager.network.client;
 
 
+import com.smithsgaming.transportmanager.main.player.*;
 import com.smithsgaming.transportmanager.network.message.*;
 import io.netty.buffer.*;
 import io.netty.channel.*;
@@ -24,6 +25,7 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         TMNetworkingClient.setActiveComChannel(ctx.channel());
+        ctx.writeAndFlush(new ConnectClient(GamePlayer.current));
     }
 
     public void channelReadComplete(ChannelHandlerContext ctx) {

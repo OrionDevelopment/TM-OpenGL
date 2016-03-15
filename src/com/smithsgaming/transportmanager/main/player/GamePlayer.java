@@ -1,11 +1,16 @@
 package com.smithsgaming.transportmanager.main.player;
 
-import java.nio.channels.*;
+import io.netty.channel.*;
+
+import java.io.*;
 
 /**
  * Created by marcf on 3/13/2016.
  */
-public class GamePlayer {
+public class GamePlayer implements Serializable {
+
+    public static final GamePlayer current = new GamePlayer("Marc", null);
+
     private String displayName;
     private Channel connectionChannel;
     private int currentScore = 0;

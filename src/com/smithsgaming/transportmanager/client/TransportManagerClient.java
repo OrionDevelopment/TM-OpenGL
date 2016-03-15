@@ -44,18 +44,6 @@ public class TransportManagerClient implements Runnable {
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
         clientNetworkThread.start();
-
-        while (TMNetworkingClient.activeComChannel == null) {
-            try {
-                System.out.println("No active network connection found, retrying in a second...");
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Active connection found sending payload...");
-        TMNetworkingClient.sendMessage(new NBTPayloadMessage(new StringTag("Test", "Hello Server!")));
     }
 
     public void loadGraphics () {

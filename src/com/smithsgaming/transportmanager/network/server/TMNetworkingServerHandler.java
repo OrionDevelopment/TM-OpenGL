@@ -9,9 +9,9 @@ import io.netty.channel.*;
 /**
  * Created by marcf on 3/14/2016.
  */
-public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<NBTPayloadMessage> {
+public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, NBTPayloadMessage tmNetworkingMessage) throws Exception {
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
         System.out.println("Attempting to handle NBTPayLoad...");
         TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), TMNetworkingMessage.NetworkingSide.SERVER);
 

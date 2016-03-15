@@ -3,6 +3,7 @@
 package com.smithsgaming.transportmanager.main.world;
 
 import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.main.world.saveable.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
@@ -18,9 +19,10 @@ public class World {
     public static int WORLDLENGTH;
 
     private Chunk[][] chunks = new Chunk[WORLDWIDTH / Chunk.chunkSize + 1][WORLDLENGTH / Chunk.chunkSize + 1];
+    private TileSaveHandler saveHandler;
 
     public World() {
-
+        saveHandler = new TileSaveHandler(this);
     }
 
     public Chunk getChunkForPos(int chunkPosX, int chunkPosZ) {
@@ -33,6 +35,10 @@ public class World {
 
     public TileEntity getTileEntityForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
         return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    }
+
+    public TileSaveHandler getSaveHandler() {
+        return saveHandler;
     }
 
     protected void initializeChunkMap() {
