@@ -5,14 +5,16 @@ import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import org.jnbt.*;
 
+import java.io.*;
+
 /**
  * Created by marcf on 3/13/2016.
  */
-public class Chunk {
+public class Chunk implements Serializable {
 
     public static int chunkSize = 20;
 
-    private World world;
+    private transient World world;
 
     private int chunkX;
     private int chunkZ;
@@ -25,8 +27,8 @@ public class Chunk {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
 
-        tiles = new Tile[chunkSize][chunkSize][world.getCoreData().getWorldHeight()];
-        tileEntities = new TileEntity[chunkSize][chunkSize][world.getCoreData().getWorldHeight()];
+        tiles = new Tile[chunkSize][world.getCoreData().getWorldHeight()][chunkSize];
+        tileEntities = new TileEntity[chunkSize][world.getCoreData().getWorldHeight()][chunkSize];
     }
 
     public int getChunkX() {
@@ -55,6 +57,10 @@ public class Chunk {
 
     public World getWorld () {
         return world;
+    }
+
+    public void setWorld (World world) {
+        this.world = world;
     }
 
     public Tag getDataTag()

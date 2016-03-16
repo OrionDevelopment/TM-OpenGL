@@ -26,6 +26,10 @@ public class World {
         return chunks[chunkPosX][chunkPosZ];
     }
 
+    public void setChunkForPos (Chunk chunkForPos) {
+        chunks[chunkForPos.getChunkX()][chunkForPos.getChunkZ()] = chunkForPos;
+    }
+
     public Tile getTileForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
         return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }

@@ -20,6 +20,8 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
 
     @Override
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
+        System.out.println("Operation Accepted: " + side + " - " + operation);
+
         if (operation == Operation.PLAYERCONNECTED)
             TransportManagerClient.instance.registerEvent(new ClientConnectedEvent());
 

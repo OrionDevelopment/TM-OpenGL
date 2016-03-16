@@ -4,10 +4,12 @@ package com.smithsgaming.transportmanager.main.world.tiles;
 
 import com.smithsgaming.transportmanager.main.world.*;
 
+import java.io.*;
+
 /**
  * Created by marcf on 3/13/2016.
  */
-public abstract class Tile {
+public abstract class Tile implements Serializable {
 
     private String identity;
 

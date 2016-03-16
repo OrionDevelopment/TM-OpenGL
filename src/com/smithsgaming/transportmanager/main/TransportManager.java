@@ -1,6 +1,7 @@
 
 package com.smithsgaming.transportmanager.main;
 
+import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.network.server.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
@@ -19,6 +20,8 @@ public class TransportManager implements Runnable, IEventController {
 
     @Override
     public void run() {
+        WorldManager.instance.generateWorld();
+
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));
         serverNetworkThread.start();
 

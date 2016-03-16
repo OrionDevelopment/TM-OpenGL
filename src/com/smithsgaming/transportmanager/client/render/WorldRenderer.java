@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.render;
 
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.world.*;
+import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.util.vector.*;
 
@@ -19,7 +20,24 @@ public class WorldRenderer implements IRenderer {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, new Matrix4f(), OpenGLUtil.Shaders.defaultShader);
-        //OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultTriangleGeometry(), TextureRegistry.Textures.deepWater, OpenGLUtil.Shaders.defaultShader);
+        if (worldClient == null)
+            OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, new Matrix4f(), OpenGLUtil.Shaders.defaultShader);
+
+    }
+
+    private boolean isChunkInView (Chunk chunk) {
+
+    }
+
+    private void drawChunk (Chunk chunk) {
+
+    }
+
+    public WorldClient getWorldClient () {
+        return worldClient;
+    }
+
+    public void setWorldClient (WorldClient worldClient) {
+        this.worldClient = worldClient;
     }
 }

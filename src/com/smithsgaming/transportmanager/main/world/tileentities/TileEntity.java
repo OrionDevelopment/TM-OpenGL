@@ -2,12 +2,13 @@ package com.smithsgaming.transportmanager.main.world.tileentities;
 
 import org.jnbt.*;
 
+import java.io.*;
 import java.util.*;
 
 /**
  * Created by marcf on 3/13/2016.
  */
-public abstract class TileEntity {
+public abstract class TileEntity implements Serializable {
 
     private String identity;
 

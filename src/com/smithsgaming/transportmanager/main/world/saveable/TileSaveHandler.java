@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.main.world.saveable;
 
+import com.google.common.base.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
@@ -7,6 +8,7 @@ import com.smithsgaming.transportmanager.main.world.tiles.*;
 import org.jnbt.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Created by marcf on 3/13/2016.
@@ -35,7 +37,7 @@ public class TileSaveHandler {
             if (tile instanceof ITileEntityProvider) {
                 ITileEntityProvider iTileEntityProvider = (ITileEntityProvider) tile;
 
-                dataMap.put(Tags.TILEENTITYDATA, getTagForTileEntity(chunk, tileChunkPosX, tileChunkPosY, tileChunkPosZ));
+                //dataMap.put(Tags.TILEENTITYDATA, getTagForTileEntity(chunk, tileChunkPosX, tileChunkPosY, tileChunkPosZ));
             }
         }
 
@@ -71,6 +73,10 @@ public class TileSaveHandler {
     }
 
     public CompoundTag getTagForChunk(World world, int chunkPosX, int chunkPosZ) {
+        System.out.println("Started writing chunk to Tag");
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
+
         Chunk chunk = world.getChunkForPos(chunkPosX, chunkPosZ);
 
         Map<String, Tag> dataMap = new HashMap<>();
@@ -85,6 +91,8 @@ public class TileSaveHandler {
             }
         }
 
+
+        System.out.println("   ==> Finished converting in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
         return new CompoundTag(Tags.CHUNK + "-" + chunkPosX + "-" + chunkPosZ, dataMap);
     }
 
@@ -177,6 +185,11 @@ public class TileSaveHandler {
                 loadChunkForTagIntoWorld(world, chunkTag, x, z);
             }
         }
+    }
+
+    public void setChunkInWorld (World world, Chunk chunk) {
+        chunk.setWorld(world);
+        world.setChunkForPos(chunk);
     }
 
     public static class Tags {

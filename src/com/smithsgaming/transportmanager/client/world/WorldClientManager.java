@@ -24,9 +24,9 @@ public class WorldClientManager {
 
     public Pair<Integer, Integer> getNextChunkToSyncForWorld () {
         for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
-            for (int y = 0; y < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
-                if (!world.getLoadedStateForChunk(x, y)) ;
-                return new Pair<>(x, y);
+            for (int z = 0; z < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; z++) {
+                if (!world.getLoadedStateForChunk(x, z))
+                    return new Pair<>(x, z);
             }
         }
 

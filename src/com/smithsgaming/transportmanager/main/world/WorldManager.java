@@ -30,7 +30,6 @@ public class WorldManager {
         isWorldBeingLoaded = true;
 
         loadedWorld = new World(new WorldCoreData(500, 256, 500, new Random().nextLong()));
-        loadedWorld.initializeChunkMap();
         loadedWorld.generate();
 
         saveHandler = new TileSaveHandler(loadedWorld);

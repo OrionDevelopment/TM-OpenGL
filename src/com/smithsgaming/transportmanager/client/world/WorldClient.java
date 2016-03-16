@@ -20,4 +20,8 @@ public class WorldClient extends World
     public boolean getLoadedStateForChunk (int chunkPosX, int chunkPosZ) {
         return chunkLoadedState[chunkPosX][chunkPosZ];
     }
+
+    public void setChunkLoadedState (int chunkPosX, int chunkPosZ, boolean state) {
+        chunkLoadedState[chunkPosX][chunkPosZ] = state;
+    }
 }

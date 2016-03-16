@@ -46,6 +46,12 @@ public class TransportManagerClient implements Runnable, IEventController {
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
 
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
         clientNetworkThread.start();
 

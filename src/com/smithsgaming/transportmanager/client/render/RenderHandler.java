@@ -9,4 +9,8 @@ public class RenderHandler {
     public static void doRender () {
         worldRenderer.render();
     }
+
+    public static WorldRenderer getWorldRenderer () {
+        return worldRenderer;
+    }
 }
