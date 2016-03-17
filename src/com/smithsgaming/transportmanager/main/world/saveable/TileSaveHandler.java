@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.main.world.saveable;
 
 import com.google.common.base.*;
+import com.smithsgaming.transportmanager.client.world.*;
+import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
@@ -15,11 +17,7 @@ import java.util.concurrent.*;
  */
 public class TileSaveHandler {
 
-    private World world;
-
-    public TileSaveHandler(World world) {
-        this.world = world;
-    }
+    public static TileSaveHandler instance = new TileSaveHandler();
 
     public CompoundTag getTagForTile(Chunk chunk, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         Map<String, Tag> dataMap = new HashMap<>();
@@ -188,6 +186,11 @@ public class TileSaveHandler {
     }
 
     public void setChunkInWorld (World world, Chunk chunk) {
+        chunk.setWorld(world);
+        world.setChunkForPos(chunk);
+    }
+
+    public void setChunkInWorldClient (WorldClient world, ChunkClient chunk) {
         chunk.setWorld(world);
         world.setChunkForPos(chunk);
     }

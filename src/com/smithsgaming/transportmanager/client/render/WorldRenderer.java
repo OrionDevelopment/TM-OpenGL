@@ -1,8 +1,9 @@
 package com.smithsgaming.transportmanager.client.render;
 
+import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.world.*;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.util.vector.*;
 
@@ -25,11 +26,14 @@ public class WorldRenderer implements IRenderer {
 
     }
 
-    private boolean isChunkInView (Chunk chunk) {
-
+    private boolean isChunkInView (ChunkClient chunk) {
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
     }
 
-    private void drawChunk (Chunk chunk) {
+    private void drawChunk (ChunkClient chunk) {
+        if (!isChunkInView(chunk))
+            return;
+
 
     }
 

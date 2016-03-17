@@ -4,7 +4,9 @@ import com.google.common.base.*;
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.client.world.*;
+import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.main.world.saveable.*;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 import javafx.util.*;
@@ -37,7 +39,7 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
         if (side == Side.CLIENT) {
             Stopwatch stopwatch = Stopwatch.createStarted();
 
-            WorldClientManager.instance.getSaveHandler().setChunkInWorld(WorldClientManager.instance.getWorld(), chunk);
+            TileSaveHandler.instance.setChunkInWorldClient(WorldClientManager.instance.getWorld(), new ChunkClient(chunk));
 
             System.out.println("   ==> Finished loading in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
             stopwatch.reset();

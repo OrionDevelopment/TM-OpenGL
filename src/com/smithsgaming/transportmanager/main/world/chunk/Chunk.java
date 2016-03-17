@@ -3,7 +3,6 @@ package com.smithsgaming.transportmanager.main.world.chunk;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
-import org.jnbt.*;
 
 import java.io.*;
 
@@ -55,16 +54,19 @@ public class Chunk implements Serializable {
         tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tileEntity;
     }
 
+    public Tile[][][] getTiles () {
+        return tiles;
+    }
+
+    public TileEntity[][][] getTileEntities () {
+        return tileEntities;
+    }
+
     public World getWorld () {
         return world;
     }
 
     public void setWorld (World world) {
         this.world = world;
-    }
-
-    public Tag getDataTag()
-    {
-        return  WorldManager.instance.getSaveHandler().getTagForChunk(world, chunkX, chunkZ);
     }
 }

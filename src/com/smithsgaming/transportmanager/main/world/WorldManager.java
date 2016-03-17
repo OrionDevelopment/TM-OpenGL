@@ -1,8 +1,6 @@
 
 package com.smithsgaming.transportmanager.main.world;
 
-import com.smithsgaming.transportmanager.main.world.saveable.*;
-
 import java.util.*;
 
 /**
@@ -14,13 +12,8 @@ public class WorldManager {
 
     private World loadedWorld = null;
     private boolean isWorldBeingLoaded;
-    private TileSaveHandler saveHandler;
 
     protected WorldManager() {
-    }
-
-    public TileSaveHandler getSaveHandler() {
-        return saveHandler;
     }
 
     public void generateWorld() {
@@ -31,8 +24,6 @@ public class WorldManager {
 
         loadedWorld = new World(new WorldCoreData(500, 256, 500, new Random().nextLong()));
         loadedWorld.generate();
-
-        saveHandler = new TileSaveHandler(loadedWorld);
 
         isWorldBeingLoaded = false;
     }
