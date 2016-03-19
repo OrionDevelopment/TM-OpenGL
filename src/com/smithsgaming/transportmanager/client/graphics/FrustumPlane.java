@@ -20,13 +20,15 @@ class FrustumPlane {
     }
 
     public FrustumPlane () {
-        this(new Vector3f(), new Vector3f(), new Vector3f());
+        normal = new Vector3f();
+        point = new Vector3f();
+        d = 0f;
     }
 
     void set3Points (Vector3f v1, Vector3f v2, Vector3f v3) {
 
-        Vector3f aux1 = null;
-        Vector3f aux2 = null;
+        Vector3f aux1 = new Vector3f();
+        Vector3f aux2 = new Vector3f();
 
         Vector3f.sub(v1, v2, aux1);
         Vector3f.sub(v3, v2, aux2);

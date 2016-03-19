@@ -3,10 +3,10 @@
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
 import org.lwjgl.util.vector.*;
 
 import java.io.*;
@@ -23,21 +23,11 @@ public class OpenGLUtil {
     private static float FOV = 60f;
     private static float aspectRatio = ((float) TransportManagerClient.getDisplay().getResolutionHorizontal() / (float)TransportManagerClient.getDisplay().getResolutionVertical());
 
-    private static Matrix4f projectionMatrix;
-    private static Matrix4f viewMatrix;
     private static Matrix4f modelMatrix;
-
-    private static int projectionMatrixAdress;
-    private static int viewMatrixAdress;
-    private static int modelMatrixAdress;
-
-    private static Vector3f cameraPosition = new Vector3f(0, 0, 0);
 
     private static Stack<Matrix4f> modelMatrixStack = new Stack<>();
     private static Matrix4f renderingModelMatrix = new Matrix4f();
 
-    private static FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
-    private static FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private static FloatBuffer modelMatrixBuffer = BufferUtils.createFloatBuffer(16);
 
     /**
@@ -64,7 +54,7 @@ public class OpenGLUtil {
      *
      * @return The GL ID of the shader source code once loaded into the GPU.
      */
-    public static int compileShader (int shaderType, String shaderSourceCode) {
+    private static int compileShader (int shaderType, String shaderSourceCode) {
         int shader = GL20.glCreateShader(shaderType);
         GL20.glShaderSource(shader, shaderSourceCode);
         GL20.glCompileShader(shader);
@@ -101,7 +91,7 @@ public class OpenGLUtil {
      *
      * @return The GL ID of the OpenGL Graphical Pipeline programm.
      */
-    public static int linkShaders (int[] shaders) {
+    private static int linkShaders (ShaderRegistry.Shader shader, int[] shaders) {
         int program = GL20.glCreateProgram();
         for (int i = 0; i < shaders.length; i++) {
             GL20.glAttachShader(program, shaders[i]);
@@ -125,9 +115,9 @@ public class OpenGLUtil {
         }
 
         // Get matrices uniform locations
-        projectionMatrixAdress = GL20.glGetUniformLocation(program, "projectionMatrix");
-        viewMatrixAdress = GL20.glGetUniformLocation(program, "viewMatrix");
-        modelMatrixAdress = GL20.glGetUniformLocation(program, "modelMatrix");
+        shader.setProjectionMatrixIndex(GL20.glGetUniformLocation(program, "projectionMatrix"));
+        shader.setViewMatrixIndex(GL20.glGetUniformLocation(program, "viewMatrix"));
+        shader.setModelMatrixIndex(GL20.glGetUniformLocation(program, "modelMatrix"));
 
         for (int i = 0; i < shaders.length; i++) {
             GL20.glDetachShader(program, shaders[i]);
@@ -138,27 +128,17 @@ public class OpenGLUtil {
         return program;
     }
 
-    /**
-     * Method to get the default shader for TM.
-     *
-     * @return The OpenGL ID of the default TM Shader.
-     *
-     * @throws FileNotFoundException Exception is thrown when the ShaderLoader could not find the Shader source code
-     *                               file.
-     */
-    public static int loadDefaultShaderProgramm () throws FileNotFoundException {
-        if (Shaders.defaultShader != null)
-            return Shaders.defaultShader;
+    public static void loadShaderProgramm (ShaderRegistry.Shader shader) {
+        if (shader.getShaderId() > -1)
+            throw new IllegalArgumentException("Shader already loaded.");
 
         int[] shaders = new int[2];
-        shaders[0] = compileShader(GL20.GL_VERTEX_SHADER, loadShaderSourceCode("vertexShaderZoom"));
-        shaders[1] = compileShader(GL20.GL_FRAGMENT_SHADER, loadShaderSourceCode("fragmentShaderColor"));
+        shaders[0] = compileShader(GL20.GL_VERTEX_SHADER, shader.getVertexShaderSourceCode());
+        shaders[1] = compileShader(GL20.GL_FRAGMENT_SHADER, shader.getFragmentShaderSourceCode());
 
-        Shaders.defaultShader = linkShaders(shaders);
+        shader.setShaderId(linkShaders(shader, shaders));
 
-        checkGlState("Load Default Shader");
-
-        return Shaders.defaultShader;
+        checkGlState("Load Shader");
     }
 
     /**
@@ -220,7 +200,7 @@ public class OpenGLUtil {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
                 GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
-                GL11.GL_LINEAR_MIPMAP_LINEAR);
+                GL11.GL_NEAREST_MIPMAP_NEAREST);
 
         texture.setOpenGLTextureId(texId);
         texture.setBoundTextureUnit(GL13.GL_TEXTURE0);
@@ -233,25 +213,19 @@ public class OpenGLUtil {
      *
      * @param geometry The Geometry to render.
      * @param texture  The Texture to render the geometry with.
-     * @param shaderId The OpenGL Shader Programm ID to use.
+     * @param shader The OpenGL Shader ID to use.
      */
-    public static void drawGeometryWithShader(GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, Matrix4f renderMatrix, int shaderId) {
+    public static void drawGeometryWithShader (Camera camera, GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, Matrix4f renderMatrix, ShaderRegistry.Shader shader) {
         if (geometry == null)
             return;
 
-        if (projectionMatrix == null)
-            createProjectionMatrix();
-
-        if (viewMatrix == null)
-            createCameraMatrix();
-
-        GL20.glUseProgram(shaderId);
+        GL20.glUseProgram(shader.getShaderId());
 
         setModelMatrix(renderMatrix);
 
-        GL20.glUniformMatrix4fv(projectionMatrixAdress, false, projectionMatrixBuffer);
-        GL20.glUniformMatrix4fv(viewMatrixAdress, false, viewMatrixBuffer);
-        GL20.glUniformMatrix4fv(modelMatrixAdress, false, modelMatrixBuffer);
+        GL20.glUniformMatrix4fv(shader.getProjectionMatrixIndex(), false, camera.getProjectionMatrixBuffer());
+        GL20.glUniformMatrix4fv(shader.getViewMatrixIndex(), false, camera.getViewMatrixBuffer());
+        GL20.glUniformMatrix4fv(shader.getModelMatrixIndex(), false, modelMatrixBuffer);
 
         GL13.glActiveTexture(texture.getBoundTextureUnit());
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
@@ -300,7 +274,7 @@ public class OpenGLUtil {
     public static void setFOV (float FOV) {
         OpenGLUtil.FOV = FOV;
 
-        createProjectionMatrix();
+        //TODO: Update the camera when this happens.
     }
 
     /**
@@ -320,59 +294,7 @@ public class OpenGLUtil {
     public static void setAspectRatio (float aspectRatio) {
         OpenGLUtil.aspectRatio = aspectRatio;
 
-        createProjectionMatrix();
-    }
-
-    public static Vector3f getCameraPosition() {
-        return cameraPosition;
-    }
-
-    public static void setCameraPosition(Vector3f cameraPosition) {
-        OpenGLUtil.cameraPosition = cameraPosition;
-
-        createCameraMatrix();
-    }
-
-    @JavadocExclude
-    private static void createProjectionMatrix () {
-        setProjectionMatrix(MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(FOV), aspectRatio, 0.1f, 100f));
-    }
-
-    @JavadocExclude
-    private static void createCameraMatrix () {
-        Matrix4f matrix4f = new Matrix4f();
-
-        matrix4f.translate(cameraPosition);
-
-        setViewMatrix(matrix4f);
-    }
-
-    private static void createModelMatrix () {
-        setModelMatrix(new Matrix4f());
-    }
-
-    public static Matrix4f getViewMatrix () {
-        return viewMatrix;
-    }
-
-    public static void setViewMatrix (Matrix4f viewMatrix) {
-        OpenGLUtil.viewMatrix = viewMatrix;
-
-        viewMatrixBuffer.clear();
-
-        viewMatrix.store(viewMatrixBuffer);
-        viewMatrixBuffer.flip();
-    }
-
-    public static Matrix4f getProjectionMatrix () {
-        return projectionMatrix;
-    }
-
-    public static void setProjectionMatrix (Matrix4f projectionMatrix) {
-        OpenGLUtil.projectionMatrix = projectionMatrix;
-
-        projectionMatrix.store(projectionMatrixBuffer);
-        projectionMatrixBuffer.flip();
+        //TODO: Update the camera when this happens.
     }
 
     public static Matrix4f getModelMatrix () {
@@ -417,9 +339,9 @@ public class OpenGLUtil {
 
     }
 
-    public static void deleteShader (int programmId) {
+    public static void deleteShader (ShaderRegistry.Shader shader) {
         GL20.glUseProgram(0);
-        GL20.glDeleteProgram(programmId);
+        GL20.glDeleteProgram(shader.getShaderId());
 
     }
 
@@ -430,9 +352,4 @@ public class OpenGLUtil {
             System.err.println("ERROR - " + snapshotMoment + ": " + errorValue);
         }
     }
-
-    public static class Shaders {
-        public static Integer defaultShader = null;
-    }
-
 }

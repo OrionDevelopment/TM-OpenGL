@@ -22,7 +22,7 @@ public class WorldRenderer implements IRenderer {
     @Override
     public void render () {
         if (worldClient == null)
-            OpenGLUtil.drawGeometryWithShader(GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.deepWater, new Matrix4f(), OpenGLUtil.Shaders.defaultShader);
+            OpenGLUtil.drawGeometryWithShader(Camera.Player, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, new Matrix4f(), ShaderRegistry.Shaders.textured);
 
     }
 

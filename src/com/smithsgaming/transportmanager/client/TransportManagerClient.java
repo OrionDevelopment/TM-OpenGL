@@ -7,8 +7,6 @@ import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
 
-import java.io.*;
-
 
 /**
  * This class is responsible for handling all the parts of Transport Manager that you can see and interact with. It
@@ -53,7 +51,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        clientNetworkThread.start();
+        //clientNetworkThread.start();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
@@ -92,19 +90,13 @@ public class TransportManagerClient implements Runnable, IEventController {
 
     public void loadGraphics () {
         TextureRegistry.Textures.init();
-        try {
-            OpenGLUtil.loadDefaultShaderProgramm();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        ShaderRegistry.Shaders.init();
     }
 
     public void unLoadGraphics () {
         TextureRegistry.instance.unLoad();
         GeometryRegistry.instance.unLoad();
-
-        OpenGLUtil.deleteShader(OpenGLUtil.Shaders.defaultShader);
+        ShaderRegistry.instance.unLoad();
     }
 
     private void updateClient () {

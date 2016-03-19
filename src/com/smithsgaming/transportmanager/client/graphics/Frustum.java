@@ -16,10 +16,8 @@ public class Frustum {
     private FrustumPlane[] planes = new FrustumPlane[6];
     private Matrix4f viewProjectionMatrix = new Matrix4f();
 
-    public Frustum (Camera activeCamera) {
+    protected Frustum (Camera activeCamera) {
         this.activeCamera = activeCamera;
-
-        updateFrustum();
 
         planes[0] = topFrustumPlane;
         planes[1] = bottomFrustumPlane;

@@ -2,17 +2,23 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
+import org.lwjgl.*;
 import org.lwjgl.util.vector.*;
+
+import java.nio.*;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
  */
 public class Camera {
 
-    public static final Camera Player = new Camera();
+    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
 
     private Matrix4f projectionMatrix;
     private Matrix4f viewMatrix;
+
+    private FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
+    private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
 
     private Vector3f cameraPosition = new Vector3f();
     private float viewDistanceInChunks = 4;
@@ -24,12 +30,33 @@ public class Camera {
     }
 
     public Camera (Vector3f cameraPosition) {
-        createProjectionMatrix();
-
-        createCameraMatrix();
-        moveCamera(cameraPosition);
-
         this.activeFrustum = new Frustum(this);
+
+        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
+        this.projectionMatrix.store(projectionMatrixBuffer);
+        this.projectionMatrixBuffer.flip();
+
+
+        this.viewMatrix = new Matrix4f();
+        this.viewMatrix.store(this.viewMatrixBuffer);
+        this.viewMatrixBuffer.flip();
+
+        moveCamera(cameraPosition);
+    }
+
+    public Camera (float angle, Vector3f rotationAxis) {
+        this.activeFrustum = new Frustum(this);
+
+        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
+        this.projectionMatrix.store(projectionMatrixBuffer);
+        this.projectionMatrixBuffer.flip();
+
+
+        this.viewMatrix = new Matrix4f();
+        this.viewMatrix.store(this.viewMatrixBuffer);
+        this.viewMatrixBuffer.flip();
+
+        rotateCamera(angle, rotationAxis);
     }
 
     /**
@@ -62,6 +89,10 @@ public class Camera {
     private void setProjectionMatrix (Matrix4f projectionMatrix) {
         this.projectionMatrix = projectionMatrix;
 
+        projectionMatrixBuffer.clear();
+        projectionMatrix.store(projectionMatrixBuffer);
+        projectionMatrixBuffer.flip();
+
         activeFrustum.updateFrustum();
     }
 
@@ -72,7 +103,19 @@ public class Camera {
     private void setViewMatrix (Matrix4f viewMatrix) {
         this.viewMatrix = viewMatrix;
 
+        viewMatrixBuffer.clear();
+        viewMatrix.store(viewMatrixBuffer);
+        viewMatrixBuffer.flip();
+
         activeFrustum.updateFrustum();
+    }
+
+    public FloatBuffer getProjectionMatrixBuffer () {
+        return projectionMatrixBuffer;
+    }
+
+    public FloatBuffer getViewMatrixBuffer () {
+        return viewMatrixBuffer;
     }
 
     /**
@@ -80,11 +123,17 @@ public class Camera {
      *
      * @param moveDelta The distance to move the camera over.
      */
-    public void moveCamera (Vector3f moveDelta) {
+    public Camera moveCamera (Vector3f moveDelta) {
         viewMatrix.translate(moveDelta);
         cameraPosition.translate(moveDelta.getX(), moveDelta.getY(), moveDelta.getZ());
 
+        viewMatrixBuffer.clear();
+        viewMatrix.store(viewMatrixBuffer);
+        viewMatrixBuffer.flip();
+
         activeFrustum.updateFrustum();
+
+        return this;
     }
 
     /**
@@ -93,10 +142,16 @@ public class Camera {
      * @param angle The angle to rotate the camera over.
      * @param axis  A vector indicating the axis that should be rotated over.
      */
-    public void rotateCamera (float angle, Vector3f axis) {
+    public Camera rotateCamera (float angle, Vector3f axis) {
         viewMatrix.rotate(angle, axis);
 
+        viewMatrixBuffer.clear();
+        viewMatrix.store(viewMatrixBuffer);
+        viewMatrixBuffer.flip();
+
         activeFrustum.updateFrustum();
+
+        return this;
     }
 
     public Frustum getActiveFrustum () {
