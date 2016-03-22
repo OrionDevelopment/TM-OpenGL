@@ -1,9 +1,11 @@
 package com.smithsgaming.transportmanager.client.registries;
 
+import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.util.*;
 
 import java.nio.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -36,13 +38,23 @@ public class TextureRegistry {
         return bufferedTextures.get(id);
     }
 
-    public Texture initializeTextureStitching (int textureStichtingId) {
-        ArrayList<Texture> texturesToCombine = new ArrayList<>();
+    public Texture initializeTextureStitching (int textureStitchingId) {
+        ArrayList<Texture> texturesToCombine = bufferedTextures.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));
 
-        for (Texture texture : bufferedTextures.values()) {
-            if (texture.getTextureStitchId() == textureStichtingId && texture.isRequiringTextureStitching() && !texture.isStitched()) {
+        TextureStitcher stitcher = new TextureStitcher(Display.getMaxTextureSize(), Display.getMaxTextureSize(), true);
+        stitcher.addSprites(texturesToCombine);
 
-            }
+        Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId, ByteBuffer.allocateDirect(
+                4 * stitcher.getCurrentStitchedWidth() * stitcher.getCurrentStitchedHeight()), stitcher.getCurrentStitchedWidth(), stitcher.getCurrentStitchedHeight(), 0, 0, false, false, textureStitchingId);
+
+        OpenGLUtil.loadTextureIntoGPU(stitchedTexture);
+
+        texturesToCombine = (ArrayList<Texture>) stitcher.getStitchSlots();
+
+        for (Texture texture : texturesToCombine) {
+            OpenGLUtil.loadSubTextureRegionIntoGPU(stitchedTexture, texture);
+            texture.setBoundTextureUnit(stitchedTexture.getBoundTextureUnit());
+            texture.setOpenGLTextureId(stitchedTexture.getOpenGLTextureId());
         }
 
         return null;
@@ -55,6 +67,8 @@ public class TextureRegistry {
     }
 
     public static class Texture {
+        private String textureName;
+
         private ByteBuffer data;
         private int width;
         private int height;
@@ -70,11 +84,12 @@ public class TextureRegistry {
         private float v;
 
 
-        public Texture (ByteBuffer data, int width, int height) {
-            this(false, true, 0, data, width, height, 0, 0);
+        public Texture (String textureName, ByteBuffer data, int width, int height) {
+            this(textureName, data, width, height, 0, 0, false, true, 0);
         }
 
-        public Texture (boolean isStitched, boolean requiringTextureStitching, int textureStitchId, ByteBuffer data, int width, int height, float u, float v) {
+        public Texture (String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
+            this.textureName = textureName;
             this.isStitched = isStitched;
             this.requiringTextureStitching = requiringTextureStitching;
             this.textureStitchId = textureStitchId;
@@ -83,6 +98,10 @@ public class TextureRegistry {
             this.data = data;
             this.u = u;
             this.v = v;
+        }
+
+        public String getTextureName () {
+            return textureName;
         }
 
         public ByteBuffer getData () {

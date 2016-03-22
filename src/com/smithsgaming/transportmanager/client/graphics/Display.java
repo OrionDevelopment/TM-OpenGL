@@ -9,6 +9,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.io.*;
+import java.nio.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -20,21 +21,31 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Display implements Runnable
 {
+    private static int max_texture_size = -1;
     private int resolutionHorizontal = 1240;
     private int resolutionVertical = 720;
     private boolean fullScreen = false;
-
     private int sizeHorizontal = resolutionHorizontal;
     private int sizeVertical = resolutionVertical;
     private boolean resized = false;
-
     private GLFWErrorCallback errorCallback;
     private GLFWFramebufferSizeCallback resizeWindow;
     private GLDebugMessageCallback debugMessageKHRCallback;
-
     private long window;
 
     public Display(){
+    }
+
+    public static int getMaxTextureSize () {
+        if (max_texture_size != -1) return max_texture_size;
+        for (int i = 0x4000; i > 0; i >>= 1) {
+            GL11.glTexImage2D(GL11.GL_PROXY_TEXTURE_2D, 0, GL11.GL_RGBA, i, i, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+            if (GL11.glGetTexLevelParameteri(GL11.GL_PROXY_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH) != 0) {
+                max_texture_size = i;
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void init () {
@@ -161,4 +172,10 @@ public class Display implements Runnable
     public int getResolutionVertical() {
         return resolutionVertical;
     }
+
+    public long getWindow () {
+        return window;
+    }
+
+
 }

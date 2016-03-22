@@ -72,4 +72,16 @@ public class MathUtil
         return matrix4f;
     }
 
+    /**
+     * Returns the input value rounded up to the next highest power of two.
+     */
+    public static int roundUpToPowerOfTwo (int value) {
+        int i = value - 1;
+        i = i | i >> 1;
+        i = i | i >> 2;
+        i = i | i >> 4;
+        i = i | i >> 8;
+        i = i | i >> 16;
+        return i + 1;
+    }
 }

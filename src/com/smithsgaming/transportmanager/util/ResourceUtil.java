@@ -71,6 +71,6 @@ public class ResourceUtil {
             e.printStackTrace();
         }
 
-        return new TextureRegistry.Texture(buf, width, height);
+        return new TextureRegistry.Texture(fileName, buf, width, height);
     }
 }

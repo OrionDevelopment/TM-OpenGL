@@ -13,6 +13,8 @@ import java.io.*;
 import java.nio.*;
 import java.util.*;
 
+import static org.lwjgl.opengl.GL11.*;
+
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
  *
@@ -206,6 +208,20 @@ public class OpenGLUtil {
         texture.setBoundTextureUnit(GL13.GL_TEXTURE0);
 
         checkGlState("Load Texture");
+    }
+
+    /**
+     * Method to load a texture into a other texture.
+     *
+     * @param masterTexture The texture to load into.
+     * @param subTexture    The texture to copy from.
+     */
+    public static void loadSubTextureRegionIntoGPU (TextureRegistry.Texture masterTexture, TextureRegistry.Texture subTexture) {
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, masterTexture.getOpenGLTextureId());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, (int) subTexture.getU(), (int) subTexture.getV(), subTexture.getWidth(), subTexture.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, subTexture.getData());
+
+        checkGlState("Subtexture loading. Master: " + masterTexture.getTextureName() + " - Sub: " + subTexture.getTextureName());
     }
 
     /**

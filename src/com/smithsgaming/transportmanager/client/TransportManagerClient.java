@@ -30,6 +30,11 @@ public class TransportManagerClient implements Runnable, IEventController {
         return display;
     }
 
+    public void loadGraphics () {
+        TextureRegistry.Textures.init();
+        ShaderRegistry.Shaders.init();
+    }
+
     /**
      * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
      * causes the object's <code>run</code> method to be called in that separately executing thread.
@@ -88,9 +93,9 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
     }
 
-    public void loadGraphics () {
-        TextureRegistry.Textures.init();
-        ShaderRegistry.Shaders.init();
+
+    private void updateClient () {
+
     }
 
     public void unLoadGraphics () {
@@ -99,7 +104,4 @@ public class TransportManagerClient implements Runnable, IEventController {
         ShaderRegistry.instance.unLoad();
     }
 
-    private void updateClient () {
-
-    }
 }
