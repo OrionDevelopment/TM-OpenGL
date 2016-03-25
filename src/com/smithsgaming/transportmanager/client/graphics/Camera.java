@@ -13,6 +13,7 @@ import java.nio.*;
 public class Camera {
 
     public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
+    public static final Camera Gui = new Camera();
 
     private Matrix4f projectionMatrix;
     private Matrix4f viewMatrix;
@@ -163,6 +164,6 @@ public class Camera {
     }
 
     public boolean isPointInViewDistance (Vector3f point) {
-        return point.sub(point, cameraPosition, new Vector3f()).lengthSquared() <= ( Math.pow(viewDistanceInChunks * Chunk.chunkSize, 2) );
+        return Vector3f.sub(point, cameraPosition, new Vector3f()).lengthSquared() <= ( Math.pow(viewDistanceInChunks * Chunk.chunkSize, 2) );
     }
 }

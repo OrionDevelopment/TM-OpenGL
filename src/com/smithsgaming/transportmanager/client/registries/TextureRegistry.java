@@ -20,7 +20,7 @@ public class TextureRegistry {
     }
 
     public Texture loadTexture (String fileName) {
-        Texture texture = ResourceUtil.loadPNGTexture(fileName);
+        Texture texture = ResourceUtil.loadStitchablePNGTexture(fileName);
 
         return this.loadTexture(texture);
     }
@@ -176,7 +176,7 @@ public class TextureRegistry {
 
     public static class Textures {
         public static void init () {
-            SkyBox.skyBoxOcean = ResourceUtil.loadPNGTexture("/textures/deepWater_0.png");
+            SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/deepWater_0.png");
             SkyBox.skyBoxOcean.setRequiringTextureStitching(false);
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);

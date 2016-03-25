@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.client.event;
 
+import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -13,5 +14,6 @@ public class WorldClientLoadedEvent extends TMEvent {
     @Override
     public void processEvent (Side side) {
         RenderHandler.getWorldRenderer().setWorldClient(WorldClientManager.instance.getWorld());
+        TransportManagerClient.getDisplay().registerEvent(new CloseGuiEvent());
     }
 }

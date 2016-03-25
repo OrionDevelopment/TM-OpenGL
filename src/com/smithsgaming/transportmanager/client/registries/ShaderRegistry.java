@@ -95,11 +95,16 @@ public class ShaderRegistry {
 
         public static Shader colored;
         public static Shader textured;
+        public static Shader guiColored;
+        public static Shader guiTextured;
 
         static {
             try {
-                colored = new Shader("vertexShaderZoom", "fragmentShaderColor");
-                textured = new Shader("vertexShaderZoom", "fragmentShaderTextured");
+                colored = new Shader("vertexShaderProjection", "fragmentShaderColor");
+                textured = new Shader("vertexShaderProjection", "fragmentShaderTextured");
+
+                guiColored = new Shader("vertexShaderGui", "fragmentShaderColor");
+                guiTextured = new Shader("vertexShaderGui", "fragmentShaderTextured");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -108,6 +113,8 @@ public class ShaderRegistry {
         public static void init () {
             ShaderRegistry.instance.registerNewShader(colored);
             ShaderRegistry.instance.registerNewShader(textured);
+            ShaderRegistry.instance.registerNewShader(guiColored);
+            ShaderRegistry.instance.registerNewShader(guiTextured);
         }
     }
 

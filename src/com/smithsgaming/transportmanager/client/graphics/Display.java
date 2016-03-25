@@ -4,12 +4,14 @@ import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.event.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.io.*;
 import java.nio.*;
+import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -19,7 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @Author Marc (Created on: 05.03.2016)
  */
-public class Display implements Runnable
+public class Display implements Runnable, IEventController
 {
     private static int max_texture_size = -1;
     private int resolutionHorizontal = 1240;
@@ -32,6 +34,7 @@ public class Display implements Runnable
     private GLFWFramebufferSizeCallback resizeWindow;
     private GLDebugMessageCallback debugMessageKHRCallback;
     private long window;
+    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
 
     public Display(){
     }
@@ -127,6 +130,8 @@ public class Display implements Runnable
 
             doRenderLoop();
 
+            doProcessEventLoop();
+
             glfwSwapBuffers(window); // swap the color buffers
 
             glfwPollEvents();
@@ -135,6 +140,27 @@ public class Display implements Runnable
 
     private void doRenderLoop () {
         RenderHandler.doRender();
+    }
+
+    private void doProcessEventLoop () {
+        synchronized (eventQueu) {
+            if (eventQueu.size() == 0)
+                return;
+
+            for (TMEvent event : eventQueu) {
+                try {
+                    if (!TransportManager.isRunning)
+                        return;
+
+                    event.processEvent(Side.CLIENT);
+                } catch (Exception ex) {
+                    System.err.println("Exception while trying to process event: " + event.toString());
+                    ex.printStackTrace();
+                }
+            }
+
+            eventQueu.clear();
+        }
     }
 
     /**
@@ -165,6 +191,11 @@ public class Display implements Runnable
         }
     }
 
+    @Override
+    public Queue<TMEvent> getEventQueu () {
+        return eventQueu;
+    }
+
     public int getResolutionHorizontal() {
         return resolutionHorizontal;
     }
@@ -176,6 +207,4 @@ public class Display implements Runnable
     public long getWindow () {
         return window;
     }
-
-
 }

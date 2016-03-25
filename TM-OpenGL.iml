@@ -30,7 +30,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: io.netty:netty-all:5.0.0.Alpha2" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.21.0" level="project" />

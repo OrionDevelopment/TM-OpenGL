@@ -7,6 +7,8 @@ import com.smithsgaming.transportmanager.network.server.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
 
+import java.util.*;
+
 /**
  * Game class for the TransportManager game.
  * Initializes the game and runs it.
@@ -15,9 +17,16 @@ import com.smithsgaming.transportmanager.util.event.*;
  */
 public class TransportManager implements Runnable, IEventController {
 
+    public static final TransportManager instance = new TransportManager();
+
     public static boolean isRunning = true;
     static Thread serverNetworkThread;
     static int targetUPS = 60;
+
+    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+
+    private TransportManager () {
+    }
 
     @Override
     public void run() {
@@ -61,6 +70,11 @@ public class TransportManager implements Runnable, IEventController {
                 }
             }
         }
+    }
+
+    @Override
+    public Queue<TMEvent> getEventQueu () {
+        return eventQueu;
     }
 
     private void updateServer () {

@@ -44,21 +44,30 @@ public class ResourceUtil {
         return result.toString();
     }
 
-    public static TextureRegistry.Texture loadPNGTexture (String fileName) {
-        ByteBuffer buf = null;
-        int width = 0;
-        int height = 0;
+    public static TextureRegistry.Texture loadStitchablePNGTexture (String fileName) {
+        ByteBuffer buf = loadPNGBuffer(fileName);
+        int width = getPNGWidth(fileName);
+        int height = getPNGHeight(fileName);
 
+        return new TextureRegistry.Texture(fileName, buf, width, height);
+    }
+
+    public static TextureRegistry.Texture loadPNGTexture (String fileName) {
+        ByteBuffer buf = loadPNGBuffer(fileName);
+        int width = getPNGWidth(fileName);
+        int height = getPNGHeight(fileName);
+
+        return new TextureRegistry.Texture(fileName, buf, width, height, 0, 0, false, false, -1);
+    }
+
+    private static ByteBuffer loadPNGBuffer (String fileName) {
+        ByteBuffer buf = null;
+        
         try {
             // Open the PNG file as an InputStream
             InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
             // Link the PNG decoder to this stream
             PNGDecoder decoder = new PNGDecoder(in);
-
-            // Get the width and height of the texture
-            width = decoder.getWidth();
-            height = decoder.getHeight();
-
 
             // Decode the PNG file in a ByteBuffer
             buf = ByteBuffer.allocateDirect(
@@ -71,6 +80,45 @@ public class ResourceUtil {
             e.printStackTrace();
         }
 
-        return new TextureRegistry.Texture(fileName, buf, width, height);
+        return buf;
     }
+
+    private static int getPNGWidth (String fileName) {
+        int width = -1;
+
+        try {
+            // Open the PNG file as an InputStream
+            InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
+            // Link the PNG decoder to this stream
+            PNGDecoder decoder = new PNGDecoder(in);
+
+            width = decoder.getWidth();
+
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return width;
+    }
+
+    private static int getPNGHeight (String fileName) {
+        int height = -1;
+
+        try {
+            // Open the PNG file as an InputStream
+            InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
+            // Link the PNG decoder to this stream
+            PNGDecoder decoder = new PNGDecoder(in);
+
+            height = decoder.getHeight();
+
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return height;
+    }
+    
 }

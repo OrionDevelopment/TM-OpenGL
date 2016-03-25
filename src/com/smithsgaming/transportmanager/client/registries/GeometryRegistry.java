@@ -172,5 +172,18 @@ public class GeometryRegistry {
         public QuadGeometry () {
             super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
         }
+
+        private QuadGeometry (TexturedVertex[] texturedVertices) {
+            super(GeometryType.QUAD, texturedVertices);
+        }
+
+        public static Geometry constructFromPlaneForTexture (GuiPlane geometryPlane, GuiPlane texturePlane) {
+            final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getCoord1X(), texturePlane.getCoord1Y()).setXYZ(geometryPlane.getCoord1X(), geometryPlane.getCoord1Y(), 0);
+            final TexturedVertex topRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getCoord2X(), texturePlane.getCoord2Y()).setXYZ(geometryPlane.getCoord2X(), geometryPlane.getCoord2Y(), 0);
+            final TexturedVertex bottomRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getCoord3X(), texturePlane.getCoord3Y()).setXYZ(geometryPlane.getCoord3X(), geometryPlane.getCoord3Y(), 0);
+            final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getCoord4X(), texturePlane.getCoord4Y()).setXYZ(geometryPlane.getCoord4X(), geometryPlane.getCoord4Y(), 0);
+
+            return new QuadGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
+        }
     }
 }

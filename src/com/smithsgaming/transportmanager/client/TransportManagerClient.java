@@ -1,11 +1,15 @@
 package com.smithsgaming.transportmanager.client;
 
+import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.gui.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+
+import java.util.*;
 
 
 /**
@@ -18,21 +22,17 @@ import com.smithsgaming.transportmanager.util.event.*;
 public class TransportManagerClient implements Runnable, IEventController {
 
     public static TransportManagerClient instance = new TransportManagerClient();
-
     private static Thread clientNetworkThread;
     private static Thread displayThread;
-
     private static Display display;
-
     private static int targetUPS = 60;
+    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+
+    private TransportManagerClient () {
+    }
 
     public static Display getDisplay() {
         return display;
-    }
-
-    public void loadGraphics () {
-        TextureRegistry.Textures.init();
-        ShaderRegistry.Shaders.init();
     }
 
     /**
@@ -49,6 +49,8 @@ public class TransportManagerClient implements Runnable, IEventController {
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
 
+        display.registerEvent(new OpenGuiEvent(new GuiGameLoading()));
+
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -56,7 +58,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        //clientNetworkThread.start();
+        clientNetworkThread.start();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
@@ -80,7 +82,7 @@ public class TransportManagerClient implements Runnable, IEventController {
                             if (!TransportManager.isRunning)
                                 return;
 
-                            event.processEvent(Side.SERVER);
+                            event.processEvent(Side.CLIENT);
                         } catch (Exception ex) {
                             System.err.println("Exception while trying to process event: " + event.toString());
                             ex.printStackTrace();
@@ -93,9 +95,18 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
     }
 
+    @Override
+    public Queue<TMEvent> getEventQueu () {
+        return eventQueu;
+    }
 
     private void updateClient () {
 
+    }
+
+    public void loadGraphics () {
+        TextureRegistry.Textures.init();
+        ShaderRegistry.Shaders.init();
     }
 
     public void unLoadGraphics () {
@@ -103,5 +114,4 @@ public class TransportManagerClient implements Runnable, IEventController {
         GeometryRegistry.instance.unLoad();
         ShaderRegistry.instance.unLoad();
     }
-
 }

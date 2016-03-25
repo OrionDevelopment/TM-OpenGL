@@ -17,12 +17,12 @@ public class Main {
     static Thread serverThread;
 
     public static void main(String[] args) {
-        server = new TransportManager();
+        server = TransportManager.instance;
 
         serverThread = new Thread(server, "TM-OpenGL -  Server");
         serverThread.start();
 
-        client = new TransportManagerClient();
+        client = TransportManagerClient.instance;
 
         clientThread = new Thread(client, "TM-OpenGL - Client");
         clientThread.start();
