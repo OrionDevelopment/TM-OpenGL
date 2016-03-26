@@ -22,12 +22,12 @@ public class WorldRenderer implements IRenderer {
     @Override
     public void render () {
         if (worldClient == null)
-            OpenGLUtil.drawGeometryWithShader(Camera.Player, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, new Matrix4f(), ShaderRegistry.Shaders.textured);
+            OpenGLUtil.drawGeometryWithShader(Camera.PLAYER, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, new Matrix4f(), ShaderRegistry.Shaders.textured);
 
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
+        return Camera.PLAYER.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.PLAYER.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.PLAYER));
     }
 
     private void drawChunk (ChunkClient chunk) {

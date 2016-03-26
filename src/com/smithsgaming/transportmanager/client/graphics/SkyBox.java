@@ -32,6 +32,6 @@ public class SkyBox implements IRenderer {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(Camera.Player, oceanGeometry, TextureRegistry.Textures.SkyBox.skyBoxOcean, new Matrix4f(), ShaderRegistry.Shaders.textured);
+        OpenGLUtil.drawGeometryWithShader(Camera.PLAYER, oceanGeometry, TextureRegistry.Textures.SkyBox.skyBoxOcean, new Matrix4f(), ShaderRegistry.Shaders.textured);
     }
 }

@@ -47,6 +47,6 @@ public class ComponentImage extends GuiComponent {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(Camera.Gui, geometryToRender, textureToRender, new Matrix4f(), ShaderRegistry.Shaders.guiTextured);
+        OpenGLUtil.drawGeometryWithShader(Camera.GUI, geometryToRender, textureToRender, new Matrix4f(), ShaderRegistry.Shaders.guiTextured);
     }
 }
