@@ -7,13 +7,13 @@ import java.util.*;
  */
 public interface IEventController
 {
-    Queue<TMEvent> getEventQueu ();
+    Queue<TMEvent> getEventQueue();
 
     default void registerEvent (TMEvent event)
     {
-        synchronized (getEventQueu())
+        synchronized (getEventQueue())
         {
-            getEventQueu().add(event);
+            getEventQueue().add(event);
         }
     }
 }

@@ -95,8 +95,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
     }
 
-    @Override
-    public Queue<TMEvent> getEventQueu () {
+    public Queue<TMEvent> getEventQueue() {
         return eventQueu;
     }
 

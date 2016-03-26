@@ -17,7 +17,7 @@ public class World {
 
     private Chunk[][] chunks;
 
-    public World (WorldCoreData data) {
+    public World(WorldCoreData data) {
         coreData = data;
         initializeChunkMap();
     }
@@ -26,7 +26,7 @@ public class World {
         return chunks[chunkPosX][chunkPosZ];
     }
 
-    public void setChunkForPos (Chunk chunkForPos) {
+    public void setChunkForPos(Chunk chunkForPos) {
         chunks[chunkForPos.getChunkX()][chunkForPos.getChunkZ()] = chunkForPos;
     }
 
@@ -46,13 +46,12 @@ public class World {
         getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityOnPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public WorldCoreData getCoreData () {
+    public WorldCoreData getCoreData() {
         return coreData;
     }
 
     protected void initializeChunkMap() {
         chunks = new Chunk[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
-        
         for (int x = 0; x < chunks.length; x++) {
             for (int z = 0; z < chunks[0].length; z++) {
                 chunks[x][z] = new Chunk(this, x, z);
@@ -64,7 +63,6 @@ public class World {
         for (int x = 0; x < chunks.length; x++) {
             for (int z = 0; z < chunks[0].length; z++) {
                 Chunk chunk = chunks[x][z];
-
                 for (int cx = 0; cx < Chunk.chunkSize; cx++) {
                     for (int cy = 0; cy < coreData.getWorldHeight(); cy++) {
                         for (int cz = 0; cz < Chunk.chunkSize; cz++) {

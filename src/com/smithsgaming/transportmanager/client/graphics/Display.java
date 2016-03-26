@@ -34,7 +34,7 @@ public class Display implements Runnable, IEventController
     private GLFWFramebufferSizeCallback resizeWindow;
     private GLDebugMessageCallback debugMessageKHRCallback;
     private long window;
-    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+    private Queue<TMEvent> eventQueue = new ArrayDeque<>();
 
     public Display(){
     }
@@ -143,11 +143,11 @@ public class Display implements Runnable, IEventController
     }
 
     private void doProcessEventLoop () {
-        synchronized (eventQueu) {
-            if (eventQueu.size() == 0)
+        synchronized (eventQueue) {
+            if (eventQueue.size() == 0)
                 return;
 
-            for (TMEvent event : eventQueu) {
+            for (TMEvent event : eventQueue) {
                 try {
                     if (!TransportManager.isRunning)
                         return;
@@ -159,7 +159,7 @@ public class Display implements Runnable, IEventController
                 }
             }
 
-            eventQueu.clear();
+            eventQueue.clear();
         }
     }
 
@@ -191,9 +191,8 @@ public class Display implements Runnable, IEventController
         }
     }
 
-    @Override
-    public Queue<TMEvent> getEventQueu () {
-        return eventQueu;
+    public Queue<TMEvent> getEventQueue() {
+        return eventQueue;
     }
 
     public int getResolutionHorizontal() {
