@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Game class for the TransportManager game.
  * Initializes the game and runs it.
- *
+ * <p>
  * Created by Marc on 05.03.2016.
  */
 public class TransportManager implements Runnable, IEventController {
@@ -23,9 +23,9 @@ public class TransportManager implements Runnable, IEventController {
     static Thread serverNetworkThread;
     static int targetUPS = 60;
 
-    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+    private Queue<TMEvent> eventQueue = new ArrayDeque<>();
 
-    private TransportManager () {
+    private TransportManager() {
     }
 
     @Override
@@ -40,21 +40,20 @@ public class TransportManager implements Runnable, IEventController {
         final double ns = 1000000000 / targetUPS;
         double delta = 0;
 
-        while(isRunning)
-        {
+        while (isRunning) {
             long now = System.nanoTime();
-            delta += ( now - lastTime ) / ns;
+            delta += (now - lastTime) / ns;
             lastTime = now;
 
             while (delta >= 1) {
                 updateServer();
                 delta--;
 
-                synchronized (eventQueu) {
-                    if (eventQueu.size() == 0)
+                synchronized (eventQueue) {
+                    if (eventQueue.size() == 0)
                         continue;
 
-                    for (TMEvent event : eventQueu) {
+                    for (TMEvent event : eventQueue) {
                         try {
                             if (!isRunning)
                                 return;
@@ -66,17 +65,17 @@ public class TransportManager implements Runnable, IEventController {
                         }
                     }
 
-                    eventQueu.clear();
+                    eventQueue.clear();
                 }
             }
         }
     }
 
     public Queue<TMEvent> getEventQueue() {
-        return eventQueu;
+        return eventQueue;
     }
 
-    private void updateServer () {
+    private void updateServer() {
 
     }
 }
