@@ -28,6 +28,12 @@ public class WorldManager {
         isWorldBeingLoaded = false;
     }
 
+    public void updateWorld() {
+        if (loadedWorld != null) {
+            loadedWorld.update();
+        }
+    }
+
     public World getLoadedWorld() {
         return loadedWorld;
     }

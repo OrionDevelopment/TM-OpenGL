@@ -69,4 +69,7 @@ public abstract class World {
             }
         }
     }
+
+    public void update() {
+    }
 }

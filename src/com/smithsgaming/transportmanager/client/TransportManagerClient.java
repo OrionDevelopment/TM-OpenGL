@@ -8,6 +8,8 @@ import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -21,14 +23,15 @@ import java.util.*;
  */
 public class TransportManagerClient implements Runnable, IEventController {
 
+    public static final Logger clientLogger = LogManager.getLogger();
     public static TransportManagerClient instance = new TransportManagerClient();
     private static Thread clientNetworkThread;
     private static Thread displayThread;
     private static Display display;
     private static int targetUPS = 60;
-    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+    private Queue<TMEvent> eventQueue = new ArrayDeque<>();
 
-    private TransportManagerClient () {
+    private TransportManagerClient() {
     }
 
     public static Display getDisplay() {
@@ -44,7 +47,7 @@ public class TransportManagerClient implements Runnable, IEventController {
      * @see Thread#run()
      */
     @Override
-    public void run () {
+    public void run() {
         display = new Display();
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
@@ -66,18 +69,18 @@ public class TransportManagerClient implements Runnable, IEventController {
 
         while (TransportManager.isRunning) {
             long now = System.nanoTime();
-            delta += ( now - lastTime ) / ns;
+            delta += (now - lastTime) / ns;
             lastTime = now;
 
             while (delta >= 1) {
                 updateClient();
                 delta--;
 
-                synchronized (eventQueu) {
-                    if (eventQueu.size() == 0)
+                synchronized (eventQueue) {
+                    if (eventQueue.size() == 0)
                         continue;
 
-                    for (TMEvent event : eventQueu) {
+                    for (TMEvent event : eventQueue) {
                         try {
                             if (!TransportManager.isRunning)
                                 return;
@@ -89,26 +92,26 @@ public class TransportManagerClient implements Runnable, IEventController {
                         }
                     }
 
-                    eventQueu.clear();
+                    eventQueue.clear();
                 }
             }
         }
     }
 
     public Queue<TMEvent> getEventQueue() {
-        return eventQueu;
+        return eventQueue;
     }
 
-    private void updateClient () {
+    private void updateClient() {
 
     }
 
-    public void loadGraphics () {
+    public void loadGraphics() {
         TextureRegistry.Textures.init();
         ShaderRegistry.Shaders.init();
     }
 
-    public void unLoadGraphics () {
+    public void unLoadGraphics() {
         TextureRegistry.instance.unLoad();
         GeometryRegistry.instance.unLoad();
         ShaderRegistry.instance.unLoad();
