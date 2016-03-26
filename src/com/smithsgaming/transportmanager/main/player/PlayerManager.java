@@ -17,16 +17,16 @@ public class PlayerManager {
     }
 
     /**
-     * Method to register a new Player.
+     * Method to register a new PLAYER.
      *
-     * @param player The new Player.
+     * @param player The new PLAYER.
      */
     public void onPlayerConnected(GamePlayer player) {
         connectedPlayers.add(player);
     }
 
     /**
-     * Method to unregister a connected Player.
+     * Method to unregister a connected PLAYER.
      *
      * @param player The player to unregister.
      */
@@ -35,9 +35,9 @@ public class PlayerManager {
     }
 
     /**
-     * Method to get a Player for a given ComChannel.
+     * Method to get a PLAYER for a given ComChannel.
      *
-     * @param playerChannel The channel you want the Player for.
+     * @param playerChannel The channel you want the PLAYER for.
      * @return The player with that channel, or null if none is registered.
      */
     public GamePlayer getPlayerForChannel(Channel playerChannel) {

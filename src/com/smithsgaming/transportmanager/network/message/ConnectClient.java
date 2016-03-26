@@ -21,7 +21,7 @@ public class ConnectClient extends TMNetworkingMessage
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         connectingPlayer = new GamePlayer(connectingPlayer.getDisplayName(), channel);
         PlayerManager.instance.onPlayerConnected(connectingPlayer);
-        System.out.println("[Server] Player: " + connectingPlayer.getDisplayName() + " connected!");
+        System.out.println("[Server] PLAYER: " + connectingPlayer.getDisplayName() + " connected!");
 
         return new OperationAcceptedMessage(OperationAcceptedMessage.Operation.PLAYERCONNECTED);
     }

@@ -74,11 +74,11 @@ public class Display implements Runnable, IEventController
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             if (fullScreen) {
-                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello World!", glfwGetPrimaryMonitor(), MemoryUtil.NULL);
+                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello WorldServer!", glfwGetPrimaryMonitor(), MemoryUtil.NULL);
                 if (window == MemoryUtil.NULL)
                     throw new RuntimeException("Failed to create the GLFW window");
             } else {
-                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL);
+                window = glfwCreateWindow(sizeHorizontal, sizeVertical, "Hello WorldServer!", MemoryUtil.NULL, MemoryUtil.NULL);
                 if (window == MemoryUtil.NULL)
                     throw new RuntimeException("Failed to create the GLFW window");
 

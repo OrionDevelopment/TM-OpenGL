@@ -22,7 +22,7 @@ public class RequestChunkDataMessage extends TMNetworkingMessage {
     @Override
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         if (side == Side.SERVER) {
-            return new ChunkDataMessage(WorldManager.instance.getLoadedWorld().getChunkForPos(x, y));
+            return new ChunkDataMessage(WorldManager.instance.getLoadedWorld().getChunkAtPos(x, y));
         }
 
         return null;

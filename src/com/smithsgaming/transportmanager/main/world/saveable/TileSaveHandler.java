@@ -26,7 +26,7 @@ public class TileSaveHandler {
         dataMap.put(Tags.TILECHUNKPOSY, new IntTag(Tags.TILECHUNKPOSY, tileChunkPosY));
         dataMap.put(Tags.TILECHUNKPOSZ, new IntTag(Tags.TILECHUNKPOSZ, tileChunkPosZ));
 
-        Tile tile = chunk.getTileOnPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        Tile tile = chunk.getTileAtPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
         if (tile == null) {
             dataMap.put(Tags.TILEIDENTITY, new StringTag(Tags.TILEIDENTITY, TileRegistry.NULLTILEIDENTITY));
         } else {
@@ -42,40 +42,40 @@ public class TileSaveHandler {
         return new CompoundTag(Tags.TILE + "-" + tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ, dataMap);
     }
 
-    public CompoundTag getTagForTileEntity(Chunk chunk, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        Map<String, Tag> dataMap = new HashMap<>();
-
-        TileEntity tileEntity = chunk.getTileEntityOnPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
-        if (tileEntity == null) {
-            throw new IllegalArgumentException("The given chunk pos does not contain a TE!");
-        } else {
-            dataMap.put(Tags.TILEENTITYIDENTITY, new StringTag(Tags.TILEENTITYIDENTITY, tileEntity.getIdentity()));
-
-            try {
-                dataMap.putAll(tileEntity.writeDataToDisk());
-                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 0));
-            } catch (Exception ex) {
-                System.err.println("Exception while attempting to write TE on Pos: " + tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ() + " has been caught: ");
-                System.err.println();
-
-                ex.printStackTrace();
-
-                System.err.println();
-                System.err.println("On load of this world the TE will be replaced with a new one!");
-
-                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 1));
-            }
-        }
-
-        return new CompoundTag(Tags.TILEENTITYDATA, dataMap);
-    }
+//    public CompoundTag getTagForTileEntity(Chunk chunk, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+//        Map<String, Tag> dataMap = new HashMap<>();
+//
+//        TileEntity tileEntity = chunk.getTileEntityAtPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+//        if (tileEntity == null) {
+//            throw new IllegalArgumentException("The given chunk pos does not contain a TE!");
+//        } else {
+//            dataMap.put(Tags.TILEENTITYIDENTITY, new StringTag(Tags.TILEENTITYIDENTITY, tileEntity.getIdentity()));
+//
+//            try {
+//                dataMap.putAll(tileEntity.writeDataToDisk());
+//                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 0));
+//            } catch (Exception ex) {
+//                System.err.println("Exception while attempting to write TE on Pos: " + tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ() + " has been caught: ");
+//                System.err.println();
+//
+//                ex.printStackTrace();
+//
+//                System.err.println();
+//                System.err.println("On load of this world the TE will be replaced with a new one!");
+//
+//                dataMap.put(Tags.TILEENTITYDATAERRORED, new IntTag(Tags.TILEENTITYDATAERRORED, 1));
+//            }
+//        }
+//
+//        return new CompoundTag(Tags.TILEENTITYDATA, dataMap);
+//    }
 
     public CompoundTag getTagForChunk(World world, int chunkPosX, int chunkPosZ) {
         System.out.println("Started writing chunk to Tag");
         Stopwatch stopwatch = Stopwatch.createStarted();
 
 
-        Chunk chunk = world.getChunkForPos(chunkPosX, chunkPosZ);
+        Chunk chunk = world.getChunkAtPos(chunkPosX, chunkPosZ);
 
         Map<String, Tag> dataMap = new HashMap<>();
 
@@ -120,42 +120,42 @@ public class TileSaveHandler {
 
         Tile tile = TileRegistry.instance.getTileForIdentity((String) dataMap.get(Tags.TILEIDENTITY).getValue());
         if (tile == null) {
-            chunk.setTileOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+            chunk.setTileAtPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
         } else {
             if (tile instanceof ITileEntityProvider) {
-                loadTileEntityForTagIntoChunk(chunk, dataMap.get(Tags.TILEENTITYDATA), tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+                //loadTileEntityForTagIntoChunk(chunk, dataMap.get(Tags.TILEENTITYDATA), tileChunkPosX, tileChunkPosY, tileChunkPosZ);
             }
         }
     }
 
-    public void loadTileEntityForTagIntoChunk (Chunk chunk, Tag teTag, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        if (!( teTag instanceof CompoundTag ))
-            throw new IllegalArgumentException("teTag");
-
-        Map<String, Tag> dataMap = ( (CompoundTag) teTag ).getValue();
-
-        TileEntity tileEntity = TileEntityRegistry.instance.getTileEntityForIdentity((String) dataMap.get(Tags.TILEENTITYIDENTITY).getValue());
-        if (tileEntity == null) {
-            chunk.setTileEntityOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
-        } else {
-            if (( (int) dataMap.get(Tags.TILEENTITYDATAERRORED).getValue() ) == 1) {
-                System.err.println("Loading errored TE on pos: " + +tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ());
-                chunk.setTileEntityOnPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
-
-                return;
-            }
-
-            tileEntity.readDataFromDisk((Map<String, Tag>) dataMap.get(Tags.TILEENTITYDATA).getValue());
-
-            chunk.setTileEntityOnPos(tileEntity, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
-        }
-    }
+//    public void loadTileEntityForTagIntoChunk (Chunk chunk, Tag teTag, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+//        if (!( teTag instanceof CompoundTag ))
+//            throw new IllegalArgumentException("teTag");
+//
+//        Map<String, Tag> dataMap = ( (CompoundTag) teTag ).getValue();
+//
+//        TileEntity tileEntity = TileEntityRegistry.instance.getTileEntityForIdentity((String) dataMap.get(Tags.TILEENTITYIDENTITY).getValue());
+//        if (tileEntity == null) {
+//            chunk.setTileEntityAtPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+//        } else {
+//            if (( (int) dataMap.get(Tags.TILEENTITYDATAERRORED).getValue() ) == 1) {
+//                System.err.println("Loading errored TE on pos: " + +tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ());
+//                chunk.setTileEntityAtPos(null, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+//
+//                return;
+//            }
+//
+//            tileEntity.readDataFromDisk((Map<String, Tag>) dataMap.get(Tags.TILEENTITYDATA).getValue());
+//
+//            chunk.setTileEntityAtPos(tileEntity, tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+//        }
+//    }
 
     public void loadChunkForTagIntoWorld (World world, Tag chunkTag, int chunkPosX, int chunkPosZ) {
         if (!( chunkTag instanceof CompoundTag ))
             throw new IllegalArgumentException("teTag");
 
-        Chunk chunk = world.getChunkForPos(chunkPosX, chunkPosZ);
+        Chunk chunk = world.getChunkAtPos(chunkPosX, chunkPosZ);
 
         Map<String, Tag> dataMap = ( (CompoundTag) chunkTag ).getValue();
 
@@ -187,12 +187,12 @@ public class TileSaveHandler {
 
     public void setChunkInWorld (World world, Chunk chunk) {
         chunk.setWorld(world);
-        world.setChunkForPos(chunk);
+        world.setChunk(chunk);
     }
 
     public void setChunkInWorldClient (WorldClient world, ChunkClient chunk) {
         chunk.setWorld(world);
-        world.setChunkForPos(chunk);
+        world.setChunk(chunk);
     }
 
     public static class Tags {
