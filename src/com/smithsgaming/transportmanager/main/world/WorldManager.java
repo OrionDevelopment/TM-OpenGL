@@ -17,18 +17,18 @@ public class WorldManager {
     }
 
     public void generateWorld() {
-        if (isWorldBeingLoaded)
+        if (isWorldBeingLoaded) {
             return;
-
+        }
         isWorldBeingLoaded = true;
 
-        loadedWorld = new World(new WorldCoreData(500, 256, 500, new Random().nextLong()));
+        loadedWorld = new WorldServer(new WorldCoreData(500, 256, 500, new Random().nextLong()));
         loadedWorld.generate();
 
         isWorldBeingLoaded = false;
     }
 
-    public World getLoadedWorld () {
+    public World getLoadedWorld() {
         return loadedWorld;
     }
 

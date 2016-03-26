@@ -1,24 +1,20 @@
-
-
 package com.smithsgaming.transportmanager.main.world;
 
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
-
-import static com.smithsgaming.transportmanager.main.world.tiles.TileRegistry.*;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
 
 /**
- * Created by marcf on 3/13/2016.
+ * Created by Tim on 26/03/2016.
  */
-public class World {
+public abstract class World {
 
-    WorldCoreData coreData;
+    protected WorldCoreData coreData;
+    protected Chunk[][] chunks;
 
-    private Chunk[][] chunks;
-
-    public World(WorldCoreData data) {
-        coreData = data;
+    protected World(WorldCoreData data) {
+        this.coreData = data;
         initializeChunkMap();
     }
 
@@ -66,7 +62,7 @@ public class World {
                 for (int cx = 0; cx < Chunk.chunkSize; cx++) {
                     for (int cy = 0; cy < coreData.getWorldHeight(); cy++) {
                         for (int cz = 0; cz < Chunk.chunkSize; cz++) {
-                            chunk.setTileOnPos(TileRegistry.instance.getTileForIdentity(TileNames.OCEAN), cx, cy, cz);
+                            chunk.setTileOnPos(TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.OCEAN), cx, cy, cz);
                         }
                     }
                 }

@@ -50,7 +50,7 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
             Pair<Integer, Integer> nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld();
 
             if (nextChunkPair == null) {
-                System.out.println("   ==> Finished World download!");
+                System.out.println("   ==> Finished WorldServer download!");
                 TransportManagerClient.instance.registerEvent(new WorldClientLoadedEvent());
 
                 return null;
