@@ -18,28 +18,28 @@ public abstract class World {
         initializeChunkMap();
     }
 
-    public Chunk getChunkForPos(int chunkPosX, int chunkPosZ) {
+    public Chunk getChunkAtPos(int chunkPosX, int chunkPosZ) {
         return chunks[chunkPosX][chunkPosZ];
     }
 
-    public void setChunkForPos(Chunk chunkForPos) {
+    public void setChunk(Chunk chunkForPos) {
         chunks[chunkForPos.getChunkX()][chunkForPos.getChunkZ()] = chunkForPos;
     }
 
-    public Tile getTileForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
-        return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    public Tile getTileAtPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public TileEntity getTileEntityForPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
-        return getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityOnPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    public TileEntity getTileEntityAtPos(int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public void setTileOnPos(Tile tile, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
-        getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileOnPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    public void setTileAtPos(Tile tile, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileAtPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public void setTileEntityOnPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
-        getChunkForPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityOnPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
+    public void setTileEntityAtPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ) {
+        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityAtPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosY, tileWorldPosZ % Chunk.chunkSize);
     }
 
     public WorldCoreData getCoreData() {
@@ -62,12 +62,11 @@ public abstract class World {
                 for (int cx = 0; cx < Chunk.chunkSize; cx++) {
                     for (int cy = 0; cy < coreData.getWorldHeight(); cy++) {
                         for (int cz = 0; cz < Chunk.chunkSize; cz++) {
-                            chunk.setTileOnPos(TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.OCEAN), cx, cy, cz);
+                            chunk.setTileAtPos(TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.OCEAN), cx, cy, cz);
                         }
                     }
                 }
             }
         }
     }
-
 }

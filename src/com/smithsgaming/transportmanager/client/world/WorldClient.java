@@ -26,7 +26,7 @@ public class WorldClient extends World {
         chunkLoadedState[chunkPosX][chunkPosZ] = state;
     }
 
-    public ChunkClient getChunkForPos(int chunkPosX, int chunkPosZ) {
+    public ChunkClient getChunkAtPos(int chunkPosX, int chunkPosZ) {
         return (ChunkClient) chunks[chunkPosX][chunkPosZ];
     }
 
@@ -38,5 +38,4 @@ public class WorldClient extends World {
             }
         }
     }
-
 }

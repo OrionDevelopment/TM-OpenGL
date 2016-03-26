@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.main.world.tiles;
+package com.smithsgaming.transportmanager.main.world.tileentities;
 
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
@@ -8,5 +8,5 @@ import com.smithsgaming.transportmanager.main.world.tileentities.*;
  */
 public interface ITileEntityProvider {
 
-    TileEntity generateNewDefaultEntity(World world, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ);
+    TileEntity createTileEntity(World world, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ);
 }

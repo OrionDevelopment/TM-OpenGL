@@ -40,19 +40,22 @@ public class Chunk implements Serializable {
         return chunkZ;
     }
 
-    public Tile getTileOnPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+    public Tile getTileAtPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         return tiles[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
     }
 
-    public void setTileOnPos(Tile tile, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+    public void setTileAtPos(Tile tile, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         tiles[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tile;
+        if (tile instanceof ITileEntityProvider) {
+            setTileEntityAtPos(((ITileEntityProvider) tile).createTileEntity(world, tileChunkPosX, tileChunkPosY, tileChunkPosZ), tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+        }
     }
 
-    public TileEntity getTileEntityOnPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+    public TileEntity getTileEntityAtPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         return tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
     }
 
-    public void setTileEntityOnPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
+    public void setTileEntityAtPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tileEntity;
     }
 
