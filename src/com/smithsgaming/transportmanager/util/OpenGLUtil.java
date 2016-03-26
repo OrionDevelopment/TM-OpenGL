@@ -11,7 +11,6 @@ import org.lwjgl.util.vector.*;
 
 import java.io.*;
 import java.nio.*;
-import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -26,9 +25,6 @@ public class OpenGLUtil {
     private static float aspectRatio = ((float) TransportManagerClient.getDisplay().getResolutionHorizontal() / (float)TransportManagerClient.getDisplay().getResolutionVertical());
 
     private static Matrix4f modelMatrix;
-
-    private static Stack<Matrix4f> modelMatrixStack = new Stack<>();
-    private static Matrix4f renderingModelMatrix = new Matrix4f();
 
     private static FloatBuffer modelMatrixBuffer = BufferUtils.createFloatBuffer(16);
 
@@ -322,10 +318,6 @@ public class OpenGLUtil {
 
         modelMatrix.store(modelMatrixBuffer);
         modelMatrixBuffer.flip();
-    }
-
-    public static void pushMatrix() {
-        modelMatrixStack.push(modelMatrix);
     }
 
     public static void destroyTexture (TextureRegistry.Texture texture) {

@@ -6,6 +6,7 @@ import org.lwjgl.*;
 import org.lwjgl.util.vector.*;
 
 import java.nio.*;
+import java.util.*;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -14,13 +15,12 @@ public class Camera {
 
     public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
     public static final Camera Gui = new Camera();
-
+    private static Stack<Matrix4f> modelMatrixStack = new Stack<>();
+    private static Matrix4f renderingModelMatrix = new Matrix4f();
     private Matrix4f projectionMatrix;
     private Matrix4f viewMatrix;
-
     private FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
-
     private Vector3f cameraPosition = new Vector3f();
     private float viewDistanceInChunks = 4;
 
@@ -165,5 +165,14 @@ public class Camera {
 
     public boolean isPointInViewDistance (Vector3f point) {
         return Vector3f.sub(point, cameraPosition, new Vector3f()).lengthSquared() <= ( Math.pow(viewDistanceInChunks * Chunk.chunkSize, 2) );
+    }
+
+    public void pushMatrix (Matrix4f modelMatrix) {
+        modelMatrixStack.push(new Matrix4f(renderingModelMatrix));
+        Matrix4f.mul(modelMatrix, renderingModelMatrix, renderingModelMatrix);
+    }
+
+    public void popMatrix () {
+        renderingModelMatrix = modelMatrixStack.pop();
     }
 }
