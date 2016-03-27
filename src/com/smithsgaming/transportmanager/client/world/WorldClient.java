@@ -26,10 +26,12 @@ public class WorldClient extends World {
         chunkLoadedState[chunkPosX][chunkPosZ] = state;
     }
 
+    @Override
     public ChunkClient getChunkAtPos(int chunkPosX, int chunkPosZ) {
         return (ChunkClient) chunks[chunkPosX][chunkPosZ];
     }
 
+    @Override
     protected void initializeChunkMap() {
         chunks = new ChunkClient[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
         for (int x = 0; x < chunks.length; x++) {
@@ -37,5 +39,10 @@ public class WorldClient extends World {
                 chunks[x][z] = new ChunkClient(this, x, z);
             }
         }
+    }
+
+    @Override
+    public void update() {
+
     }
 }

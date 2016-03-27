@@ -56,7 +56,7 @@ public class WorldSaveHandler {
         dataMap.put(Tags.TILE_CHUNK_POS_Z, new IntTag(Tags.TILE_CHUNK_POS_Z, tileChunkPosZ));
         Tile tile = chunk.getTileAtPos(tileChunkPosX, tileChunkPosY, tileChunkPosZ);
         if (tile == null) {
-            dataMap.put(Tags.TILE_IDENTITY, new StringTag(Tags.TILE_IDENTITY, TileRegistry.NULLTILEIDENTITY));
+            dataMap.put(Tags.TILE_IDENTITY, new StringTag(Tags.TILE_IDENTITY, TileRegistry.NULL_TILE_IDENTITY));
         } else {
             dataMap.put(Tags.TILE_IDENTITY, new StringTag(Tags.TILE_IDENTITY, tile.getIdentity()));
             if (tile instanceof ITileEntityProvider) {

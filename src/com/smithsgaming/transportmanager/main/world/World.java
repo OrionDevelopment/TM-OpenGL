@@ -46,14 +46,7 @@ public abstract class World {
         return coreData;
     }
 
-    protected void initializeChunkMap() {
-        chunks = new Chunk[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
-        for (int x = 0; x < chunks.length; x++) {
-            for (int z = 0; z < chunks[0].length; z++) {
-                chunks[x][z] = new Chunk(this, x, z);
-            }
-        }
-    }
+    protected abstract void initializeChunkMap();
 
     public void generate() {
         for (int x = 0; x < chunks.length; x++) {
@@ -70,6 +63,5 @@ public abstract class World {
         }
     }
 
-    public void update() {
-    }
+    public abstract void update();
 }

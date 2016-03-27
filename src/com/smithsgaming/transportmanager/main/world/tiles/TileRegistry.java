@@ -9,13 +9,13 @@ import java.util.*;
  */
 public class TileRegistry {
 
-    public static final String NULLTILEIDENTITY = "tile.null";
+    public static final String NULL_TILE_IDENTITY = "tile.null";
     public static TileRegistry instance = new TileRegistry();
 
     private HashMap<String, Tile> tileHashMap = new HashMap<>();
 
     protected TileRegistry() {
-        tileHashMap.put(NULLTILEIDENTITY, null);
+        tileHashMap.put(NULL_TILE_IDENTITY, null);
     }
 
     /**
