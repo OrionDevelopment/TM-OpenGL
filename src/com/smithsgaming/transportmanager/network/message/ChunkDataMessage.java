@@ -39,7 +39,7 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
         if (side == Side.CLIENT) {
             Stopwatch stopwatch = Stopwatch.createStarted();
 
-            TileSaveHandler.instance.setChunkInWorldClient(WorldClientManager.instance.getWorld(), new ChunkClient(chunk));
+            WorldSaveHandler.instance.setChunkInWorldClient(WorldClientManager.instance.getWorld(), new ChunkClient(chunk));
 
             System.out.println("   ==> Finished loading in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
             stopwatch.reset();
