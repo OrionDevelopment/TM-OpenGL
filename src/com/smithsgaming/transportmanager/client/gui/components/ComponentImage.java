@@ -3,7 +3,8 @@ package com.smithsgaming.transportmanager.client.gui.components;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.util.vector.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
@@ -47,6 +48,9 @@ public class ComponentImage extends GuiComponent {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(Camera.GUI, geometryToRender, textureToRender, new Matrix4f(), ShaderRegistry.Shaders.guiTextured);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Gui, geometryToRender, textureToRender, ShaderRegistry.Shaders.guiTextured);
+        glDisable(GL_BLEND);
     }
 }

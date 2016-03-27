@@ -1,8 +1,6 @@
 package com.smithsgaming.transportmanager.client;
 
-import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.gui.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
@@ -49,8 +47,6 @@ public class TransportManagerClient implements Runnable, IEventController {
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
 
-        display.registerEvent(new OpenGuiEvent(new GuiGameLoading()));
-
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -58,7 +54,6 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        clientNetworkThread.start();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
@@ -105,11 +100,13 @@ public class TransportManagerClient implements Runnable, IEventController {
 
     public void loadGraphics () {
         TextureRegistry.Textures.init();
+        TextureRegistry.Fonts.init();
         ShaderRegistry.Shaders.init();
     }
 
     public void unLoadGraphics () {
         TextureRegistry.instance.unLoad();
+        TextureRegistry.Fonts.unLoad();
         GeometryRegistry.instance.unLoad();
         ShaderRegistry.instance.unLoad();
     }

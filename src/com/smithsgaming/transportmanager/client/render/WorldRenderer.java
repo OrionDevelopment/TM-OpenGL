@@ -5,7 +5,6 @@ import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.util.vector.*;
 
 /**
  * Class used to render the world.
@@ -22,12 +21,12 @@ public class WorldRenderer implements IRenderer {
     @Override
     public void render () {
         if (worldClient == null)
-            OpenGLUtil.drawGeometryWithShader(Camera.PLAYER, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, new Matrix4f(), ShaderRegistry.Shaders.textured);
+            OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, ShaderRegistry.Shaders.textured);
 
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        return Camera.PLAYER.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.PLAYER.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.PLAYER));
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
     }
 
     private void drawChunk (ChunkClient chunk) {

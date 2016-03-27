@@ -52,7 +52,7 @@ public class TileEntityRegistry {
     /**
      * Method to register a Tile. If two tiles with the same identity are being registered the last one is being kept.
      *
-     * @param tile The tile to register.
+     * @param tileEntityClass The tile to register.
      */
     public void registerTile (Class<? extends TileEntity> tileEntityClass) {
         TileEntity tileEntity = null;
@@ -67,7 +67,7 @@ public class TileEntityRegistry {
             e.printStackTrace();
         }
 
-        tileHashMap.put(tileEntity.getIdentity(), tileEntityClass);
+        tileHashMap.put(tileEntity.getClass().getTypeName(), tileEntityClass);
     }
 
     /**

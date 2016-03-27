@@ -1,16 +1,16 @@
 package com.smithsgaming.transportmanager.main.world.entity;
 
-import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.world.*;
 
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Created by Tim on 26/03/2016.
  */
 public class AbstractEntity implements Serializable {
 
-    protected World world;
     public int xPos, yPos, zPos, height;
+    protected transient World world;
 
     /**
      * @return The world the entity is in

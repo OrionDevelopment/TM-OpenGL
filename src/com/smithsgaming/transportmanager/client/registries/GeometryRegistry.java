@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client.registries;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.*;
 
 import java.nio.*;
 import java.util.*;
@@ -184,6 +185,15 @@ public class GeometryRegistry {
             final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getCoord4X(), texturePlane.getCoord4Y()).setXYZ(geometryPlane.getCoord4X(), geometryPlane.getCoord4Y(), 0);
 
             return new QuadGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
+        }
+
+        public static Geometry constructFromPlaneForColored (GuiPlane geometryPlane, Color topLeftColor, Color topRightColor, Color bottomRightColor, Color bottomLeftColor) {
+            TexturedVertex topLeftVertex = new TexturedVertex().setRGBA(topLeftColor.getRed() / 255f, topLeftColor.getGreen() / 255f, topLeftColor.getBlue() / 255f, topLeftColor.getAlpha() / 255f).setST(0, 1).setXYZ(geometryPlane.getCoord1X(), geometryPlane.getCoord1Y(), 0);
+            TexturedVertex topRightVertex = new TexturedVertex().setRGBA(topRightColor.getRed() / 255f, topRightColor.getGreen() / 255f, topRightColor.getBlue() / 255f, topRightColor.getAlpha() / 255f).setST(1, 1).setXYZ(geometryPlane.getCoord2X(), geometryPlane.getCoord2Y(), 0);
+            TexturedVertex bottomRightVertex = new TexturedVertex().setRGBA(bottomRightColor.getRed() / 255f, bottomRightColor.getGreen() / 255f, bottomRightColor.getBlue() / 255f, bottomRightColor.getAlpha() / 255f).setST(1, 0).setXYZ(geometryPlane.getCoord3X(), geometryPlane.getCoord3Y(), 0);
+            TexturedVertex bottomLeftVertex = new TexturedVertex().setRGBA(bottomLeftColor.getRed() / 255f, bottomLeftColor.getGreen() / 255f, bottomLeftColor.getBlue() / 255f, bottomLeftColor.getAlpha() / 255f).setST(0, 0).setXYZ(geometryPlane.getCoord4X(), geometryPlane.getCoord4Y(), 0);
+
+            return new QuadGeometry(new TexturedVertex[]{topLeftVertex, bottomLeftVertex, topRightVertex, bottomRightVertex});
         }
     }
 }

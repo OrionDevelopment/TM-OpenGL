@@ -186,7 +186,7 @@ public class OpenGLUtil {
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 
         // Upload the texture data and generate mip maps (for scaling)
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, texture.getWidth(), texture.getHeight(), 0,
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, texture.getWidth(), texture.getHeight(), 0,
                 GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, texture.getData());
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
@@ -196,7 +196,7 @@ public class OpenGLUtil {
 
         // Setup what to do when the texture has to be scaled
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
-                GL11.GL_LINEAR);
+                GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
                 GL11.GL_NEAREST_MIPMAP_NEAREST);
 
@@ -221,26 +221,37 @@ public class OpenGLUtil {
     }
 
     /**
-     * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader.
+     * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader and Texture.
      *
      * @param geometry The Geometry to render.
      * @param texture  The Texture to render the geometry with.
      * @param shader The OpenGL Shader ID to use.
      */
-    public static void drawGeometryWithShader (Camera camera, GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, Matrix4f renderMatrix, ShaderRegistry.Shader shader) {
+    public static void drawGeometryWithShaderAndTexture (Camera camera, GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, ShaderRegistry.Shader shader) {
+        if (geometry == null)
+            return;
+
+        GL13.glActiveTexture(texture.getBoundTextureUnit());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
+
+        drawGeometryWithShader(camera, geometry, shader);
+    }
+
+    /**
+     * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader.
+     *
+     * @param geometry The Geometry to render.
+     * @param shader   The OpenGL Shader ID to use.
+     */
+    public static void drawGeometryWithShader (Camera camera, GeometryRegistry.Geometry geometry, ShaderRegistry.Shader shader) {
         if (geometry == null)
             return;
 
         GL20.glUseProgram(shader.getShaderId());
 
-        setModelMatrix(renderMatrix);
-
         GL20.glUniformMatrix4fv(shader.getProjectionMatrixIndex(), false, camera.getProjectionMatrixBuffer());
         GL20.glUniformMatrix4fv(shader.getViewMatrixIndex(), false, camera.getViewMatrixBuffer());
-        GL20.glUniformMatrix4fv(shader.getModelMatrixIndex(), false, modelMatrixBuffer);
-
-        GL13.glActiveTexture(texture.getBoundTextureUnit());
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
+        GL20.glUniformMatrix4fv(shader.getModelMatrixIndex(), false, camera.getRenderingModelMatrixBuffer());
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());
@@ -353,7 +364,7 @@ public class OpenGLUtil {
 
     }
 
-    private static void checkGlState (String snapshotMoment) {
+    public static void checkGlState (String snapshotMoment) {
         int errorValue = GL11.glGetError();
 
         if (errorValue != GL11.GL_NO_ERROR) {

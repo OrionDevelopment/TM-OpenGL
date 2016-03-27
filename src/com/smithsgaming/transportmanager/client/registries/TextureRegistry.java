@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client.registries;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.util.*;
 
+import java.awt.*;
 import java.nio.*;
 import java.util.*;
 import java.util.stream.*;
@@ -190,6 +191,18 @@ public class TextureRegistry {
 
         public static class Tiles {
             public static Texture deepWater;
+        }
+    }
+
+    public static class Fonts {
+        public static TrueTypeFont Courier;
+
+        public static void init () {
+            Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), true);
+        }
+
+        public static void unLoad () {
+            Courier.destroy();
         }
     }
 }

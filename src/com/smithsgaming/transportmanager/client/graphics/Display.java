@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.gui.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -113,7 +114,9 @@ public class Display implements Runnable, IEventController
 
             KHRDebug.glDebugMessageCallback(debugMessageKHRCallback, 0);
 
+            //glClearColor(1f, 1f, 1f, 1f);
             glClearColor(102f / 255f, 152f / 255f, 1.0f, 1.0f);
+            OpenGLUtil.checkGlState("Display - Init");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -178,9 +181,13 @@ public class Display implements Runnable, IEventController
 
             TransportManagerClient.instance.loadGraphics();
 
+            RenderHandler.getGuiController().openGui(new GuiGameLoading());
+
             runRender();
 
             glfwDestroyWindow(window);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             TransportManagerClient.instance.unLoadGraphics();
 

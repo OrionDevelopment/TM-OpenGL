@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         server = TransportManager.instance;
 
-        serverThread = new Thread(server, "TM-OpenGL -  Server");
+        serverThread = new Thread(server, "TM-OpenGL - Server");
         serverThread.start();
 
         client = TransportManagerClient.instance;

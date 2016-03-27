@@ -3,7 +3,6 @@ package com.smithsgaming.transportmanager.client.graphics;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.util.vector.*;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -32,6 +31,6 @@ public class SkyBox implements IRenderer {
      */
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(Camera.PLAYER, oceanGeometry, TextureRegistry.Textures.SkyBox.skyBoxOcean, new Matrix4f(), ShaderRegistry.Shaders.textured);
+        OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, oceanGeometry, TextureRegistry.Textures.SkyBox.skyBoxOcean, ShaderRegistry.Shaders.textured);
     }
 }
