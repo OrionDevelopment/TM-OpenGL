@@ -16,16 +16,16 @@ public class TextureRegistry {
     public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
     public HashMap<Integer, Texture> stitchedTextures = new HashMap<>();
 
-    private TextureRegistry () {
+    private TextureRegistry() {
     }
 
-    public Texture loadTexture (String fileName) {
+    public Texture loadTexture(String fileName) {
         Texture texture = ResourceUtil.loadStitchablePNGTexture(fileName);
 
         return this.loadTexture(texture);
     }
 
-    public Texture loadTexture (Texture toLoad) {
+    public Texture loadTexture(Texture toLoad) {
         if (!toLoad.isRequiringTextureStitching())
             OpenGLUtil.loadTextureIntoGPU(toLoad);
 
@@ -34,11 +34,11 @@ public class TextureRegistry {
         return toLoad;
     }
 
-    public Texture getTextureForOpenGLID (int id) {
+    public Texture getTextureForOpenGLID(int id) {
         return bufferedTextures.get(id);
     }
 
-    public Texture initializeTextureStitching (int textureStitchingId) {
+    public Texture initializeTextureStitching(int textureStitchingId) {
         ArrayList<Texture> texturesToCombine = bufferedTextures.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));
 
         TextureStitcher stitcher = new TextureStitcher(Display.getMaxTextureSize(), Display.getMaxTextureSize(), true);
@@ -60,7 +60,7 @@ public class TextureRegistry {
         return null;
     }
 
-    public void unLoad () {
+    public void unLoad() {
         bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);
 
         bufferedTextures.clear();
@@ -84,11 +84,11 @@ public class TextureRegistry {
         private float v;
 
 
-        public Texture (String textureName, ByteBuffer data, int width, int height) {
+        public Texture(String textureName, ByteBuffer data, int width, int height) {
             this(textureName, data, width, height, 0, 0, false, true, 0);
         }
 
-        public Texture (String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
+        public Texture(String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
             this.textureName = textureName;
             this.isStitched = isStitched;
             this.requiringTextureStitching = requiringTextureStitching;
@@ -100,88 +100,97 @@ public class TextureRegistry {
             this.v = v;
         }
 
-        public String getTextureName () {
+        public String getTextureName() {
             return textureName;
         }
 
-        public ByteBuffer getData () {
+        public ByteBuffer getData() {
             return data;
         }
 
-        public int getWidth () {
+        public int getWidth() {
             return width;
         }
 
-        public int getHeight () {
+        public int getHeight() {
             return height;
         }
 
-        public int getOpenGLTextureId () {
+        public int getOpenGLTextureId() {
             return openGLTextureId;
         }
 
-        public void setOpenGLTextureId (int openGLTextureId) {
+        public void setOpenGLTextureId(int openGLTextureId) {
             this.openGLTextureId = openGLTextureId;
         }
 
-        public int getBoundTextureUnit () {
+        public int getBoundTextureUnit() {
             return boundTextureUnit;
         }
 
-        public void setBoundTextureUnit (int boundTextureUnit) {
+        public void setBoundTextureUnit(int boundTextureUnit) {
             this.boundTextureUnit = boundTextureUnit;
         }
 
-        public float getV () {
+        public float getV() {
             return v;
         }
 
-        public void setV (float v) {
+        public void setV(float v) {
             this.v = v;
         }
 
-        public float getU () {
+        public float getU() {
             return u;
         }
 
-        public void setU (float u) {
+        public void setU(float u) {
             this.u = u;
         }
 
-        public int getTextureStitchId () {
+        public int getTextureStitchId() {
             return textureStitchId;
         }
 
-        public void setTextureStitchId (int textureStitchId) {
+        public void setTextureStitchId(int textureStitchId) {
             this.textureStitchId = textureStitchId;
         }
 
-        public boolean isStitched () {
+        public boolean isStitched() {
             return isStitched;
         }
 
-        public void setStitched (boolean stitched) {
+        public void setStitched(boolean stitched) {
             isStitched = stitched;
         }
 
-        public boolean isRequiringTextureStitching () {
+        public boolean isRequiringTextureStitching() {
             return requiringTextureStitching;
         }
 
-        public void setRequiringTextureStitching (boolean requiringTextureStitching) {
+        public void setRequiringTextureStitching(boolean requiringTextureStitching) {
             this.requiringTextureStitching = requiringTextureStitching;
         }
     }
 
 
     public static class Textures {
-        public static void init () {
+        public static void init() {
             SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/deepWater_0.png");
             SkyBox.skyBoxOcean.setRequiringTextureStitching(false);
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);
 
-            Tiles.deepWater = TextureRegistry.instance.loadTexture("/textures/deepWater_0.png");
+            Tiles.deepWater = TextureRegistry.instance.loadTexture("/textures/tiles/world/deepWater_0.png");
+            Tiles.grass = TextureRegistry.instance.loadTexture("/textures/tiles/world/grass.png");
+            Tiles.dryGrass = TextureRegistry.instance.loadTexture("/textures/tiles/world/dryGrass.png");
+            Tiles.beach = TextureRegistry.instance.loadTexture("/textures/tiles/world/beach.png");
+            Tiles.desert = TextureRegistry.instance.loadTexture("/textures/tiles/world/desert.png");
+            Tiles.river = TextureRegistry.instance.loadTexture("/textures/tiles/world/shallowWater_0.png");
+            Tiles.snow = TextureRegistry.instance.loadTexture("/textures/tiles/world/snow.png");
+            Tiles.stoneOverground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneOverground.png");
+            Tiles.stoneUnderground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneUnderground.png");
+            Tiles.ice = TextureRegistry.instance.loadTexture("/textures/tiles/world/ice_0.png");
         }
 
         public static class SkyBox {
@@ -190,6 +199,15 @@ public class TextureRegistry {
 
         public static class Tiles {
             public static Texture deepWater;
+            public static Texture grass;
+            public static Texture dryGrass;
+            public static Texture beach;
+            public static Texture desert;
+            public static Texture river;
+            public static Texture snow;
+            public static Texture stoneOverground;
+            public static Texture stoneUnderground;
+            public static Texture ice;
         }
     }
 }

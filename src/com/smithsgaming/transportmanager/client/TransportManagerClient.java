@@ -61,7 +61,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        clientNetworkThread.start();
+        //clientNetworkThread.start();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;

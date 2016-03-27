@@ -33,7 +33,7 @@ public class WorldSaveHandler {
     }
 
     public void writeTagForChunk(NBTTagCompound worldTag, World world, int chunkPosX, int chunkPosZ) {
-        System.out.println("Started writing chunk to Tag");
+        System.out.println("Started writing chunk to Tag: " + chunkPosX + ", " + chunkPosZ);
         Stopwatch stopwatch = Stopwatch.createStarted();
         NBTTagCompound chunkTag = new NBTTagCompound();
         Chunk chunk = world.getChunkAtPos(chunkPosX, chunkPosZ);
