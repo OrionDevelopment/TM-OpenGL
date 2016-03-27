@@ -1,14 +1,14 @@
 package com.smithsgaming.transportmanager.main.world.saveable;
 
-import org.jnbt.CompoundTag;
+import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 
 /**
  * Created by Tim on 26/03/2016.
  */
 public interface ISavable {
 
-    CompoundTag writeToDisk();
+    void writeToDisk(NBTTagCompound tag);
 
-    void loadFromDisk(CompoundTag tag);
+    void loadFromDisk(NBTTagCompound tag);
 
 }
