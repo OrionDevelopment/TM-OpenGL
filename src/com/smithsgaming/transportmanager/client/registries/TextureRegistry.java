@@ -68,9 +68,8 @@ public class TextureRegistry {
     }
 
     public static class Texture {
+        protected ByteBuffer data;
         private String textureName;
-
-        private ByteBuffer data;
         private int width;
         private int height;
 

@@ -51,7 +51,7 @@ public class ComponentText extends GuiComponent {
      */
     @Override
     public void render () {
-        font.drawString(xCoord, yCoord, text, 1F, 1F);
+        //font.drawString(xCoord, yCoord, text, 1F, 1F);
         //OpenGLUtil.checkGlState("Render text");
     }
 }

@@ -27,6 +27,8 @@ public class Camera {
     private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private Vector3f cameraPosition = new Vector3f();
     private float viewDistanceInChunks = 4;
+    private float fov;
+    private float aspectRatio;
 
     private Frustum activeFrustum;
 
@@ -76,6 +78,10 @@ public class Camera {
     private void createCameraMatrix () {
         Matrix4f matrix4f = new Matrix4f();
         setViewMatrix(matrix4f);
+    }
+
+    public void updateProjectionMatrix () {
+        com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
     }
 
     /**
@@ -236,6 +242,17 @@ public class Camera {
     }
 
     /**
+     * Method to update the GuiScale before a render run is made.
+     *
+     * @param horizontalScale The horizontal GUI Scale.
+     * @param verticalScale   The vertical GUI scale.
+     */
+    public void updateGuiScale (float horizontalScale, float verticalScale) {
+        scaleModel(new Vector3f(horizontalScale, verticalScale, 0f));
+        pushMatrix();
+    }
+
+    /**
      * Method to push the current rendering matrix on the stack and absorb the acting matrix. Is automatically called
      * when rendering. So if you make changes to the ModelMatrix before rendering you will need to call popmatrix at
      * least once.
@@ -258,6 +275,15 @@ public class Camera {
         currentActingMatrix = new Matrix4f();
         isActingMatrixLive = true;
         updateModelMatrixBuffer = true;
+    }
+
+    /**
+     * Method to get the current amount of matrix's on the stack. Does not take the current in use matrix into account.
+     *
+     * @return The amount of matrix's on the stack.
+     */
+    public int getMatrixStackCount () {
+        return modelMatrixStack.size();
     }
 
     /**

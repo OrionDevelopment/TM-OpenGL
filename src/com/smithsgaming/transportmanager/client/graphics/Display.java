@@ -97,8 +97,6 @@ public class Display implements Runnable, IEventController
                     resized = true;
                     sizeVertical = height;
                     sizeHorizontal = width;
-
-                    OpenGLUtil.setAspectRatio(((float) width / (float) height));
                 }
             };
 
@@ -126,6 +124,8 @@ public class Display implements Runnable, IEventController
         while (glfwWindowShouldClose(window) == GLFW_FALSE) {
             if (resized) {
                 GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
+                OpenGLUtil.setAspectRatio(( (float) sizeHorizontal / (float) sizeVertical ));
+                Camera.Gui.updateGuiScale();
                 resized = false;
             }
 

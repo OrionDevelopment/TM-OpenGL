@@ -297,7 +297,7 @@ public class OpenGLUtil {
     public static void setFOV (float FOV) {
         OpenGLUtil.FOV = FOV;
 
-        //TODO: Update the camera when this happens.
+        Camera.Player.updateProjectionMatrix();
     }
 
     /**
@@ -317,7 +317,7 @@ public class OpenGLUtil {
     public static void setAspectRatio (float aspectRatio) {
         OpenGLUtil.aspectRatio = aspectRatio;
 
-        //TODO: Update the camera when this happens.
+        Camera.Player.updateProjectionMatrix();
     }
 
     public static Matrix4f getModelMatrix () {
