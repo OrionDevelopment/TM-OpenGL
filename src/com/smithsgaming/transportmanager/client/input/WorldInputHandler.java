@@ -44,10 +44,10 @@ public class WorldInputHandler implements KeyboardInputHandler.IKeyInputHandler,
                 Camera.Player.moveCamera(new Vector3f(0, 0, -0.25f));
                 break;
             case GLFW.GLFW_KEY_A:
-                Camera.Player.moveCamera(new Vector3f(-0.25f, 0, 0));
+                Camera.Player.moveCamera(new Vector3f(0.25f, 0, 0));
                 break;
             case GLFW.GLFW_KEY_D:
-                Camera.Player.moveCamera(new Vector3f(0.25f, 0, 0));
+                Camera.Player.moveCamera(new Vector3f(-0.25f, 0, 0));
                 break;
         }
     }
