@@ -40,6 +40,18 @@ public class Chunk implements Serializable {
         return chunkZ;
     }
 
+    public void update(){
+        synchronized (tileEntities) {
+            for (int x = 0; x < tileEntities.length; x++) {
+                for (int y = 0; y < tileEntities[1].length; x++) {
+                    for (int z = 0; z < tileEntities[2].length; z++) {
+                        tileEntities[x][y][z].update();
+                    }
+                }
+            }
+        }
+    }
+
     public Tile getTileAtPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
         return tiles[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
     }

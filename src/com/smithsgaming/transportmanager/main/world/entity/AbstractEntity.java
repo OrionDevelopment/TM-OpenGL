@@ -63,6 +63,8 @@ public abstract class AbstractEntity implements Serializable, ISavable {
         return new String(identity);
     }
 
+    public abstract void update();
+
     @Override
     public void writeToDisk(NBTTagCompound tag) {
         tag.writeString(NBTTags.TILE_ENTITY_IDENTITY, getIdentity());
@@ -72,4 +74,5 @@ public abstract class AbstractEntity implements Serializable, ISavable {
     public void loadFromDisk(NBTTagCompound tag) {
         identity = tag.getString(NBTTags.TILE_ENTITY_IDENTITY);
     }
+
 }

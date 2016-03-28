@@ -25,6 +25,12 @@ public class WorldServer extends World {
 
     @Override
     public void update() {
-
+        synchronized (chunks) {
+            for (int x = 0; x < chunks.length; x++) {
+                for (int z = 0; z < chunks[0].length; z++) {
+                    chunks[x][z].update();
+                }
+            }
+        }
     }
 }
