@@ -5,12 +5,15 @@ import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
 
+import javax.naming.directory.SearchResult;
+import java.io.Serializable;
+
 /**
  * Created by Tim on 26/03/2016.
  */
 public abstract class World {
 
-    public enum WorldType {
+    public enum WorldType implements Serializable {
         OVERGROUND, UNDERGROUND
     }
 
