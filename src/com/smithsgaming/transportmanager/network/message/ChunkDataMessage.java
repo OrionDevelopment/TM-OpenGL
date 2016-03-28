@@ -5,7 +5,7 @@ import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.saveable.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -37,7 +37,7 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
 
     @Override
     public TMNetworkingMessage onReceived(Channel channel, Side side) {
-        System.out.println("Received data package on side: " + side + " for chunk: " + x + "-" + z);
+        System.out.println("Received data package on side: " + side + " for chunk: " + x + "-" + z + " for world type:" + type);
 
         if (side == Side.CLIENT) {
             Stopwatch stopwatch = Stopwatch.createStarted();
@@ -53,6 +53,11 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
             Pair<Integer, Integer> nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(type);
 
             if (nextChunkPair == null) {
+                if (type == World.WorldType.UNDERGROUND) {
+                    nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.OVERGROUND);
+                    return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue(), World.WorldType.OVERGROUND);
+                }
+
                 System.out.println("   ==> Finished WorldServer download!");
                 TransportManagerClient.instance.registerEvent(new WorldClientLoadedEvent());
 
