@@ -52,6 +52,11 @@
             <artifactId>netty-all</artifactId>
             <version>5.0.0.Alpha2</version>
         </dependency>
+		<dependency>
+            <groupId>com.flowpowered</groupId>
+            <artifactId>flow-noise</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
