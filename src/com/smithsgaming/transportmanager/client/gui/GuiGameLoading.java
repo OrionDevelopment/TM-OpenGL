@@ -12,8 +12,11 @@ public class GuiGameLoading extends Gui {
 
     @Override
     protected void loadGui () {
-        registerComponent(new ComponentFlatArea(this, new GuiPlane(-1, 1, 1, -1, 1, 1, -1, -1), (Color) Color.WHITE));
-        registerComponent(new ComponentImage(this, "/textures/gui/background/logo.png", new GuiPlane(-0.25f, 0.25f, 0.25f, -0.25f, -0.25f, -0.25f, 0.25f, 0.25f)));
+        float horizontalHalf = GuiScale.HD.getHorizontalResolution() / 2f;
+        float verticalHalf = GuiScale.HD.getVerticalResolution() / 2f;
+
+        registerComponent(new ComponentFlatArea(this, new GuiPlane(-horizontalHalf, horizontalHalf, horizontalHalf, -horizontalHalf, verticalHalf, verticalHalf, -verticalHalf, -verticalHalf), (Color) Color.WHITE));
+        registerComponent(new ComponentImage(this, "/textures/gui/background/logo.png", 0, 0, 354, 123, true, true));
         registerComponent(new ComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", -0.3f, 0f, true));
     }
 }

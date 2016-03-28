@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client.gui.components;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.util.*;
+import org.lwjgl.util.vector.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -11,15 +12,31 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ComponentImage extends GuiComponent {
 
+    float xCoord, yCoord, width, heigth;
+    boolean centerX, centerY;
     private String resourcePath;
-
     private TextureRegistry.Texture textureToRender;
     private GeometryRegistry.Geometry geometryToRender;
 
-    public ComponentImage (GuiComponent parent, String resourcePath, GuiPlane area) {
+    public ComponentImage (GuiComponent parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
         super(parent);
         this.resourcePath = resourcePath;
-        this.geometryToRender = GeometryRegistry.QuadGeometry.constructFromPlaneForTexture(area, new GuiPlane(0, 1, 1, 0, 1, 1, 0, 0));
+
+        if (centerX)
+            xCoord -= ( width / 2f );
+
+        if (centerY)
+            yCoord -= ( heigth / 2f );
+
+        this.xCoord = xCoord;
+        this.yCoord = yCoord;
+        this.width = width;
+        this.heigth = height;
+
+        this.centerX = centerX;
+        this.centerY = centerY;
+
+        this.geometryToRender = GeometryRegistry.QuadGeometry.constructFromPlaneForTexture(new GuiPlane(-1, 1, 1, -1, 1, 1, -1, -1), new GuiPlane(0, 1, 1, 0, 1, 1, 0, 0));
     }
 
     @Override
@@ -48,9 +65,18 @@ public class ComponentImage extends GuiComponent {
      */
     @Override
     public void render () {
+        Camera.Gui.pushMatrix();
+        Camera.Gui.scaleModel(new Vector3f(2f / width, 2f / heigth, 1f));
+        Camera.Gui.translateModel(new Vector3f(xCoord, yCoord, 0f));
+        Camera.Gui.pushMatrix();
+
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Gui, geometryToRender, textureToRender, ShaderRegistry.Shaders.guiTextured);
         glDisable(GL_BLEND);
+
+        Camera.Gui.popMatrix();
+        Camera.Gui.popMatrix();
     }
 }

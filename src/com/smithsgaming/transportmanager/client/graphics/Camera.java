@@ -48,6 +48,8 @@ public class Camera {
         this.viewMatrixBuffer.flip();
 
         moveCamera(cameraPosition);
+
+        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), 2f / GuiScale.HD.getVerticalResolution(), 1f));
     }
 
     public Camera (float angle, Vector3f rotationAxis) {
@@ -63,6 +65,8 @@ public class Camera {
         this.viewMatrixBuffer.flip();
 
         rotateCamera(angle, rotationAxis);
+
+        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), 2f / GuiScale.HD.getVerticalResolution(), 1f));
     }
 
     /**
@@ -248,7 +252,10 @@ public class Camera {
      * @param verticalScale   The vertical GUI scale.
      */
     public void updateGuiScale (float horizontalScale, float verticalScale) {
-        scaleModel(new Vector3f(horizontalScale, verticalScale, 0f));
+        if (getMatrixStackCount() == 1)
+            popMatrix();
+
+        scaleModel(new Vector3f(horizontalScale, verticalScale, 1f));
         pushMatrix();
     }
 
