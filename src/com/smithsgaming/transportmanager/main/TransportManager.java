@@ -34,6 +34,7 @@ public class TransportManager implements Runnable, IEventController {
         WorldManager.instance.generateWorld();
 
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));
+        serverNetworkThread.run();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;

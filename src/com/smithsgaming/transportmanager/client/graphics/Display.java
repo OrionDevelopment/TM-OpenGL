@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.gui.*;
 import com.smithsgaming.transportmanager.client.input.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
@@ -186,7 +187,7 @@ public class Display implements Runnable, IEventController
 
             TransportManagerClient.instance.loadGraphics();
 
-            //RenderHandler.getGuiController().openGui(new GuiGameLoading());
+            RenderHandler.getGuiController().openGui(new GuiGameLoading());
 
             runRender();
 
