@@ -55,13 +55,13 @@ public class TransportManagerClient implements Runnable, IEventController {
         display.registerEvent(new OpenGuiEvent(new GuiGameLoading()));
 
         try {
-            Thread.sleep(1500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        //clientNetworkThread.start();
+        clientNetworkThread.start();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
