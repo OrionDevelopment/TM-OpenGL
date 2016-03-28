@@ -23,7 +23,7 @@ public class CrudeDataRequestMessage extends TMNetworkingMessage {
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         if (side == Side.SERVER) {
             if (type == DataType.WORLD) {
-                return new WorldCoreDataMessage(WorldManager.instance.getLoadedWorld().getCoreData());
+                return new WorldCoreDataMessage(WorldManager.instance.getOvergroundWorld().getCoreData());
             }
         }
 

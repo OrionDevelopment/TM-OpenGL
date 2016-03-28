@@ -13,8 +13,8 @@ public class WorldClient extends World {
 
     private boolean[][] chunkLoadedState;
 
-    public WorldClient(WorldCoreData coreData) {
-        super(coreData);
+    public WorldClient(WorldCoreData coreData, WorldType type) {
+        super(coreData, type);
         chunkLoadedState = new boolean[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
     }
 

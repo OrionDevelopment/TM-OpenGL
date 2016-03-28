@@ -11,15 +11,15 @@ import java.io.*;
  */
 public class Chunk implements Serializable {
 
-    public static int chunkSize = 20;
+    public static final int chunkSize = 20;
 
     protected transient World world;
 
     protected int chunkX;
     protected int chunkZ;
 
-    protected Tile[][][] tiles;
-    protected TileEntity[][][] tileEntities;
+    protected Tile[][] tiles;
+    protected TileEntity[][] tileEntities;
 
     public Chunk(World world, int chunkX, int chunkZ) {
         this.world = world;
@@ -27,8 +27,8 @@ public class Chunk implements Serializable {
         this.chunkZ = chunkZ;
 
         if (world != null) {
-            tiles = new Tile[chunkSize][world.getCoreData().getWorldHeight()][chunkSize];
-            tileEntities = new TileEntity[chunkSize][world.getCoreData().getWorldHeight()][chunkSize];
+            tiles = new Tile[chunkSize][chunkSize];
+            tileEntities = new TileEntity[chunkSize][chunkSize];
         }
     }
 
@@ -40,42 +40,40 @@ public class Chunk implements Serializable {
         return chunkZ;
     }
 
-    public void update(){
+    public void update() {
         synchronized (tileEntities) {
-            for (int x = 0; x < tileEntities.length; x++) {
-                for (int y = 0; y < tileEntities[1].length; x++) {
-                    for (int z = 0; z < tileEntities[2].length; z++) {
-                        tileEntities[x][y][z].update();
-                    }
+            for (int x = 0; x < tileEntities[0].length; x++) {
+                for (int z = 0; z < tileEntities[2].length; z++) {
+                    tileEntities[x][z].update();
                 }
             }
         }
     }
 
-    public Tile getTileAtPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        return tiles[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
+    public Tile getTileAtPos(int tileChunkPosX, int tileChunkPosZ) {
+        return tiles[tileChunkPosX][tileChunkPosZ];
     }
 
-    public void setTileAtPos(Tile tile, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        tiles[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tile;
+    public void setTileAtPos(Tile tile, int tileChunkPosX, int tileChunkPosZ) {
+        tiles[tileChunkPosX][tileChunkPosZ] = tile;
         if (tile instanceof ITileEntityProvider) {
-            setTileEntityAtPos(((ITileEntityProvider) tile).createTileEntity(world, tileChunkPosX, tileChunkPosY, tileChunkPosZ), tileChunkPosX, tileChunkPosY, tileChunkPosZ);
+            setTileEntityAtPos(((ITileEntityProvider) tile).createTileEntity(world, tileChunkPosX, tileChunkPosZ), tileChunkPosX, tileChunkPosZ);
         }
     }
 
-    public TileEntity getTileEntityAtPos(int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        return tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ];
+    public TileEntity getTileEntityAtPos(int tileChunkPosX, int tileChunkPosZ) {
+        return tileEntities[tileChunkPosX][tileChunkPosZ];
     }
 
-    public void setTileEntityAtPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosY, int tileChunkPosZ) {
-        tileEntities[tileChunkPosX][tileChunkPosY][tileChunkPosZ] = tileEntity;
+    public void setTileEntityAtPos(TileEntity tileEntity, int tileChunkPosX, int tileChunkPosZ) {
+        tileEntities[tileChunkPosX][tileChunkPosZ] = tileEntity;
     }
 
-    public Tile[][][] getTiles() {
+    public Tile[][] getTiles() {
         return tiles;
     }
 
-    public TileEntity[][][] getTileEntities() {
+    public TileEntity[][] getTileEntities() {
         return tileEntities;
     }
 

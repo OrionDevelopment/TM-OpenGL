@@ -1,10 +1,7 @@
 
 package com.smithsgaming.transportmanager.main.world;
 
-import com.smithsgaming.transportmanager.main.world.saveable.WorldSaveHandler;
-import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
-
-import java.util.*;
+import java.util.Random;
 
 /**
  * Created by marcf on 3/13/2016.
@@ -13,7 +10,8 @@ public class WorldManager {
 
     public static WorldManager instance = new WorldManager();
 
-    private World loadedWorld = null;
+    private World overgroundWorld = null;
+    private World undergroundWorld = null;
     private boolean isWorldBeingLoaded;
 
     protected WorldManager() {
@@ -25,20 +23,24 @@ public class WorldManager {
         }
         isWorldBeingLoaded = true;
 
-        loadedWorld = new WorldServer(new WorldCoreData(500, 256, 500, new Random().nextLong()));
-        loadedWorld.generate();
+        WorldCoreData data = new WorldCoreData(500, 256, 500, new Random().nextLong());
+        overgroundWorld = new WorldServer(data, World.WorldType.OVERGROUND);
+        overgroundWorld.generate();
+        undergroundWorld = new WorldServer(data, World.WorldType.UNDERGROUND);
+        undergroundWorld.generate();
 
         isWorldBeingLoaded = false;
     }
 
     public void updateWorld() {
-        if (loadedWorld != null) {
-            loadedWorld.update();
-        }
     }
 
-    public World getLoadedWorld() {
-        return loadedWorld;
+    public World getOvergroundWorld() {
+        return overgroundWorld;
+    }
+
+    public World getUndergroundWorld() {
+        return undergroundWorld;
     }
 
 

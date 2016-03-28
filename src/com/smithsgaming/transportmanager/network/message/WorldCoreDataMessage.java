@@ -13,25 +13,31 @@ public class WorldCoreDataMessage extends TMNetworkingMessage {
 
     WorldCoreData coreData;
 
-    public WorldCoreDataMessage (WorldCoreData coreData) {
+    public WorldCoreDataMessage(WorldCoreData coreData) {
         this.coreData = coreData;
     }
 
-    public WorldCoreDataMessage () {
+    public WorldCoreDataMessage() {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived(Channel channel, Side side) {
         if (side == Side.CLIENT) {
             WorldClientManager.instance.initializeWorld(coreData);
-            Pair<Integer, Integer> nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld();
-
-            if (nextChunkPair == null)
+            Pair<Integer, Integer> nextChunkPair;
+            World.WorldType type;
+            if (WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.OVERGROUND) == null) {
+                nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.OVERGROUND);
+                type = World.WorldType.OVERGROUND;
+            } else {
+                nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.UNDERGROUND);
+                type = World.WorldType.UNDERGROUND;
+            }
+            if (nextChunkPair == null) {
                 return null;
-
-            return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue());
+            }
+            return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue(), type);
         }
-
         return null;
     }
 }

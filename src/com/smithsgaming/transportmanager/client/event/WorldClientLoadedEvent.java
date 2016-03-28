@@ -13,7 +13,7 @@ public class WorldClientLoadedEvent extends TMEvent {
 
     @Override
     public void processEvent (Side side) {
-        RenderHandler.getWorldRenderer().setWorldClient(WorldClientManager.instance.getWorld());
+        RenderHandler.getWorldRenderer().setWorldClient(WorldClientManager.instance.getOvergroundWorld());
         TransportManagerClient.getDisplay().registerEvent(new CloseGuiEvent());
     }
 }

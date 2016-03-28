@@ -6,6 +6,7 @@ package com.smithsgaming.transportmanager.main.world.saveable;
 public class NBTTags {
 
     public static final String WORLD = "world";
+    public static final String WORLD_TYPE = "worldType";
     public static final String CHUNK = "chunk";
     public static final String TILE = "tile";
     public static final String TILE_IDENTITY = "tileIdentity";

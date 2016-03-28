@@ -9,8 +9,8 @@ import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
  */
 public class WorldServer extends World {
 
-    public WorldServer(WorldCoreData data) {
-        super(data);
+    public WorldServer(WorldCoreData data, WorldType type) {
+        super(data, type);
     }
 
     @Override

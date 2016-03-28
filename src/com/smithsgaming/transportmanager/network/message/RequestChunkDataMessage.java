@@ -10,21 +10,26 @@ import io.netty.channel.*;
 public class RequestChunkDataMessage extends TMNetworkingMessage {
     private int x;
     private int y;
+    private World.WorldType type;
 
-    public RequestChunkDataMessage (int x, int y) {
+    public RequestChunkDataMessage(int x, int y, World.WorldType type) {
         this.x = x;
         this.y = y;
+        this.type = type;
     }
 
-    public RequestChunkDataMessage () {
+    public RequestChunkDataMessage() {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived(Channel channel, Side side) {
         if (side == Side.SERVER) {
-            return new ChunkDataMessage(WorldManager.instance.getLoadedWorld().getChunkAtPos(x, y));
+            if (type == World.WorldType.OVERGROUND) {
+                return new ChunkDataMessage(WorldManager.instance.getOvergroundWorld().getChunkAtPos(x, y));
+            } else if (type == World.WorldType.UNDERGROUND) {
+                return new ChunkDataMessage(WorldManager.instance.getUndergroundWorld().getChunkAtPos(x, y));
+            }
         }
-
         return null;
     }
 }
