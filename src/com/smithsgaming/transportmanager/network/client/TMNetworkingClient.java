@@ -39,8 +39,7 @@ public class TMNetworkingClient implements Runnable {
         }
     }
 
-    public static boolean isConnectionEstablished()
-    {
+    public static boolean isConnectionEstablished() {
         return activeComChannel != null;
     }
 

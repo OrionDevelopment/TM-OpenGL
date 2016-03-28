@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.util.nbt;
 
 import org.jnbt.*;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +84,30 @@ public class NBTTagCompound {
         dataMap.put(tagName, value);
     }
 
+    public byte getByte(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof ByteTag) {
+            return ((ByteTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
+    public byte[] getByteArray(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof ByteArrayTag) {
+            return ((ByteArrayTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
     public int getInt(String tagName) {
         if (!dataMap.containsKey(tagName)) {
             throw new NBTError("The TagCompound does not contain the specified key");
@@ -90,6 +115,54 @@ public class NBTTagCompound {
         Tag tag = dataMap.get(tagName);
         if (tag instanceof IntTag) {
             return ((IntTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
+    public float getFloat(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof FloatTag) {
+            return ((FloatTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
+    public double getDouble(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof DoubleTag) {
+            return ((DoubleTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
+    public long getLong(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof LongTag) {
+            return ((LongTag) tag).getValue();
+        } else {
+            throw new NBTError("The data at the specified key was of an incorrect type");
+        }
+    }
+
+    public short getShort(String tagName) {
+        if (!dataMap.containsKey(tagName)) {
+            throw new NBTError("The TagCompound does not contain the specified key");
+        }
+        Tag tag = dataMap.get(tagName);
+        if (tag instanceof ShortTag) {
+            return ((ShortTag) tag).getValue();
         } else {
             throw new NBTError("The data at the specified key was of an incorrect type");
         }

@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.main.world.entity;
 
 import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.main.world.saveable.ISavable;
+import com.smithsgaming.transportmanager.main.world.saveable.NBTTags;
 import com.smithsgaming.transportmanager.main.world.saveable.WorldSaveHandler;
 import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 import org.jnbt.CompoundTag;
@@ -64,11 +65,11 @@ public abstract class AbstractEntity implements Serializable, ISavable {
 
     @Override
     public void writeToDisk(NBTTagCompound tag) {
-        tag.writeString(WorldSaveHandler.Tags.TILE_ENTITY_IDENTITY, getIdentity());
+        tag.writeString(NBTTags.TILE_ENTITY_IDENTITY, getIdentity());
     }
 
     @Override
     public void loadFromDisk(NBTTagCompound tag) {
-
+        identity = tag.getString(NBTTags.TILE_ENTITY_IDENTITY);
     }
 }

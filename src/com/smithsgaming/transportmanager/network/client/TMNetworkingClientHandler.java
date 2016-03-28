@@ -30,7 +30,7 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
     }
 
     @Override
-    public void channelReadComplete (ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
     }
 
