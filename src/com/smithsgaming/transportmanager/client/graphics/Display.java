@@ -1,7 +1,7 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.gui.*;
+import com.smithsgaming.transportmanager.client.input.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -102,6 +102,11 @@ public class Display implements Runnable, IEventController
 
             glfwSetFramebufferSizeCallback(window, resizeWindow);
 
+            glfwSetCursorPosCallback(window, MouseInputHandler.CURSOR_POS_CALLBACK);
+            glfwSetMouseButtonCallback(window, MouseInputHandler.MOUSE_BUTTON_CALLBACK);
+            glfwSetKeyCallback(window, KeyboardInputHandler.KEY_CALLBACK);
+            glfwSetScrollCallback(window, MouseInputHandler.SCROLL_CALLBACK);
+
             glfwMakeContextCurrent(window);
             glfwSwapInterval(1);
 
@@ -125,7 +130,7 @@ public class Display implements Runnable, IEventController
             if (resized) {
                 GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
                 OpenGLUtil.setAspectRatio(( (float) sizeHorizontal / (float) sizeVertical ));
-                Camera.Gui.updateGuiScale();
+                //Camera.Gui.updateGuiScale();
                 resized = false;
             }
 
@@ -181,7 +186,7 @@ public class Display implements Runnable, IEventController
 
             TransportManagerClient.instance.loadGraphics();
 
-            RenderHandler.getGuiController().openGui(new GuiGameLoading());
+            //RenderHandler.getGuiController().openGui(new GuiGameLoading());
 
             runRender();
 

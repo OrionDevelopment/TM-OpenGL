@@ -51,7 +51,7 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
 
             if (nextChunkPair == null) {
                 System.out.println("   ==> Finished WorldServer download!");
-                TransportManagerClient.instance.registerEvent(new WorldClientLoadedEvent());
+                TransportManagerClient.instance.registerEvent(new EventClientWorldLoaded());
 
                 return null;
             }

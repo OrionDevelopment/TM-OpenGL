@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.input.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
@@ -46,6 +47,10 @@ public class TransportManagerClient implements Runnable, IEventController {
         display = new Display();
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
+
+        WorldInputHandler inputHandler = new WorldInputHandler();
+        MouseInputHandler.instance.registerScrollInputHandler(inputHandler);
+        KeyboardInputHandler.instance.registerKeyInputHandler(inputHandler);
 
         try {
             Thread.sleep(1500);

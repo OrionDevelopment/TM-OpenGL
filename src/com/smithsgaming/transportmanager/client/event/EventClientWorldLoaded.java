@@ -9,11 +9,11 @@ import com.smithsgaming.transportmanager.util.event.*;
 /**
  * @Author Marc (Created on: 16.03.2016)
  */
-public class WorldClientLoadedEvent extends TMEvent {
+public class EventClientWorldLoaded extends TMEvent {
 
     @Override
     public void processEvent (Side side) {
         RenderHandler.getWorldRenderer().setWorldClient(WorldClientManager.instance.getWorld());
-        TransportManagerClient.getDisplay().registerEvent(new CloseGuiEvent());
+        TransportManagerClient.getDisplay().registerEvent(new EventClientGuiClose());
     }
 }

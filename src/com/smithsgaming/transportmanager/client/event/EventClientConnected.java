@@ -8,7 +8,7 @@ import com.smithsgaming.transportmanager.util.event.*;
 /**
  * @Author Marc (Created on: 15.03.2016)
  */
-public class ClientConnectedEvent extends TMEvent {
+public class EventClientConnected extends TMEvent {
 
     @Override
     public void processEvent (Side side) {

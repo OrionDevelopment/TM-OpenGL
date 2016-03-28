@@ -23,7 +23,7 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
         System.out.println("Operation Accepted: " + side + " - " + operation);
 
         if (operation == Operation.PLAYERCONNECTED)
-            TransportManagerClient.instance.registerEvent(new ClientConnectedEvent());
+            TransportManagerClient.instance.registerEvent(new EventClientConnected());
 
         return null;
     }

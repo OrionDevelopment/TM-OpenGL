@@ -21,8 +21,8 @@ public class ComponentText extends GuiComponent {
         this.yCoord = yCoord;
         this.center = center;
 
-        if (center)
-            this.xCoord -= ( this.font.getWidth(this.text) / 2f );
+        //if (center)
+        //this.xCoord -= ( this.font.getWidth(this.text) / 2f );
     }
 
 
