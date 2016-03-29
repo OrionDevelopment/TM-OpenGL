@@ -2,6 +2,8 @@ package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
 
+import static org.lwjgl.opengl.GL11.*;
+
 /**
  * @Author Marc (Created on: 27.03.2016)
  */
@@ -20,9 +22,6 @@ public class ComponentText extends GuiComponent {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.center = center;
-
-        //if (center)
-        //this.xCoord -= ( this.font.getWidth(this.text) / 2f );
     }
 
 
@@ -51,7 +50,10 @@ public class ComponentText extends GuiComponent {
      */
     @Override
     public void render () {
-        //font.drawString(xCoord, yCoord, text, 1F, 1F);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        font.drawString(Camera.Gui, xCoord, yCoord, text, TrueTypeFont.ALIGN_CENTER);
         //OpenGLUtil.checkGlState("Render text");
+        glDisable(GL_BLEND);
     }
 }

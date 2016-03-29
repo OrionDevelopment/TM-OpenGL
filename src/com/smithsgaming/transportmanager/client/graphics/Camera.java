@@ -27,8 +27,8 @@ public class Camera {
     private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private Vector3f cameraPosition = new Vector3f();
     private float viewDistanceInChunks = 4;
-    private float fov;
-    private float aspectRatio;
+    private float horizontalScale = 1f;
+    private float verticalScale = 1f;
 
     private Frustum activeFrustum;
 
@@ -49,7 +49,7 @@ public class Camera {
 
         moveCamera(cameraPosition);
 
-        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), 2f / GuiScale.HD.getVerticalResolution(), 1f));
+        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), -2f / GuiScale.HD.getVerticalResolution(), 1f));
     }
 
     public Camera (float angle, Vector3f rotationAxis) {
@@ -65,8 +65,6 @@ public class Camera {
         this.viewMatrixBuffer.flip();
 
         rotateCamera(angle, rotationAxis);
-
-        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), 2f / GuiScale.HD.getVerticalResolution(), 1f));
     }
 
     /**
@@ -257,6 +255,9 @@ public class Camera {
 
         scaleModel(new Vector3f(horizontalScale, verticalScale, 1f));
         pushMatrix();
+
+        this.horizontalScale = horizontalScale;
+        this.verticalScale = verticalScale;
     }
 
     /**
@@ -299,7 +300,7 @@ public class Camera {
      * @param modelTranslation The translation to perform.
      */
     public void translateModel (Vector3f modelTranslation) {
-        currentActingMatrix.translate(modelTranslation);
+        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / GuiScale.HD.getHorizontalResolution(), modelTranslation.getY() / GuiScale.HD.getHorizontalResolution(), modelTranslation.getZ()));
         isActingMatrixLive = false;
     }
 

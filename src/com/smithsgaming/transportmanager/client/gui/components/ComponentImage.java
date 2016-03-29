@@ -22,11 +22,11 @@ public class ComponentImage extends GuiComponent {
         super(parent);
         this.resourcePath = resourcePath;
 
-        if (centerX)
-            xCoord -= ( width / 2f );
+        if (!centerX)
+            xCoord += ( width / 2f );
 
-        if (centerY)
-            yCoord -= ( heigth / 2f );
+        if (!centerY)
+            yCoord += ( height / 2f );
 
         this.xCoord = xCoord;
         this.yCoord = yCoord;
@@ -66,8 +66,8 @@ public class ComponentImage extends GuiComponent {
     @Override
     public void render () {
         Camera.Gui.pushMatrix();
-        Camera.Gui.scaleModel(new Vector3f(2f / width, 2f / heigth, 1f));
         Camera.Gui.translateModel(new Vector3f(xCoord, yCoord, 0f));
+        Camera.Gui.scaleModel(new Vector3f(1f / ( 2f / width ), 1f / ( 2f / heigth ), 1f));
         Camera.Gui.pushMatrix();
 
 

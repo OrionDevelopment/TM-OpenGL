@@ -1,7 +1,9 @@
 package com.smithsgaming.transportmanager.client.registries;
 
+import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.util.*;
+import org.lwjgl.opengl.*;
 
 import java.awt.*;
 import java.nio.*;
@@ -83,6 +85,8 @@ public class TextureRegistry {
         private float u;
         private float v;
 
+        private int internalFormat = GL11.GL_RGBA;
+        private int format = GL11.GL_RGBA;
 
         public Texture (String textureName, ByteBuffer data, int width, int height) {
             this(textureName, data, width, height, 0, 0, false, true, 0);
@@ -171,6 +175,22 @@ public class TextureRegistry {
         public void setRequiringTextureStitching (boolean requiringTextureStitching) {
             this.requiringTextureStitching = requiringTextureStitching;
         }
+
+        public int getInternalFormat () {
+            return internalFormat;
+        }
+
+        public void setInternalFormat (int internalFormat) {
+            this.internalFormat = internalFormat;
+        }
+
+        public int getFormat () {
+            return format;
+        }
+
+        public void setFormat (int format) {
+            this.format = format;
+        }
     }
 
 
@@ -195,13 +215,16 @@ public class TextureRegistry {
 
     public static class Fonts {
         public static TrueTypeFont Courier;
+        public static TrueTypeFont TimesNewRoman;
 
         public static void init () {
             Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), true);
+            TimesNewRoman = new TrueTypeFont(new Font("Times New Roman", java.awt.Font.PLAIN, 25), true);
         }
 
         public static void unLoad () {
             Courier.destroy();
+            TimesNewRoman.destroy();
         }
     }
 }

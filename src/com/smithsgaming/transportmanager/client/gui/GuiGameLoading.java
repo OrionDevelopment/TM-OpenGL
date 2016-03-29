@@ -17,6 +17,6 @@ public class GuiGameLoading extends Gui {
 
         registerComponent(new ComponentFlatArea(this, new GuiPlane(-horizontalHalf, horizontalHalf, horizontalHalf, -horizontalHalf, verticalHalf, verticalHalf, -verticalHalf, -verticalHalf), (Color) Color.WHITE));
         registerComponent(new ComponentImage(this, "/textures/gui/background/logo.png", 0, 0, 354, 123, true, true));
-        registerComponent(new ComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", -0.3f, 0f, true));
+        registerComponent(new ComponentText(this, TextureRegistry.Fonts.TimesNewRoman, "Loading...", 0f, -200f, true));
     }
 }
