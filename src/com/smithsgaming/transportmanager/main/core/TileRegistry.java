@@ -1,6 +1,11 @@
 
 
-package com.smithsgaming.transportmanager.main.world.tiles;
+package com.smithsgaming.transportmanager.main.core;
+
+import com.smithsgaming.transportmanager.main.world.tiles.BridgableTile;
+import com.smithsgaming.transportmanager.main.world.tiles.BuildableTile;
+import com.smithsgaming.transportmanager.main.world.tiles.NonBuildableTile;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 
 import java.util.*;
 

@@ -7,7 +7,7 @@ import com.smithsgaming.transportmanager.main.world.World;
  */
 public class BuildableTile extends Tile {
 
-    protected BuildableTile(String identity) {
+    public BuildableTile(String identity) {
         super(identity);
     }
 

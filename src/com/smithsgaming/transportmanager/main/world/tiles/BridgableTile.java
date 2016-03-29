@@ -7,7 +7,7 @@ import com.smithsgaming.transportmanager.main.world.World;
  */
 public class BridgableTile extends Tile {
 
-    protected BridgableTile(String identity) {
+    public BridgableTile(String identity) {
         super(identity);
     }
 

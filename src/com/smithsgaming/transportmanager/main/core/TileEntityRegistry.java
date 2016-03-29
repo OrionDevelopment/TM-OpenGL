@@ -1,6 +1,8 @@
 
 
-package com.smithsgaming.transportmanager.main.world.tileentities;
+package com.smithsgaming.transportmanager.main.core;
+
+import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
 
 import java.util.*;
 

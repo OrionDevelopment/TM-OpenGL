@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.network.message;
 
-import com.smithsgaming.transportmanager.main.world.*;
+import com.smithsgaming.transportmanager.main.core.WorldManager;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 

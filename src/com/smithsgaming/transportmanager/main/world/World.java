@@ -3,9 +3,8 @@ package com.smithsgaming.transportmanager.main.world;
 import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
-import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
 
-import javax.naming.directory.SearchResult;
 import java.io.Serializable;
 
 /**

@@ -1,8 +1,9 @@
-package com.smithsgaming.transportmanager.main.world.biome;
+package com.smithsgaming.transportmanager.main.core;
 
 import com.hoten.delaunay.voronoi.Center;
+import com.smithsgaming.transportmanager.main.world.biome.BaseBiome;
+import com.smithsgaming.transportmanager.main.world.biome.Biome;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
-import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

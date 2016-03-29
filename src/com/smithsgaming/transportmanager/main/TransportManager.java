@@ -1,8 +1,8 @@
 
 package com.smithsgaming.transportmanager.main;
 
-import com.smithsgaming.transportmanager.main.world.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
+import com.smithsgaming.transportmanager.main.core.WorldManager;
 import com.smithsgaming.transportmanager.network.server.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;

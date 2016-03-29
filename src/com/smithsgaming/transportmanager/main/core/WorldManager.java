@@ -1,5 +1,9 @@
 
-package com.smithsgaming.transportmanager.main.world;
+package com.smithsgaming.transportmanager.main.core;
+
+import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.world.WorldCoreData;
+import com.smithsgaming.transportmanager.main.world.WorldServer;
 
 import java.util.Random;
 

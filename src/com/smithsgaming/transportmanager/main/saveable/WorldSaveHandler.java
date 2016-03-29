@@ -8,9 +8,9 @@ import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.main.world.tileentities.ITileEntityProvider;
 import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
-import com.smithsgaming.transportmanager.main.world.tileentities.TileEntityRegistry;
+import com.smithsgaming.transportmanager.main.core.TileEntityRegistry;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
-import com.smithsgaming.transportmanager.main.world.tiles.TileRegistry;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 
 import java.util.concurrent.TimeUnit;
