@@ -23,9 +23,6 @@ public class TrueTypeFont {
 
     private HashMap<Character, Pair<CharGeometry, CharTexture>> characterPairHashMap = new HashMap<>();
 
-    /** Map of user defined font characters (Character <-> IntObject) */
-    private Map customChars = new HashMap();
-
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
 
@@ -157,7 +154,7 @@ public class TrueTypeFont {
         }
         gt.setFont(font);
         gt.setColor(Color.BLACK);
-        int charx = 4;
+        int charx = 3;
         int chary = 1;
         gt.drawString(String.valueOf(ch), ( charx ), ( chary ) + fontMetrics.getAscent());
         return fontImage;
@@ -311,7 +308,7 @@ public class TrueTypeFont {
         }
 
         public static CharTexture getForChar (FontMetrics fontMetrics, char c, float stitchX, float stitchY) {
-            return new CharTexture(fontMetrics.getFont().getName() + "-Char:" + c, null, fontMetrics.charWidth(c) + 8, fontMetrics.getHeight() + 3, stitchX, stitchY, true, false, -1);
+            return new CharTexture(fontMetrics.getFont().getName() + "-Char:" + c, null, fontMetrics.charWidth(c) + 8, fontMetrics.getHeight() + 3, stitchX, stitchY, false, false, -1);
         }
     }
 }
