@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.main.world.saveable;
+package com.smithsgaming.transportmanager.main.saveable;
 
 import com.google.common.base.Stopwatch;
 import com.smithsgaming.transportmanager.client.world.WorldClient;

@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.main.world.saveable;
+package com.smithsgaming.transportmanager.main.saveable;
 
 import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 

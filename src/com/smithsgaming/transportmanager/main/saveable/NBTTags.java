@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.main.world.saveable;
+package com.smithsgaming.transportmanager.main.saveable;
 
 /**
  * Created by Tim on 28/03/2016.

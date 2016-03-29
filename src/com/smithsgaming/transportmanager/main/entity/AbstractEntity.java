@@ -1,17 +1,11 @@
-package com.smithsgaming.transportmanager.main.world.entity;
+package com.smithsgaming.transportmanager.main.entity;
 
 import com.smithsgaming.transportmanager.main.world.World;
-import com.smithsgaming.transportmanager.main.world.saveable.ISavable;
-import com.smithsgaming.transportmanager.main.world.saveable.NBTTags;
-import com.smithsgaming.transportmanager.main.world.saveable.WorldSaveHandler;
+import com.smithsgaming.transportmanager.main.saveable.ISavable;
+import com.smithsgaming.transportmanager.main.saveable.NBTTags;
 import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
-import org.jnbt.CompoundTag;
-import org.jnbt.IntTag;
-import org.jnbt.Tag;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Tim on 26/03/2016.
