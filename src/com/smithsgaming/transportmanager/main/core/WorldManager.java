@@ -2,8 +2,9 @@
 package com.smithsgaming.transportmanager.main.core;
 
 import com.smithsgaming.transportmanager.main.world.World;
-import com.smithsgaming.transportmanager.main.world.WorldCoreData;
 import com.smithsgaming.transportmanager.main.world.WorldServer;
+import com.smithsgaming.transportmanager.main.world.generation.WorldGenManager;
+import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationData;
 
 import java.util.Random;
 
@@ -26,17 +27,20 @@ public class WorldManager {
             return;
         }
         isWorldBeingLoaded = true;
-
-        WorldCoreData data = new WorldCoreData(500, 256, 500, new Random().nextLong());
-        overgroundWorld = new WorldServer(data, World.WorldType.OVERGROUND);
-        overgroundWorld.generate();
-        undergroundWorld = new WorldServer(data, World.WorldType.UNDERGROUND);
-        undergroundWorld.generate();
-
+        WorldGenManager.WorldGenThread thread = WorldGenManager.instance.getNewWorldGenThread();
+        thread.run();
+        overgroundWorld = thread.getWorld(World.WorldType.OVERGROUND);
+        undergroundWorld = thread.getWorld(World.WorldType.UNDERGROUND);
         isWorldBeingLoaded = false;
     }
 
     public void updateWorld() {
+        if (overgroundWorld != null) {
+            overgroundWorld.update();
+        }
+        if (undergroundWorld != null) {
+            undergroundWorld.update();
+        }
     }
 
     public World getOvergroundWorld() {

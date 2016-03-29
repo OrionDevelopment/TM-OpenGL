@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client.world;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationData;
 import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
@@ -13,9 +14,15 @@ public class WorldClient extends World {
 
     private boolean[][] chunkLoadedState;
 
-    public WorldClient(WorldCoreData coreData, WorldType type) {
+    public WorldClient(WorldGenerationData coreData, WorldType type) {
         super(coreData, type);
-        chunkLoadedState = new boolean[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
+        coreData.setChunks(new ChunkClient[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldHeight() / Chunk.chunkSize + 1]);
+        for (int x = 0; x < coreData.getWorldWidth() / Chunk.chunkSize + 1; x++) {
+            for (int z = 0; z < coreData.getWorldHeight() / Chunk.chunkSize + 1; z++) {
+                coreData.setChunk(new ChunkClient(this, x, z));
+            }
+        }
+        chunkLoadedState = new boolean[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldHeight() / Chunk.chunkSize + 1];
     }
 
     public boolean getLoadedStateForChunk(int chunkPosX, int chunkPosZ) {
@@ -26,19 +33,8 @@ public class WorldClient extends World {
         chunkLoadedState[chunkPosX][chunkPosZ] = state;
     }
 
-    @Override
     public ChunkClient getChunkAtPos(int chunkPosX, int chunkPosZ) {
-        return (ChunkClient) chunks[chunkPosX][chunkPosZ];
-    }
-
-    @Override
-    protected void initializeChunkMap() {
-        chunks = new ChunkClient[coreData.getWorldWidth() / Chunk.chunkSize + 1][coreData.getWorldLength() / Chunk.chunkSize + 1];
-        for (int x = 0; x < chunks.length; x++) {
-            for (int z = 0; z < chunks[0].length; z++) {
-                chunks[x][z] = new ChunkClient(this, x, z);
-            }
-        }
+        return (ChunkClient) coreData.getChunkMap()[chunkPosX][chunkPosZ];
     }
 
     @Override

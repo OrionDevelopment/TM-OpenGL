@@ -4,6 +4,7 @@ import com.smithsgaming.transportmanager.client.event.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.gui.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.world.WorldClientManager;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -55,7 +56,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         display.registerEvent(new OpenGuiEvent(new GuiGameLoading()));
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -103,7 +104,6 @@ public class TransportManagerClient implements Runnable, IEventController {
     }
 
     private void updateClient() {
-
     }
 
     public void loadGraphics() {

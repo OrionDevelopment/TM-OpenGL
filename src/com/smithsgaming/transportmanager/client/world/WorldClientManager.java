@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.world;
 
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationData;
 import javafx.util.*;
 
 /**
@@ -16,7 +17,7 @@ public class WorldClientManager {
     protected WorldClientManager() {
     }
 
-    public void initializeWorld(WorldCoreData data) {
+    public void initializeWorld(WorldGenerationData data) {
         this.overgroundWorld = new WorldClient(data, World.WorldType.OVERGROUND);
         this.undergroundWorld = new WorldClient(data, World.WorldType.UNDERGROUND);
     }

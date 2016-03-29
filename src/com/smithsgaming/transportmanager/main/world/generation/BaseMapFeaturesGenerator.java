@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.main.world.generation;
 import com.smithsgaming.transportmanager.main.TransportManager;
 import com.smithsgaming.transportmanager.main.core.BiomeManager;
 import com.smithsgaming.transportmanager.main.world.biome.BaseBiome;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.util.concurrent.ProgressionNotifierThread;
 
 import java.awt.image.BufferedImage;
@@ -21,6 +22,11 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
         float progressionStep = 1F / maxCount;
         float totalProgression = 0F;
 
+        for (int x = 0; x < worldGenerationData.getWorldWidth() / Chunk.chunkSize + 1; x++) {
+            for (int z = 0; z < worldGenerationData.getWorldHeight() / Chunk.chunkSize + 1; z++) {
+                worldGenerationData.setChunk(new Chunk(worldGenerationData.world, x, z));
+            }
+        }
         progressionNotifierThread.onThreadProgressionChanged(totalProgression, 1, "Started generating biomes...");
         for (int x = 0; x < worldGenerationData.getWorldWidth(); x++) {
             for (int y = 0; y < worldGenerationData.getWorldHeight(); y++) {
@@ -42,7 +48,7 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
                 totalProgression += progressionStep;
                 progressionNotifierThread.onThreadProgressionChanged(totalProgression, 1, "Generated Biome: " + blockBiome.getBiomeType().getName() + " for X: " + x + " Y: " + y);
                 worldGenerationData.getBiomeMap()[x][y] = blockBiome;
-                worldGenerationData.getTileMap()[x][y] = blockBiome.getTile();
+                worldGenerationData.setTileAtPos(blockBiome.getTile(), x, y);
             }
         }
         progressionNotifierThread.onThreadProgressionChanged(1F, 1, "Finished generating biomes...");

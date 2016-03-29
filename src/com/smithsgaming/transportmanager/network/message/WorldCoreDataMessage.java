@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.main.world.*;
+import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationData;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 import javafx.util.*;
@@ -11,9 +12,9 @@ import javafx.util.*;
  */
 public class WorldCoreDataMessage extends TMNetworkingMessage {
 
-    WorldCoreData coreData;
+    WorldGenerationData coreData;
 
-    public WorldCoreDataMessage(WorldCoreData coreData) {
+    public WorldCoreDataMessage(WorldGenerationData coreData) {
         this.coreData = coreData;
     }
 

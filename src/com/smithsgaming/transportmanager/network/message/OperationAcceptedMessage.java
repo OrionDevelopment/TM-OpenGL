@@ -12,14 +12,15 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
 
     Operation operation;
 
-    public OperationAcceptedMessage() {}
+    public OperationAcceptedMessage() {
+    }
 
     public OperationAcceptedMessage(Operation operation) {
         this.operation = operation;
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived(Channel channel, Side side) {
         System.out.println("Operation Accepted: " + side + " - " + operation);
 
         if (operation == Operation.PLAYERCONNECTED)
@@ -28,8 +29,7 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
         return null;
     }
 
-    public enum Operation
-    {
+    public enum Operation {
         PLAYERCONNECTED,
         PLAYERDISCONNEDTED
     }

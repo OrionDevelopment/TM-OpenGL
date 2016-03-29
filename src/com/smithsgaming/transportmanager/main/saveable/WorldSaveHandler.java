@@ -26,7 +26,7 @@ public class WorldSaveHandler {
         NBTTagCompound worldTag = new NBTTagCompound();
         worldTag.writeInt(NBTTags.WORLD_TYPE, world.getWorldTypeOrdinal());
         for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
-            for (int z = 0; z < world.getCoreData().getWorldLength() / Chunk.chunkSize + 1; z++) {
+            for (int z = 0; z < world.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
                 writeTagForChunk(worldTag, world, x, z);
             }
         }
@@ -37,7 +37,7 @@ public class WorldSaveHandler {
         System.out.println("Started writing chunk to Tag: " + chunkPosX + ", " + chunkPosZ);
         Stopwatch stopwatch = Stopwatch.createStarted();
         NBTTagCompound chunkTag = new NBTTagCompound();
-        Chunk chunk = world.getChunkAtPos(chunkPosX, chunkPosZ);
+        Chunk chunk = world.getCoreData().getChunkAtPos(chunkPosX, chunkPosZ);
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 writeTagForTile(chunkTag, chunk, x, z);
@@ -85,7 +85,7 @@ public class WorldSaveHandler {
     public void loadWorldFromTag(World world, NBTTagCompound worldTag) {
         world.setType(World.WorldType.values()[worldTag.getInt(NBTTags.WORLD_TYPE)]);
         for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
-            for (int z = 0; z < world.getCoreData().getWorldLength() / Chunk.chunkSize + 1; z++) {
+            for (int z = 0; z < world.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
                 NBTTagCompound chunkTag = new NBTTagCompound(worldTag.getTagCompound(NBTTags.CHUNK + "_" + x + "_" + z));
                 loadChunkForTagIntoWorld(chunkTag, world, x, z);
             }
@@ -93,7 +93,7 @@ public class WorldSaveHandler {
     }
 
     public void loadChunkForTagIntoWorld(NBTTagCompound chunkTag, World world, int chunkPosX, int chunkPosZ) {
-        Chunk chunk = world.getChunkAtPos(chunkPosX, chunkPosZ);
+        Chunk chunk = world.getCoreData().getChunkAtPos(chunkPosX, chunkPosZ);
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 NBTTagCompound tileTag = new NBTTagCompound(chunkTag.getTagCompound(NBTTags.TILE + "_" + x + "_" + z));
@@ -135,11 +135,11 @@ public class WorldSaveHandler {
 
     public void setChunkInWorld(World world, Chunk chunk) {
         chunk.setWorld(world);
-        world.setChunk(chunk);
+        world.getCoreData().setChunk(chunk);
     }
 
     public void setChunkInWorldClient(WorldClient world, ChunkClient chunk) {
         chunk.setWorld(world);
-        world.setChunk(chunk);
+        world.getCoreData().setChunk(chunk);
     }
 }

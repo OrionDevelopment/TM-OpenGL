@@ -1,36 +1,40 @@
 package com.smithsgaming.transportmanager.main.world.generation;
 
 import com.hoten.delaunay.voronoi.nodename.as3delaunay.Voronoi;
+import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.main.world.biome.BaseBiome;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.world.tileentities.TileEntity;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Created by Tim on 29/03/2016.
  */
-public class WorldGenerationData {
+public class WorldGenerationData implements Serializable{
 
     private final int WORLD_WIDTH;
     private final int WORLD_HEIGHT;
-    private final long worldSeed;
-
-    private Random generationRandom;
-
-    private Voronoi voronoiGenerator;
-    private TransportManagerWorldGraph worldGraph;
-    private BufferedImage pregenImage;
-
+    private final long WORLD_SEED;
     private final int WATER_HEIGHT;
     private final int MAX_TILE_HEIGHT;
 
-    private int[][] heightMap;
-    private BaseBiome[][] biomeMap;
-    private Tile[][] tileMap;
+    public transient World world;
+    private transient Random generationRandom;
+
+    private transient Voronoi voronoiGenerator;
+    private transient TransportManagerWorldGraph worldGraph;
+    private transient BufferedImage pregenImage;
+
+    private transient int[][] heightMap;
+    private transient BaseBiome[][] biomeMap;
+    private transient Chunk[][] chunks;
 
     public WorldGenerationData(long worldSeed, int worldWidth, int worldHeight, int waterHeight, int maxTileHeight) {
-        this.worldSeed = worldSeed;
+        this.WORLD_SEED = worldSeed;
 
         this.generationRandom = new Random(worldSeed);
         this.voronoiGenerator = new Voronoi((worldWidth / 20) * (worldHeight / 20), worldWidth, worldHeight, this.getGenerationRandom(), null);
@@ -42,7 +46,11 @@ public class WorldGenerationData {
 
         this.heightMap = new int[worldWidth][worldHeight];
         this.biomeMap = new BaseBiome[worldWidth][worldHeight];
-        this.tileMap = new Tile[worldWidth][worldHeight];
+        this.chunks = new Chunk[worldWidth / Chunk.chunkSize + 1][worldHeight / Chunk.chunkSize + 1];
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     public int getWorldWidth() {
@@ -54,7 +62,31 @@ public class WorldGenerationData {
     }
 
     public long getWorldSeed() {
-        return worldSeed;
+        return WORLD_SEED;
+    }
+
+    public Chunk getChunkAtPos(int chunkPosX, int chunkPosZ) {
+        return chunks[chunkPosX][chunkPosZ];
+    }
+
+    public void setChunk(Chunk chunkForPos) {
+        chunks[chunkForPos.getChunkX()][chunkForPos.getChunkZ()] = chunkForPos;
+    }
+
+    public Tile getTileAtPos(int tileWorldPosX, int tileWorldPosZ) {
+        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+    }
+
+    public TileEntity getTileEntityAtPos(int tileWorldPosX, int tileWorldPosZ) {
+        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+    }
+
+    public void setTileAtPos(Tile tile, int tileWorldPosX, int tileWorldPosZ) {
+        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileAtPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+    }
+
+    public void setTileEntityAtPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosZ) {
+        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityAtPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
     }
 
     public TransportManagerWorldGraph getWorldGraph() {
@@ -116,12 +148,12 @@ public class WorldGenerationData {
         this.biomeMap = biomeMap;
     }
 
-    public Tile[][] getTileMap() {
-        return tileMap;
+    public Chunk[][] getChunkMap() {
+        return chunks;
     }
 
-    public void setTileMap(Tile[][] tileMap) {
-        this.tileMap = tileMap;
+    public void setChunks(Chunk[][] chunks) {
+        this.chunks = chunks;
     }
 
     public Random getGenerationRandom() {
