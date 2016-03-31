@@ -116,6 +116,7 @@ public class OpenGLUtil {
         shader.setProjectionMatrixIndex(GL20.glGetUniformLocation(program, "projectionMatrix"));
         shader.setViewMatrixIndex(GL20.glGetUniformLocation(program, "viewMatrix"));
         shader.setModelMatrixIndex(GL20.glGetUniformLocation(program, "modelMatrix"));
+        shader.setColorIndex(GL20.glGetUniformLocation(program, "color"));
 
         for (int i = 0; i < shaders.length; i++) {
             GL20.glDetachShader(program, shaders[i]);
@@ -252,6 +253,7 @@ public class OpenGLUtil {
         GL20.glUniformMatrix4fv(shader.getProjectionMatrixIndex(), false, camera.getProjectionMatrixBuffer());
         GL20.glUniformMatrix4fv(shader.getViewMatrixIndex(), false, camera.getViewMatrixBuffer());
         GL20.glUniformMatrix4fv(shader.getModelMatrixIndex(), false, camera.getRenderingModelMatrixBuffer());
+        GL20.glUniform4fv(shader.getColorIndex(), camera.getActiveColorBuffer());
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());

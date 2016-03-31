@@ -153,7 +153,7 @@ public class TrueTypeFont {
             gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
         gt.setFont(font);
-        gt.setColor(Color.BLACK);
+        gt.setColor(Color.WHITE);
         int charx = 3;
         int chary = 1;
         gt.drawString(String.valueOf(ch), ( charx ), ( chary ) + fontMetrics.getAscent());

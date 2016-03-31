@@ -44,6 +44,7 @@ public class ShaderRegistry {
         private int projectionMatrixIndex;
         private int viewMatrixIndex;
         private int modelMatrixIndex;
+        private int colorIndex;
 
         public Shader (String vertexShaderFileName, String fragmentShaderFileName) throws FileNotFoundException {
             vertexShaderSourceCode = OpenGLUtil.loadShaderSourceCode(vertexShaderFileName);
@@ -88,6 +89,14 @@ public class ShaderRegistry {
 
         public void setModelMatrixIndex (int modelMatrixIndex) {
             this.modelMatrixIndex = modelMatrixIndex;
+        }
+
+        public int getColorIndex () {
+            return colorIndex;
+        }
+
+        public void setColorIndex (int colorIndex) {
+            this.colorIndex = colorIndex;
         }
     }
 

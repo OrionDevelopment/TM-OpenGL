@@ -216,6 +216,14 @@ public class Display implements Runnable, IEventController
         return resolutionVertical;
     }
 
+    public int getSizeHorizontal () {
+        return sizeHorizontal;
+    }
+
+    public int getSizeVertical () {
+        return sizeVertical;
+    }
+
     public long getWindow () {
         return window;
     }

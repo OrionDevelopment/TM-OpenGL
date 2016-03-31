@@ -218,7 +218,7 @@ public class TextureRegistry {
         public static TrueTypeFont TimesNewRoman;
 
         public static void init () {
-            Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), true);
+            Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), false);
             TimesNewRoman = new TrueTypeFont(new Font("Times New Roman", java.awt.Font.PLAIN, 25), true);
         }
 

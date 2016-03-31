@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.input.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.settings.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -26,6 +27,7 @@ public class TransportManagerClient implements Runnable, IEventController {
     private static Display display;
     private static int targetUPS = 60;
     private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+    private ClientSettings settings = ClientSettings.loadSettings();
 
     private TransportManagerClient () {
     }
@@ -98,6 +100,10 @@ public class TransportManagerClient implements Runnable, IEventController {
 
     public Queue<TMEvent> getEventQueue() {
         return eventQueu;
+    }
+
+    public ClientSettings getSettings () {
+        return settings;
     }
 
     private void updateClient () {

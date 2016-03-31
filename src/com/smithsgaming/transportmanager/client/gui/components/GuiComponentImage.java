@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public class ComponentImage extends GuiComponent {
+public class GuiComponentImage extends GuiComponentAbstract {
 
     float xCoord, yCoord, width, heigth;
     boolean centerX, centerY;
@@ -18,7 +18,7 @@ public class ComponentImage extends GuiComponent {
     private TextureRegistry.Texture textureToRender;
     private GeometryRegistry.Geometry geometryToRender;
 
-    public ComponentImage (GuiComponent parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
+    public GuiComponentImage (GuiComponentAbstract parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
         super(parent);
         this.resourcePath = resourcePath;
 

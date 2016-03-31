@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class GuiController implements IRenderer {
 
-    Stack<Gui> openedGuiStack = new Stack<>();
+    Stack<GuiAbstract> openedGuiStack = new Stack<>();
 
     /**
      * Method called by the RenderManager to process the rendering for this renderer.
@@ -19,11 +19,11 @@ public class GuiController implements IRenderer {
         if (openedGuiStack.size() == 0)
             return;
 
-        Gui guiOpen = openedGuiStack.peek();
+        GuiAbstract guiOpen = openedGuiStack.peek();
         guiOpen.render();
     }
 
-    public void openGui (Gui gui) {
+    public void openGui (GuiAbstract gui) {
         openedGuiStack.push(gui);
 
         gui.loadGui();
@@ -35,7 +35,7 @@ public class GuiController implements IRenderer {
         if (openedGuiStack.size() == 0)
             throw new IllegalStateException("No gui open!");
 
-        Gui guiToBeClosed = openedGuiStack.pop();
+        GuiAbstract guiToBeClosed = openedGuiStack.pop();
         guiToBeClosed.unLoadGeometry();
         guiToBeClosed.unLoadTextures();
     }

@@ -1,8 +1,10 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
+import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.*;
+import org.lwjgl.util.*;
 import org.lwjgl.util.vector.*;
 
 import java.nio.*;
@@ -27,16 +29,12 @@ public class Camera {
     private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private Vector3f cameraPosition = new Vector3f();
     private float viewDistanceInChunks = 4;
-    private float horizontalScale = 1f;
-    private float verticalScale = 1f;
+    private Color activeColor = (Color) Color.WHITE;
+    private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
 
     private Frustum activeFrustum;
 
     public Camera () {
-        this(new Vector3f());
-    }
-
-    public Camera (Vector3f cameraPosition) {
         this.activeFrustum = new Frustum(this);
 
         this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
@@ -47,9 +45,8 @@ public class Camera {
         this.viewMatrix.store(this.viewMatrixBuffer);
         this.viewMatrixBuffer.flip();
 
-        moveCamera(cameraPosition);
-
-        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.HD.getHorizontalResolution(), -2f / GuiScale.HD.getVerticalResolution(), 1f));
+        setActiveColor(activeColor);
+        renderingModelMatrix.scale(new Vector3f(2f / GuiScale.FWVGA.getHorizontalResolution(), -2f / GuiScale.FWVGA.getVerticalResolution(), 1f));
     }
 
     public Camera (float angle, Vector3f rotationAxis) {
@@ -233,6 +230,35 @@ public class Camera {
     }
 
     /**
+     * Getter for the active rendering color.
+     *
+     * @return The active rendering color.
+     */
+    public Color getActiveColor () {
+        return activeColor;
+    }
+
+    /**
+     * Setter for the active color.
+     *
+     * @param activeColor The new active color.
+     */
+    public void setActiveColor (Color activeColor) {
+        this.activeColor = activeColor;
+
+        GraphicUtil.storeColor(activeColorBuffer, activeColor);
+    }
+
+    /**
+     * Getter for the active color buffer.
+     *
+     * @return The active color buffer.
+     */
+    public FloatBuffer getActiveColorBuffer () {
+        return activeColorBuffer;
+    }
+
+    /**
      * Method to check if a given point is in the ViewDistance of this Camera.
      *
      * @param point The point to check.
@@ -255,9 +281,6 @@ public class Camera {
 
         scaleModel(new Vector3f(horizontalScale, verticalScale, 1f));
         pushMatrix();
-
-        this.horizontalScale = horizontalScale;
-        this.verticalScale = verticalScale;
     }
 
     /**
@@ -300,7 +323,7 @@ public class Camera {
      * @param modelTranslation The translation to perform.
      */
     public void translateModel (Vector3f modelTranslation) {
-        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / GuiScale.HD.getHorizontalResolution(), modelTranslation.getY() / GuiScale.HD.getHorizontalResolution(), modelTranslation.getZ()));
+        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / TransportManagerClient.instance.getSettings().getCurrentScale().getHorizontalResolution(), modelTranslation.getY() / TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution(), modelTranslation.getZ()));
         isActingMatrixLive = false;
     }
 

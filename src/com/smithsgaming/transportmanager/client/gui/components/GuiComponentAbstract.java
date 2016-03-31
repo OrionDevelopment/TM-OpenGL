@@ -5,19 +5,19 @@ import com.smithsgaming.transportmanager.client.render.*;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public abstract class GuiComponent implements IRenderer {
+public abstract class GuiComponentAbstract implements IRenderer {
 
-    protected GuiComponent parent;
+    protected GuiComponentAbstract parent;
 
-    public GuiComponent () {
+    public GuiComponentAbstract () {
         this.parent = this;
     }
 
-    public GuiComponent (GuiComponent parent) {
+    public GuiComponentAbstract (GuiComponentAbstract parent) {
         this.parent = parent;
     }
 
-    public GuiComponent getParent () {
+    public GuiComponentAbstract getParent () {
         return parent;
     }
 
