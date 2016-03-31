@@ -201,7 +201,16 @@ public class TextureRegistry {
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);
 
-            Tiles.deepWater = TextureRegistry.instance.loadTexture("/textures/deepWater_0.png");
+            Tiles.deepWater = TextureRegistry.instance.loadTexture("/textures/tiles/world/deepWater_0.png");
+            Tiles.grass = TextureRegistry.instance.loadTexture("/textures/tiles/world/grass.png");
+            Tiles.dryGrass = TextureRegistry.instance.loadTexture("/textures/tiles/world/dryGrass.png");
+            Tiles.beach = TextureRegistry.instance.loadTexture("/textures/tiles/world/beach.png");
+            Tiles.desert = TextureRegistry.instance.loadTexture("/textures/tiles/world/desert.png");
+            Tiles.river = TextureRegistry.instance.loadTexture("/textures/tiles/world/shallowWater_0.png");
+            Tiles.snow = TextureRegistry.instance.loadTexture("/textures/tiles/world/snow.png");
+            Tiles.stoneOverground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneOverground.png");
+            Tiles.stoneUnderground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneUnderground.png");
+            Tiles.ice = TextureRegistry.instance.loadTexture("/textures/tiles/world/ice_0.png");
         }
 
         public static class SkyBox {
@@ -210,6 +219,15 @@ public class TextureRegistry {
 
         public static class Tiles {
             public static Texture deepWater;
+            public static Texture grass;
+            public static Texture dryGrass;
+            public static Texture beach;
+            public static Texture desert;
+            public static Texture river;
+            public static Texture snow;
+            public static Texture stoneOverground;
+            public static Texture stoneUnderground;
+            public static Texture ice;
         }
     }
 

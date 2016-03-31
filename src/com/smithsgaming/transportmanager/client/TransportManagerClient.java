@@ -8,6 +8,7 @@ import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
@@ -21,12 +22,13 @@ import java.util.*;
  */
 public class TransportManagerClient implements Runnable, IEventController {
 
+    public static final Logger clientLogger = LogManager.getLogger();
     public static TransportManagerClient instance = new TransportManagerClient();
     private static Thread clientNetworkThread;
     private static Thread displayThread;
     private static Display display;
     private static int targetUPS = 60;
-    private Queue<TMEvent> eventQueu = new ArrayDeque<>();
+    private Queue<TMEvent> eventQueue = new ArrayDeque<>();
     private ClientSettings settings = ClientSettings.loadSettings();
 
     private TransportManagerClient () {
@@ -76,11 +78,11 @@ public class TransportManagerClient implements Runnable, IEventController {
                 updateClient();
                 delta--;
 
-                synchronized (eventQueu) {
-                    if (eventQueu.size() == 0)
+                synchronized (eventQueue) {
+                    if (eventQueue.size() == 0)
                         continue;
 
-                    for (TMEvent event : eventQueu) {
+                    for (TMEvent event : eventQueue) {
                         try {
                             if (!TransportManager.isRunning)
                                 return;
@@ -92,14 +94,14 @@ public class TransportManagerClient implements Runnable, IEventController {
                         }
                     }
 
-                    eventQueu.clear();
+                    eventQueue.clear();
                 }
             }
         }
     }
 
     public Queue<TMEvent> getEventQueue() {
-        return eventQueu;
+        return eventQueue;
     }
 
     public ClientSettings getSettings () {
@@ -107,7 +109,6 @@ public class TransportManagerClient implements Runnable, IEventController {
     }
 
     private void updateClient () {
-
     }
 
     public void loadGraphics () {

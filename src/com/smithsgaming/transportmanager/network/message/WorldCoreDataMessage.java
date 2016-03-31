@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.main.world.*;
+import com.smithsgaming.transportmanager.main.world.generation.*;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 import javafx.util.*;
@@ -11,9 +12,9 @@ import javafx.util.*;
  */
 public class WorldCoreDataMessage extends TMNetworkingMessage {
 
-    WorldCoreData coreData;
+    WorldGenerationData coreData;
 
-    public WorldCoreDataMessage (WorldCoreData coreData) {
+    public WorldCoreDataMessage (WorldGenerationData coreData) {
         this.coreData = coreData;
     }
 
@@ -24,14 +25,20 @@ public class WorldCoreDataMessage extends TMNetworkingMessage {
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         if (side == Side.CLIENT) {
             WorldClientManager.instance.initializeWorld(coreData);
-            Pair<Integer, Integer> nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld();
-
-            if (nextChunkPair == null)
+            Pair<Integer, Integer> nextChunkPair;
+            World.WorldType type;
+            if (WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.OVERGROUND) == null) {
+                nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.OVERGROUND);
+                type = World.WorldType.OVERGROUND;
+            } else {
+                nextChunkPair = WorldClientManager.instance.getNextChunkToSyncForWorld(World.WorldType.UNDERGROUND);
+                type = World.WorldType.UNDERGROUND;
+            }
+            if (nextChunkPair == null) {
                 return null;
-
-            return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue());
+            }
+            return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue(), type);
         }
-
         return null;
     }
 }
