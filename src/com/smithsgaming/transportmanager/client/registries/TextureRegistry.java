@@ -193,10 +193,9 @@ public class TextureRegistry {
         }
     }
 
-
     public static class Textures {
         public static void init () {
-            SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/deepWater_0.png");
+            SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/tiles/world/deepWater_0.png");
             SkyBox.skyBoxOcean.setRequiringTextureStitching(false);
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);
