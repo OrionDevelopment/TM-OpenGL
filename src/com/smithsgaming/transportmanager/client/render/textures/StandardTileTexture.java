@@ -12,7 +12,7 @@ public class StandardTileTexture extends TextureRegistry.Texture {
         super(tileIdentity, source.getData(), source.getWidth(), source.getHeight());
     }
 
-    public static StandardTileTexture loadTexture (String tileIdentity, String texturePath) {
-        return new StandardTileTexture(ResourceUtil.loadPNGTexture(texturePath), tileIdentity);
+    public static TextureRegistry.Texture loadTexture (String tileIdentity, String texturePath) {
+        return TextureRegistry.instance.loadTexture(new StandardTileTexture(ResourceUtil.loadPNGTexture(texturePath), tileIdentity));
     }
 }
