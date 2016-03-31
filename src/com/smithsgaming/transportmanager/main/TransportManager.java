@@ -1,11 +1,11 @@
 
 package com.smithsgaming.transportmanager.main;
 
-import com.smithsgaming.transportmanager.main.world.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
+import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.network.server.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
@@ -17,6 +17,7 @@ import java.util.*;
  */
 public class TransportManager implements Runnable, IEventController {
 
+    public static final Logger serverLogger = LogManager.getLogger();
     public static final TransportManager instance = new TransportManager();
 
     public static boolean isRunning = true;
@@ -44,27 +45,24 @@ public class TransportManager implements Runnable, IEventController {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-
             while (delta >= 1) {
                 updateServer();
                 delta--;
-
                 synchronized (eventQueue) {
-                    if (eventQueue.size() == 0)
+                    if (eventQueue.size() == 0) {
                         continue;
-
+                    }
                     for (TMEvent event : eventQueue) {
                         try {
-                            if (!isRunning)
+                            if (!isRunning) {
                                 return;
-
+                            }
                             event.processEvent(Side.SERVER);
                         } catch (Exception ex) {
                             System.err.println("Exception while trying to process event: " + event.toString());
                             ex.printStackTrace();
                         }
                     }
-
                     eventQueue.clear();
                 }
             }
@@ -76,6 +74,6 @@ public class TransportManager implements Runnable, IEventController {
     }
 
     private void updateServer() {
-
+        WorldManager.instance.updateWorld();
     }
 }

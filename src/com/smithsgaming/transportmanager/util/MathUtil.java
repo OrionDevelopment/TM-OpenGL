@@ -72,6 +72,25 @@ public class MathUtil
         return matrix4f;
     }
 
+    public static Matrix4f CreateOrthographicOffCenter (float left, float right, float bottom, float top, float zNear, float zFar) {
+        Matrix4f result = new Matrix4f();
+
+        float invRL = 1 / ( right - left );
+        float invTB = 1 / ( top - bottom );
+        float invFN = 1 / ( zFar - zNear );
+
+        result.m00 = 2 * invRL;
+        result.m11 = 2 * invTB;
+        result.m22 = -2 * invFN;
+
+        result.m30 = -( right + left ) * invRL;
+        result.m31 = -( top + bottom ) * invTB;
+        result.m32 = -( zFar + zNear ) * invFN;
+        result.m33 = 1;
+
+        return result;
+    }
+
     /**
      * Returns the input value rounded up to the next highest power of two.
      */

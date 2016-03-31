@@ -1,5 +1,6 @@
 #version 330
 
+uniform vec4 color;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
@@ -12,8 +13,8 @@ out vec4 pass_Color;
 out vec2 pass_TextureCoord;
 
 void main(void) {
-	gl_Position = modelMatrix * in_Position;
+	gl_Position = viewMatrix * modelMatrix * in_Position;
 
-	pass_Color = in_Color;
+	pass_Color = color * in_Color;
 	pass_TextureCoord = in_TextureCoord;
 }

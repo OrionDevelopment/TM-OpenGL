@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.network.message;
 
-import com.smithsgaming.transportmanager.main.world.*;
+import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
@@ -23,7 +23,7 @@ public class CrudeDataRequestMessage extends TMNetworkingMessage {
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         if (side == Side.SERVER) {
             if (type == DataType.WORLD) {
-                return new WorldCoreDataMessage(WorldManager.instance.getLoadedWorld().getCoreData());
+                return new WorldCoreDataMessage(WorldManager.instance.getOvergroundWorld().getCoreData());
             }
         }
 

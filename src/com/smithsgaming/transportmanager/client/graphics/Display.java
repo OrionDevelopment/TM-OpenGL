@@ -120,6 +120,7 @@ public class Display implements Runnable, IEventController
 
             //glClearColor(1f, 1f, 1f, 1f);
             glClearColor(102f / 255f, 152f / 255f, 1.0f, 1.0f);
+
             OpenGLUtil.checkGlState("Display - Init");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -131,7 +132,6 @@ public class Display implements Runnable, IEventController
             if (resized) {
                 GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
                 OpenGLUtil.setAspectRatio(( (float) sizeHorizontal / (float) sizeVertical ));
-                Camera.Gui.updateGuiScale(GuiScale.HD.getHorizontalScaleFactor(sizeHorizontal), GuiScale.HD.getVerticalScaleFactor(sizeVertical));
                 resized = false;
             }
 
@@ -214,6 +214,14 @@ public class Display implements Runnable, IEventController
 
     public int getResolutionVertical() {
         return resolutionVertical;
+    }
+
+    public int getSizeHorizontal () {
+        return sizeHorizontal;
+    }
+
+    public int getSizeVertical () {
+        return sizeVertical;
     }
 
     public long getWindow () {

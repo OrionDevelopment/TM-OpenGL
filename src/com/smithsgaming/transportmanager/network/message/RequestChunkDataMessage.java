@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.network.message;
 
+import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
@@ -10,10 +11,12 @@ import io.netty.channel.*;
 public class RequestChunkDataMessage extends TMNetworkingMessage {
     private int x;
     private int y;
+    private World.WorldType type;
 
-    public RequestChunkDataMessage (int x, int y) {
+    public RequestChunkDataMessage (int x, int y, World.WorldType type) {
         this.x = x;
         this.y = y;
+        this.type = type;
     }
 
     public RequestChunkDataMessage () {
@@ -22,9 +25,12 @@ public class RequestChunkDataMessage extends TMNetworkingMessage {
     @Override
     public TMNetworkingMessage onReceived (Channel channel, Side side) {
         if (side == Side.SERVER) {
-            return new ChunkDataMessage(WorldManager.instance.getLoadedWorld().getChunkAtPos(x, y));
+            if (type == World.WorldType.OVERGROUND) {
+                return new ChunkDataMessage(WorldManager.instance.getOvergroundWorld().getCoreData().getChunkAtPos(x, y));
+            } else if (type == World.WorldType.UNDERGROUND) {
+                return new ChunkDataMessage(WorldManager.instance.getUndergroundWorld().getCoreData().getChunkAtPos(x, y));
+            }
         }
-
         return null;
     }
 }

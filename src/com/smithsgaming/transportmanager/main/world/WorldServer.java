@@ -2,12 +2,19 @@
 
 package com.smithsgaming.transportmanager.main.world;
 
+import com.smithsgaming.transportmanager.main.world.generation.*;
+
 /**
  * Created by marcf on 3/13/2016.
  */
 public class WorldServer extends World {
 
-    public WorldServer(WorldCoreData data) {
-        super(data);
+    public WorldServer (WorldGenerationData data, WorldType type) {
+        super(data, type);
+    }
+
+    @Override
+    public void update () {
+
     }
 }

@@ -116,6 +116,7 @@ public class OpenGLUtil {
         shader.setProjectionMatrixIndex(GL20.glGetUniformLocation(program, "projectionMatrix"));
         shader.setViewMatrixIndex(GL20.glGetUniformLocation(program, "viewMatrix"));
         shader.setModelMatrixIndex(GL20.glGetUniformLocation(program, "modelMatrix"));
+        shader.setColorIndex(GL20.glGetUniformLocation(program, "color"));
 
         for (int i = 0; i < shaders.length; i++) {
             GL20.glDetachShader(program, shaders[i]);
@@ -186,8 +187,8 @@ public class OpenGLUtil {
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 
         // Upload the texture data and generate mip maps (for scaling)
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, texture.getWidth(), texture.getHeight(), 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, texture.getData());
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, texture.getInternalFormat(), texture.getWidth(), texture.getHeight(), 0,
+                texture.getFormat(), GL11.GL_UNSIGNED_BYTE, texture.getData());
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // Setup the ST coordinate system
@@ -252,6 +253,7 @@ public class OpenGLUtil {
         GL20.glUniformMatrix4fv(shader.getProjectionMatrixIndex(), false, camera.getProjectionMatrixBuffer());
         GL20.glUniformMatrix4fv(shader.getViewMatrixIndex(), false, camera.getViewMatrixBuffer());
         GL20.glUniformMatrix4fv(shader.getModelMatrixIndex(), false, camera.getRenderingModelMatrixBuffer());
+        GL20.glUniform4fv(shader.getColorIndex(), camera.getActiveColorBuffer());
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());

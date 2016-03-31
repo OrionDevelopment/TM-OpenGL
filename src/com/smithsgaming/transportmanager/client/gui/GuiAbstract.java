@@ -8,34 +8,34 @@ import java.util.*;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public abstract class Gui extends GuiComponent implements IRenderer {
+public abstract class GuiAbstract extends GuiComponentAbstract implements IRenderer {
 
-    ArrayList<GuiComponent> components = new ArrayList<>();
+    ArrayList<GuiComponentAbstract> components = new ArrayList<>();
 
     protected abstract void loadGui ();
 
-    protected void registerComponent (GuiComponent component) {
+    protected void registerComponent (GuiComponentAbstract component) {
         components.add(component);
     }
 
     @Override
     public void loadTextures () {
-        components.forEach(GuiComponent::loadTextures);
+        components.forEach(GuiComponentAbstract::loadTextures);
     }
 
     @Override
     public void unLoadTextures () {
-        components.forEach(GuiComponent::unLoadTextures);
+        components.forEach(GuiComponentAbstract::unLoadTextures);
     }
 
     @Override
     public void loadGeometry () {
-        components.forEach(GuiComponent::loadGeometry);
+        components.forEach(GuiComponentAbstract::loadGeometry);
     }
 
     @Override
     public void unLoadGeometry () {
-        components.forEach(GuiComponent::unLoadGeometry);
+        components.forEach(GuiComponentAbstract::unLoadGeometry);
     }
 
     /**
@@ -43,6 +43,6 @@ public abstract class Gui extends GuiComponent implements IRenderer {
      */
     @Override
     public void render () {
-        components.forEach(GuiComponent::render);
+        components.forEach(GuiComponentAbstract::render);
     }
 }

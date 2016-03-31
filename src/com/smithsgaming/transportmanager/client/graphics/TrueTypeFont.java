@@ -3,10 +3,13 @@ package com.smithsgaming.transportmanager.client.graphics;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.util.*;
 import javafx.util.*;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 
+import javax.imageio.*;
 import java.awt.*;
 import java.awt.image.*;
+import java.io.*;
 import java.nio.*;
 import java.util.*;
 
@@ -19,9 +22,6 @@ public class TrueTypeFont {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
 
     private HashMap<Character, Pair<CharGeometry, CharTexture>> characterPairHashMap = new HashMap<>();
-
-    /** Map of user defined font characters (Character <-> IntObject) */
-    private Map customChars = new HashMap();
 
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
@@ -116,6 +116,7 @@ public class TrueTypeFont {
             byteBuffer.flip();
 
             fontTextureMap = new TextureRegistry.Texture(fontMetrics.getFont().getName() + "-Map", byteBuffer, width, height);
+            fontTextureMap.setInternalFormat(GL11.GL_RGBA8);
 
             OpenGLUtil.loadTextureIntoGPU(fontTextureMap);
         } catch (Exception e) {
@@ -171,7 +172,7 @@ public class TrueTypeFont {
         try {
             BufferedImage imgTemp = new BufferedImage(textureWidth, textureHeight, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = (Graphics2D) imgTemp.getGraphics();
-            g.setColor(new Color(0, 0, 0, 1));
+            g.setColor(new Color(1, 1, 1, 1));
             g.fillRect(0, 0, textureWidth, textureHeight);
             int rowHeight = 0;
             int positionX = 0;
@@ -199,8 +200,9 @@ public class TrueTypeFont {
                 }
                 g.drawImage(fontImage, positionX, positionY, null);
 
-                CharTexture charTexture = CharTexture.getForChar(fontMetrics, ch, positionX, positionY);
-                CharGeometry charGeometry = CharGeometry.getForChar(fontMetrics, ch, charTexture);
+                CharTexture charTexture = CharTexture.getForChar(fontMetrics, ch, ( (float) positionX ) / textureWidth, ( (float) positionY ) / textureHeight);
+                CharGeometry charGeometry = CharGeometry.getForChar(charTexture, textureWidth, textureHeight);
+                OpenGLUtil.loadGeometryIntoGPU(charGeometry);
 
                 positionX += fontImage.getWidth();
                 characterPairHashMap.put(ch, new Pair<>(charGeometry, charTexture));
@@ -211,7 +213,11 @@ public class TrueTypeFont {
             for (Map.Entry<Character, Pair<CharGeometry, CharTexture>> charToGeoTexEntry : characterPairHashMap.entrySet()) {
                 charToGeoTexEntry.getValue().getValue().setBoundTextureUnit(fontTextureMap.getBoundTextureUnit());
                 charToGeoTexEntry.getValue().getValue().setOpenGLTextureId(fontTextureMap.getOpenGLTextureId());
+                charToGeoTexEntry.getValue().getValue().setInternalFormat(fontTextureMap.getInternalFormat());
             }
+
+            File texture = new File("Font-" + font.getName() + ".png");
+            ImageIO.write(imgTemp, "png", texture);
         } catch (Exception e) {
             System.err.println("Failed to create font.");
             e.printStackTrace();
@@ -264,7 +270,7 @@ public class TrueTypeFont {
 
             OpenGLUtil.drawGeometryWithShaderAndTexture(camera, charGeometry, charTexture, ShaderRegistry.Shaders.guiTextured);
 
-            currentX += charTexture.getWidth();
+            currentX += charTexture.getWidth() + 5;
 
             camera.popMatrix();
         }
@@ -283,14 +289,14 @@ public class TrueTypeFont {
             super(GeometryRegistry.GeometryType.QUAD, charVertexes);
         }
 
-        public static CharGeometry getForChar (FontMetrics fontMetrics, char c, TextureRegistry.Texture charTexture) {
-            int charWidth = fontMetrics.charWidth(c) + 8;
-            int charHeight = fontMetrics.getHeight() + 3;
+        public static CharGeometry getForChar (TextureRegistry.Texture charTexture, float mapHeight, float mapWidth) {
+            int charWidth = charTexture.getWidth();
+            int charHeight = charTexture.getHeight();
 
             TexturedVertex topLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV()).setXYZ(0, 0, 0);
-            TexturedVertex topRight = new TexturedVertex().setST(charTexture.getU() + charTexture.getWidth(), charTexture.getV()).setXYZ(charWidth, 0, 0);
-            TexturedVertex bottomRight = new TexturedVertex().setST(charTexture.getU() + charTexture.getWidth(), charTexture.getHeight()).setXYZ(charWidth, charHeight, 0);
-            TexturedVertex bottomLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV() + charTexture.getHeight()).setXYZ(0, charHeight, 0);
+            TexturedVertex topRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getWidth() / mapWidth ), charTexture.getV()).setXYZ(charWidth, 0, 0);
+            TexturedVertex bottomRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getWidth() / mapWidth ), charTexture.getV() + ( charTexture.getHeight() / mapHeight )).setXYZ(charWidth, charHeight, 0);
+            TexturedVertex bottomLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV() + ( charTexture.getHeight() / mapHeight )).setXYZ(0, charHeight, 0);
 
             return new CharGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
         }
@@ -302,7 +308,7 @@ public class TrueTypeFont {
         }
 
         public static CharTexture getForChar (FontMetrics fontMetrics, char c, float stitchX, float stitchY) {
-            return new CharTexture(fontMetrics.getFont().getName() + "-Char:" + c, null, fontMetrics.charWidth(c) + 8, fontMetrics.getHeight() + 3, stitchX, stitchY, true, false, -1);
+            return new CharTexture(fontMetrics.getFont().getName() + "-Char:" + c, null, fontMetrics.charWidth(c) + 8, fontMetrics.getHeight() + 3, stitchX, stitchY, false, false, -1);
         }
     }
 }

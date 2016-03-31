@@ -7,7 +7,7 @@ import com.smithsgaming.transportmanager.main.world.*;
  */
 public class NonBuildableTile extends Tile {
 
-    protected NonBuildableTile(String identity) {
+    public NonBuildableTile (String identity) {
         super(identity);
     }
 

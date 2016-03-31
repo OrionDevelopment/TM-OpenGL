@@ -12,7 +12,8 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
 
     Operation operation;
 
-    public OperationAcceptedMessage() {}
+    public OperationAcceptedMessage () {
+    }
 
     public OperationAcceptedMessage(Operation operation) {
         this.operation = operation;
@@ -28,8 +29,7 @@ public class OperationAcceptedMessage extends TMNetworkingMessage {
         return null;
     }
 
-    public enum Operation
-    {
+    public enum Operation {
         PLAYERCONNECTED,
         PLAYERDISCONNEDTED
     }

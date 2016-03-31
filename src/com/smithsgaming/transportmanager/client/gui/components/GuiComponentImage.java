@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public class ComponentImage extends GuiComponent {
+public class GuiComponentImage extends GuiComponentAbstract {
 
     float xCoord, yCoord, width, heigth;
     boolean centerX, centerY;
@@ -18,15 +18,15 @@ public class ComponentImage extends GuiComponent {
     private TextureRegistry.Texture textureToRender;
     private GeometryRegistry.Geometry geometryToRender;
 
-    public ComponentImage (GuiComponent parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
+    public GuiComponentImage (GuiComponentAbstract parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
         super(parent);
         this.resourcePath = resourcePath;
 
-        if (centerX)
-            xCoord -= ( width / 2f );
+        if (!centerX)
+            xCoord += ( width / 2f );
 
-        if (centerY)
-            yCoord -= ( heigth / 2f );
+        if (!centerY)
+            yCoord += ( height / 2f );
 
         this.xCoord = xCoord;
         this.yCoord = yCoord;
@@ -66,8 +66,8 @@ public class ComponentImage extends GuiComponent {
     @Override
     public void render () {
         Camera.Gui.pushMatrix();
-        Camera.Gui.scaleModel(new Vector3f(2f / width, 2f / heigth, 1f));
         Camera.Gui.translateModel(new Vector3f(xCoord, yCoord, 0f));
+        Camera.Gui.scaleModel(new Vector3f(1f / ( 2f / width ), 1f / ( 2f / heigth ), 1f));
         Camera.Gui.pushMatrix();
 
 
