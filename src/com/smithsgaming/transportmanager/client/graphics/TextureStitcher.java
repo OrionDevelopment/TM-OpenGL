@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.google.common.collect.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.*;
 
 import java.util.*;
@@ -36,12 +37,12 @@ public class TextureStitcher {
         return this.currentStitchedHeight;
     }
 
-    public void addSprite (TextureRegistry.Texture texture) {
+    public void addSprite (Texture texture) {
         TextureStitcher.Holder holder = new TextureStitcher.Holder(texture);
         this.textureHolders.add(holder);
     }
 
-    public void addSprites (ArrayList<TextureRegistry.Texture> textures) {
+    public void addSprites (ArrayList<Texture> textures) {
         textures.forEach(this::addSprite);
     }
 
@@ -61,18 +62,18 @@ public class TextureStitcher {
         }
     }
 
-    public List<TextureRegistry.Texture> getStitchSlots () {
+    public List<Texture> getStitchSlots () {
         List<TextureStitcher.Slot> stitchedSlots = Lists.<TextureStitcher.Slot> newArrayList();
 
         for (TextureStitcher.Slot slot : this.stitchSlots) {
             slot.getAllStitchSlots(stitchedSlots);
         }
 
-        List<TextureRegistry.Texture> stitchedTextures = Lists.<TextureRegistry.Texture> newArrayList();
+        List<Texture> stitchedTextures = Lists.<Texture> newArrayList();
 
         for (TextureStitcher.Slot slot : stitchedSlots) {
             TextureStitcher.Holder holder = slot.getStitchHolder();
-            TextureRegistry.Texture texture = holder.getAtlasSprite();
+            Texture texture = holder.getAtlasSprite();
 
             texture.setU(slot.getOriginX());
             texture.setV(slot.getOriginY());
@@ -163,17 +164,17 @@ public class TextureStitcher {
     }
 
     public static class Holder implements Comparable<TextureStitcher.Holder> {
-        private final TextureRegistry.Texture texture;
+        private final Texture texture;
         private final int width;
         private final int height;
 
-        public Holder (TextureRegistry.Texture texture) {
+        public Holder (Texture texture) {
             this.texture = texture;
             this.width = texture.getWidth();
             this.height = texture.getHeight();
         }
 
-        public TextureRegistry.Texture getAtlasSprite () {
+        public Texture getAtlasSprite () {
             return this.texture;
         }
 

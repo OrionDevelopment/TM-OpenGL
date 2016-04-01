@@ -5,6 +5,7 @@ package com.smithsgaming.transportmanager.util;
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
@@ -178,7 +179,7 @@ public class OpenGLUtil {
         checkGlState("Load Geometry");
     }
 
-    public static void loadTextureIntoGPU (TextureRegistry.Texture texture) {
+    public static void loadTextureIntoGPU (Texture texture) {
         int texId = GL11.glGenTextures();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
@@ -213,7 +214,7 @@ public class OpenGLUtil {
      * @param masterTexture The texture to load into.
      * @param subTexture    The texture to copy from.
      */
-    public static void loadSubTextureRegionIntoGPU (TextureRegistry.Texture masterTexture, TextureRegistry.Texture subTexture) {
+    public static void loadSubTextureRegionIntoGPU (Texture masterTexture, Texture subTexture) {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, masterTexture.getOpenGLTextureId());
         glTexSubImage2D(GL_TEXTURE_2D, 0, (int) subTexture.getU(), (int) subTexture.getV(), subTexture.getWidth(), subTexture.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, subTexture.getData());
@@ -228,7 +229,7 @@ public class OpenGLUtil {
      * @param texture  The Texture to render the geometry with.
      * @param shader The OpenGL Shader ID to use.
      */
-    public static void drawGeometryWithShaderAndTexture (Camera camera, GeometryRegistry.Geometry geometry, TextureRegistry.Texture texture, ShaderRegistry.Shader shader) {
+    public static void drawGeometryWithShaderAndTexture (Camera camera, GeometryRegistry.Geometry geometry, Texture texture, ShaderRegistry.Shader shader) {
         if (geometry == null)
             return;
 
@@ -333,7 +334,7 @@ public class OpenGLUtil {
         modelMatrixBuffer.flip();
     }
 
-    public static void destroyTexture (TextureRegistry.Texture texture) {
+    public static void destroyTexture (Texture texture) {
         GL11.glDeleteTextures(texture.getOpenGLTextureId());
     }
 

@@ -1,12 +1,15 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import de.matthiasmann.twl.utils.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
+import de.matthiasmann.twl.utils.PNGDecoder;
 
-import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Scanner;
 
 /**
  * @Author Marc (Created on: 05.03.2016)
@@ -44,20 +47,20 @@ public class ResourceUtil {
         return result.toString();
     }
 
-    public static TextureRegistry.Texture loadStitchablePNGTexture (String fileName) {
+    public static Texture loadStitchablePNGTexture (String fileName) {
         ByteBuffer buf = loadPNGBuffer(fileName);
         int width = getPNGWidth(fileName);
         int height = getPNGHeight(fileName);
 
-        return new TextureRegistry.Texture(fileName, buf, width, height);
+        return new Texture(fileName, buf, width, height);
     }
 
-    public static TextureRegistry.Texture loadPNGTexture (String fileName) {
+    public static Texture loadPNGTexture (String fileName) {
         ByteBuffer buf = loadPNGBuffer(fileName);
         int width = getPNGWidth(fileName);
         int height = getPNGHeight(fileName);
 
-        return new TextureRegistry.Texture(fileName, buf, width, height, 0, 0, false, false, -1);
+        return new Texture(fileName, buf, width, height, 0, 0, false, false, -1);
     }
 
     private static ByteBuffer loadPNGBuffer (String fileName) {

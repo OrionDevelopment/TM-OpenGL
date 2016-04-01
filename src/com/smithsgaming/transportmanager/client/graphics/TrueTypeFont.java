@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.*;
 import javafx.util.*;
 import org.lwjgl.opengl.*;
@@ -34,7 +35,7 @@ public class TrueTypeFont {
 
     /** Texture used to cache the font 0-255 characters */
     private int fontTextureID;
-    private TextureRegistry.Texture fontTextureMap;
+    private Texture fontTextureMap;
 
     /** Default font texture width */
     private int textureWidth = 512;
@@ -115,7 +116,7 @@ public class TrueTypeFont {
             }
             byteBuffer.flip();
 
-            fontTextureMap = new TextureRegistry.Texture(fontMetrics.getFont().getName() + "-Map", byteBuffer, width, height);
+            fontTextureMap = new Texture(fontMetrics.getFont().getName() + "-Map", byteBuffer, width, height);
             fontTextureMap.setInternalFormat(GL11.GL_RGBA8);
 
             OpenGLUtil.loadTextureIntoGPU(fontTextureMap);
@@ -289,7 +290,7 @@ public class TrueTypeFont {
             super(GeometryRegistry.GeometryType.QUAD, charVertexes);
         }
 
-        public static CharGeometry getForChar (TextureRegistry.Texture charTexture, float mapHeight, float mapWidth) {
+        public static CharGeometry getForChar (Texture charTexture, float mapHeight, float mapWidth) {
             int charWidth = charTexture.getWidth();
             int charHeight = charTexture.getHeight();
 
@@ -302,7 +303,7 @@ public class TrueTypeFont {
         }
     }
 
-    private static class CharTexture extends TextureRegistry.Texture {
+    private static class CharTexture extends Texture {
         private CharTexture (String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
             super(textureName, data, width, height, u, v, isStitched, requiringTextureStitching, textureStitchId);
         }

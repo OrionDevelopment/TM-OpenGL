@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.*;
 import org.lwjgl.util.vector.*;
 
@@ -15,7 +16,7 @@ public class GuiComponentImage extends GuiComponentAbstract {
     float xCoord, yCoord, width, heigth;
     boolean centerX, centerY;
     private String resourcePath;
-    private TextureRegistry.Texture textureToRender;
+    private Texture textureToRender;
     private GeometryRegistry.Geometry geometryToRender;
 
     public GuiComponentImage (GuiComponentAbstract parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
