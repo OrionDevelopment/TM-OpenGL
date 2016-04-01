@@ -18,7 +18,8 @@ import java.util.*;
  * handle the communication between You and the program in the form of Key and Mouse inputs as well as outputs through
  * the screen.
  *
- * @Author Marc (Created on: 05.03.2016)
+ * @author Marc (Created on: 05.03.2016)
+ * @author Tim
  */
 public class TransportManagerClient implements Runnable, IEventController {
 
@@ -38,14 +39,6 @@ public class TransportManagerClient implements Runnable, IEventController {
         return display;
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread
-     * causes the object's <code>run</code> method to be called in that separately executing thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
     @Override
     public void run() {
         display = new Display();
@@ -56,12 +49,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         MouseInputHandler.instance.registerScrollInputHandler(inputHandler);
         KeyboardInputHandler.instance.registerKeyInputHandler(inputHandler);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        clientLogger.info("Client thread loaded, waiting for server...");
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
 
         long lastTime = System.nanoTime();
@@ -72,27 +60,24 @@ public class TransportManagerClient implements Runnable, IEventController {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-
             while (delta >= 1) {
                 updateClient();
                 delta--;
-
                 synchronized (eventQueue) {
-                    if (eventQueue.size() == 0)
+                    if (eventQueue.size() == 0) {
                         continue;
-
+                    }
                     for (TMEvent event : eventQueue) {
                         try {
-                            if (!TransportManager.isRunning)
+                            if (!TransportManager.isRunning) {
                                 return;
-
+                            }
                             event.processEvent(Side.CLIENT);
                         } catch (Exception ex) {
-                            System.err.println("Exception while trying to process event: " + event.toString());
+                            clientLogger.error("Exception while trying to process event: " + event.toString());
                             ex.printStackTrace();
                         }
                     }
-
                     eventQueue.clear();
                 }
             }
