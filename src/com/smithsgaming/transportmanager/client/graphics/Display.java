@@ -7,9 +7,15 @@ import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.KHRDebug;
+import org.lwjgl.opengl.GLDebugMessageCallback;
+import org.lwjgl.system.Library;
+import org.lwjgl.system.MemoryUtil;
 
 import java.io.*;
 import java.nio.*;
