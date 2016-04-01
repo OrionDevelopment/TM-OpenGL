@@ -31,7 +31,7 @@ public class TransportManagerClient implements Runnable, IEventController {
     private Queue<TMEvent> eventQueue = new ArrayDeque<>();
     private ClientSettings settings = ClientSettings.loadSettings();
 
-    private TransportManagerClient () {
+    private TransportManagerClient() {
     }
 
     public static Display getDisplay() {
@@ -47,7 +47,7 @@ public class TransportManagerClient implements Runnable, IEventController {
      * @see Thread#run()
      */
     @Override
-    public void run () {
+    public void run() {
         display = new Display();
         displayThread = new Thread(display, "TM-OpenGL - Display");
         displayThread.start();
@@ -57,13 +57,12 @@ public class TransportManagerClient implements Runnable, IEventController {
         KeyboardInputHandler.instance.registerKeyInputHandler(inputHandler);
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
-        //clientNetworkThread.run();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
@@ -71,7 +70,7 @@ public class TransportManagerClient implements Runnable, IEventController {
 
         while (TransportManager.isRunning) {
             long now = System.nanoTime();
-            delta += ( now - lastTime ) / ns;
+            delta += (now - lastTime) / ns;
             lastTime = now;
 
             while (delta >= 1) {
@@ -100,24 +99,28 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
     }
 
+    public void startConnection() {
+        clientNetworkThread.run();
+    }
+
     public Queue<TMEvent> getEventQueue() {
         return eventQueue;
     }
 
-    public ClientSettings getSettings () {
+    public ClientSettings getSettings() {
         return settings;
     }
 
-    private void updateClient () {
+    private void updateClient() {
     }
 
-    public void loadGraphics () {
+    public void loadGraphics() {
         TextureRegistry.Textures.init();
         TextureRegistry.Fonts.init();
         ShaderRegistry.Shaders.init();
     }
 
-    public void unLoadGraphics () {
+    public void unLoadGraphics() {
         TextureRegistry.instance.unLoad();
         TextureRegistry.Fonts.unLoad();
         GeometryRegistry.instance.unLoad();

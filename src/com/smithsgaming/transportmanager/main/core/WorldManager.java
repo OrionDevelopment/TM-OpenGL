@@ -1,6 +1,8 @@
 
 package com.smithsgaming.transportmanager.main.core;
 
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.event.EventClientWorldSyncStart;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.generation.*;
 
@@ -15,10 +17,10 @@ public class WorldManager {
     private World undergroundWorld = null;
     private boolean isWorldBeingLoaded;
 
-    protected WorldManager () {
+    protected WorldManager() {
     }
 
-    public void generateWorld () {
+    public void generateWorld() {
         if (isWorldBeingLoaded) {
             return;
         }
@@ -28,9 +30,10 @@ public class WorldManager {
         overgroundWorld = thread.getWorld(World.WorldType.OVERGROUND);
         undergroundWorld = thread.getWorld(World.WorldType.UNDERGROUND);
         isWorldBeingLoaded = false;
+        TransportManagerClient.instance.registerEvent(new EventClientWorldSyncStart());
     }
 
-    public void updateWorld () {
+    public void updateWorld() {
         if (overgroundWorld != null) {
             overgroundWorld.update();
         }
@@ -39,11 +42,11 @@ public class WorldManager {
         }
     }
 
-    public World getOvergroundWorld () {
+    public World getOvergroundWorld() {
         return overgroundWorld;
     }
 
-    public World getUndergroundWorld () {
+    public World getUndergroundWorld() {
         return undergroundWorld;
     }
 
