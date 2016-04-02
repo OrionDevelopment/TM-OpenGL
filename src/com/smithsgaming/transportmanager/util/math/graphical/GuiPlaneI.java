@@ -30,7 +30,7 @@ public class GuiPlaneI {
         this.width = lowerRightCoordinate.x - topLeftCoordinate.x;
         this.height = topLeftCoordinate.y - lowerRightCoordinate.y;
 
-        this.centerCoord = new Vector2i(topLeftCoordinate.x + (width / 2), topLeftCoordinate.y + (height / 2));
+        this.centerCoord = new Vector2i(topLeftCoordinate.x + (width / 2), topLeftCoordinate.y - (height / 2));
     }
 
     public GuiPlaneI(GuiPlaneI toCopy)
