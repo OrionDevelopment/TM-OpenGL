@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.lwjgl.util.*;
 
 /**
@@ -12,16 +12,16 @@ public class GuiComponentButton extends GuiComponentAbstract {
     private GuiComponentAbstract componentInnerBackground;
     private GuiComponentAbstract componentContent;
 
-    private GuiPlane area;
+    private GuiPlaneI area;
     private boolean centerAlign;
 
-    public GuiComponentButton (GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlane area, boolean centerAlign) {
+    public GuiComponentButton (GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlaneI area, boolean centerAlign) {
         super(parent);
         this.componentContent = componentContent;
         this.area = area;
         this.centerAlign = centerAlign;
 
-        this.componentOuterBackground = new GuiComponentFlatArea(parent, new GuiPlane(0f, Math.abs(area.getCoord1X() - area.getCoord2X()), Math.abs(area.getCoord1X() - area.getCoord2X()), 0, Math.abs(area.getCoord1Y() - area.getCoord4Y()), Math.abs(area.getCoord1Y() - area.getCoord4Y()), 0, 0), (Color) Color.DKGREY);
+        this.componentOuterBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
     }
 
     @Override

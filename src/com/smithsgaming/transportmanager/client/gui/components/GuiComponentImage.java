@@ -4,6 +4,8 @@ import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.lwjgl.util.vector.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -37,7 +39,7 @@ public class GuiComponentImage extends GuiComponentAbstract {
         this.centerX = centerX;
         this.centerY = centerY;
 
-        this.geometryToRender = GeometryRegistry.QuadGeometry.constructFromPlaneForTexture(new GuiPlane(-1, 1, 1, -1, 1, 1, -1, -1), new GuiPlane(0, 1, 1, 0, 1, 1, 0, 0));
+        this.geometryToRender = GeometryRegistry.QuadGeometry.constructFromPlaneForTexture(new GuiPlaneI(new Vector2i(-1,1), new Vector2i(1, -1)), new GuiPlaneI(new Vector2i(0,1), new Vector2i(1, 0)));
     }
 
     @Override

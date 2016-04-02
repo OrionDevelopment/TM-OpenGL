@@ -29,4 +29,8 @@ public class ChunkClient extends Chunk {
     public Vector3f getChunkCenterForCamera(Camera camera) {
         return new Vector3f(chunkX * Chunk.chunkSize + Chunk.chunkSize / 2, camera.getCameraPosition().getY(), chunkZ * Chunk.chunkSize + Chunk.chunkSize / 2);
     }
+
+    private void onTileUpdated(Tile oldTile, Tile newTile){
+
+    }
 }
