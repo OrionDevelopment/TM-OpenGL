@@ -1,11 +1,12 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.*;
-import org.lwjgl.util.vector.*;
+import org.lwjgl.util.Color;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * @Author Marc (Created on: 27.03.2016)
@@ -20,6 +21,11 @@ public class GuiComponentFlatArea extends GuiComponentAbstract {
         this.geometryToRender = GeometryRegistry.getDefaultQuadGeometry();
         this.area = area;
         this.color = color;
+    }
+
+    @Override
+    public GuiPlaneI getOccupiedArea() {
+        return area;
     }
 
     @Override

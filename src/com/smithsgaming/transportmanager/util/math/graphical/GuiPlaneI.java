@@ -74,4 +74,32 @@ public class GuiPlaneI {
     public Vector2i getCenterCoord() {
         return centerCoord;
     }
+
+    public GuiPlaneI getMovedVariant(Vector2i diff) {
+        return new GuiPlaneI(topLeftCoordinate.add(diff), lowerRightCoordinate.add(diff));
+    }
+
+    /**
+     * Returns a shrinked variant of this GuiPlaneI
+     *
+     * @param shrinkAmount The amount to move the sides.
+     * @return A shrinked version of this GuiPlaneI
+     */
+    public GuiPlaneI getShrinkedVariant(int shrinkAmount) {
+        return getShrinkedVariant(shrinkAmount, shrinkAmount, shrinkAmount, shrinkAmount);
+    }
+
+    /**
+     * Returns a shrinked variant of this GuiPlaneI
+     *
+     * @param topShrink    The amount to lower the top side of the new GuiPlane
+     * @param rightShrink  The amount to move the right side to the left of the new GuiPlane
+     * @param bottomShrink The amount to raise the bottom side of the new GuiPlane
+     * @param leftShrink   The amount to move the left side to the right of the new GuiPlane
+     * @return A shrunken GuiPlane
+     */
+    public GuiPlaneI getShrinkedVariant(int topShrink, int rightShrink, int bottomShrink, int leftShrink) {
+        return new GuiPlaneI(new Vector2i(getTopLeftCoordinate().x + leftShrink, topLeftCoordinate.y - topShrink), new Vector2i(getLowerRightCoordinate().x - rightShrink, getLowerRightCoordinate().y + bottomShrink));
+    }
+
 }

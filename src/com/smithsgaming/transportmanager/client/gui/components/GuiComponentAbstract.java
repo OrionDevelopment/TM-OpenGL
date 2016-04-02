@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
-import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
@@ -20,6 +21,8 @@ public abstract class GuiComponentAbstract implements IRenderer {
     public GuiComponentAbstract getParent () {
         return parent;
     }
+
+    public abstract GuiPlaneI getOccupiedArea();
 
     public abstract void loadTextures ();
 

@@ -1,7 +1,10 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.*;
+import org.lwjgl.util.Color;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * @Author Marc (Created on: 31.03.2016)
@@ -14,6 +17,7 @@ public class GuiComponentButton extends GuiComponentAbstract {
 
     private GuiPlaneI area;
     private boolean centerAlign;
+    private Vector2i contentLocation;
 
     public GuiComponentButton (GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlaneI area, boolean centerAlign) {
         super(parent);
@@ -22,6 +26,19 @@ public class GuiComponentButton extends GuiComponentAbstract {
         this.centerAlign = centerAlign;
 
         this.componentOuterBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
+        this.componentInnerBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(1)), (Color) Color.LTGREY);
+
+        if (!this.centerAlign) {
+            contentLocation = new Vector2i(3, 3);
+        } else {
+            GuiPlaneI contentArea = componentContent.getOccupiedArea();
+            this.contentLocation = new Vector2i(area.getCenterCoord()).sub(new Vector2i(contentArea.getWidth() / 2, contentArea.getHeight() / 2));
+        }
+    }
+
+    @Override
+    public GuiPlaneI getOccupiedArea() {
+        return area;
     }
 
     @Override
@@ -53,6 +70,15 @@ public class GuiComponentButton extends GuiComponentAbstract {
      */
     @Override
     public void render () {
+        Camera.Gui.pushMatrix();
+        Camera.Gui.translateModel(new Vector3f(contentLocation.x, contentLocation.y, 0f));
+        Camera.Gui.pushMatrix();
 
+        componentOuterBackground.render();
+        componentInnerBackground.render();
+        componentContent.render();
+
+        Camera.Gui.popMatrix();
+        Camera.Gui.popMatrix();
     }
 }

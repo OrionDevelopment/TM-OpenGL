@@ -20,7 +20,13 @@ public class GuiGameLoading extends GuiAbstract {
         float verticalHalf = TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution() / 2f;
 
         registerComponent(new GuiComponentFlatArea(this, new GuiPlaneI(new Vector2i((int) -horizontalHalf, (int) verticalHalf), new Vector2i((int) horizontalHalf, (int) -verticalHalf)), (Color) Color.WHITE));
-        registerComponent(new GuiComponentImage(this, "/textures/gui/background/logo.png", 0, 0, 354, 123, true, true));
-        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", 0f, -200f, true, (Color) Color.BLUE));
+        registerComponent(new GuiComponentImage(this, "/textures/gui/background/logo.png", new GuiPlaneI(new Vector2i(-177, 62), new Vector2i(177, -62))));
+        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", new Vector2i(0, -200), true, (Color) Color.BLUE));
+    }
+
+    @Override
+    public GuiPlaneI getOccupiedArea() {
+        //TODO: update the GUISystem to make it autocalculate its bounds.
+        return null;
     }
 }

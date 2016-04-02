@@ -1,54 +1,41 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import com.smithsgaming.transportmanager.util.*;
-import javafx.util.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.TexturedVertex;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import javafx.util.Pair;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * A TrueType font implementation originally for Slick, edited for Bobjob's Engine  *  * @original author James Chambers
- * (Jimmy)  * @original author Jeremy Adams (elias4444)  * @original author Kevin Glass (kevglass)  * @original author
- * Peter Korzuszek (genail)  *  * @new version edited by David Aaron Muhar (bobjob)
- */
 public class TrueTypeFont {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
 
     private HashMap<Character, Pair<CharGeometry, CharTexture>> characterPairHashMap = new HashMap<>();
 
-    /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
-
-    /** Font's size */
     private int fontSize = 0;
-
-    /** Font's height */
     private int fontHeight = 0;
-
-    /** Texture used to cache the font 0-255 characters */
-    private int fontTextureID;
     private Texture fontTextureMap;
-
-    /** Default font texture width */
     private int textureWidth = 512;
-
-    /** Default font texture height */
     private int textureHeight = 512;
-
-    /** A reference to Java's AWT Font that we create our font texture from */
     private Font font;
-    /** The font metrics for our Java AWT font */
-
     private FontMetrics fontMetrics;
-    private int correctL = 9, correctR = 8;
 
     public TrueTypeFont (Font font, boolean antiAlias, char[] additionalChars) {
         System.out.println("[Client] Loading font: " + font.getFontName());
@@ -124,16 +111,6 @@ public class TrueTypeFont {
             e.printStackTrace();
             System.exit(-1);
         }
-    }
-
-    public void setCorrection (boolean on) {
-        if (on) {
-            correctL = 2;
-            correctR = 1;
-        } else {
-            correctL = 0;
-        }
-        correctR = 0;
     }
 
     private BufferedImage getFontImage (char ch) {
@@ -278,6 +255,35 @@ public class TrueTypeFont {
 
         camera.popMatrix();
         camera.popMatrix();
+    }
+
+    public GuiPlaneI getOccupiedAreaForText(String text) {
+        String lines[] = text.split("\\r?\\n");
+        int width = 0, height = 0;
+
+        for (String line : lines) {
+            GuiPlaneI lineArea = getOccupiedAreaForLine(line);
+
+            height += lineArea.getHeight();
+
+            if (width < lineArea.getWidth())
+                width = lineArea.getWidth();
+        }
+
+        return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
+    }
+
+    private GuiPlaneI getOccupiedAreaForLine(String line) {
+        int width = 0, height = 0;
+
+        for (Character c : line.toCharArray()) {
+            width += characterPairHashMap.get(c).getValue().getWidth();
+
+            if (height < characterPairHashMap.get(c).getValue().getHeight())
+                height = characterPairHashMap.get(c).getValue().getHeight();
+        }
+
+        return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
     }
 
     public void destroy () {

@@ -1,45 +1,38 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.ResourceUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.vector.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
 public class GuiComponentImage extends GuiComponentAbstract {
 
-    float xCoord, yCoord, width, heigth;
-    boolean centerX, centerY;
+    private GuiPlaneI area;
     private String resourcePath;
     private Texture textureToRender;
     private GeometryRegistry.Geometry geometryToRender;
 
-    public GuiComponentImage (GuiComponentAbstract parent, String resourcePath, float xCoord, float yCoord, float width, float height, boolean centerX, boolean centerY) {
+    public GuiComponentImage(GuiComponentAbstract parent, String resourcePath, GuiPlaneI area) {
         super(parent);
         this.resourcePath = resourcePath;
+        this.area = area;
 
-        if (!centerX)
-            xCoord += ( width / 2f );
+        this.geometryToRender = GeometryRegistry.getDefaultQuadGeometry();
+    }
 
-        if (!centerY)
-            yCoord += ( height / 2f );
-
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
-        this.width = width;
-        this.heigth = height;
-
-        this.centerX = centerX;
-        this.centerY = centerY;
-
-        this.geometryToRender = GeometryRegistry.QuadGeometry.constructFromPlaneForTexture(new GuiPlaneI(new Vector2i(-1,1), new Vector2i(1, -1)), new GuiPlaneI(new Vector2i(0,1), new Vector2i(1, 0)));
+    @Override
+    public GuiPlaneI getOccupiedArea() {
+        return area;
     }
 
     @Override
@@ -50,7 +43,6 @@ public class GuiComponentImage extends GuiComponentAbstract {
 
     @Override
     public void loadGeometry () {
-        OpenGLUtil.loadGeometryIntoGPU(geometryToRender);
     }
 
     @Override
@@ -60,7 +52,7 @@ public class GuiComponentImage extends GuiComponentAbstract {
 
     @Override
     public void unLoadGeometry () {
-        OpenGLUtil.deleteGeometry(geometryToRender);
+
     }
 
     /**
@@ -69,16 +61,16 @@ public class GuiComponentImage extends GuiComponentAbstract {
     @Override
     public void render () {
         Camera.Gui.pushMatrix();
-        Camera.Gui.translateModel(new Vector3f(xCoord, yCoord, 0f));
-        Camera.Gui.scaleModel(new Vector3f(1f / ( 2f / width ), 1f / ( 2f / heigth ), 1f));
+        Camera.Gui.translateModel(new Vector3f(area.getCenterCoord().x, area.getCenterCoord().y, 0f));
+        Camera.Gui.scaleModel(new Vector3f(area.getWidth(), area.getHeight(), 1f));
         Camera.Gui.pushMatrix();
 
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Gui, geometryToRender, textureToRender, ShaderRegistry.Shaders.guiTextured);
-        glDisable(GL_BLEND);
 
+        GL11.glDisable(GL_BLEND);
         Camera.Gui.popMatrix();
         Camera.Gui.popMatrix();
     }
