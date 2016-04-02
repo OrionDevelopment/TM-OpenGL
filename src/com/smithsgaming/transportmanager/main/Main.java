@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.main;
 
-import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 
 /**
  * Main class for the TransportManager game, responsible for starting and running an instance of the TransportManager
@@ -9,7 +9,6 @@ import com.smithsgaming.transportmanager.client.*;
  * @Author Marc (Created on: 05.03.2016)
  */
 public class Main {
-
     static TransportManagerClient client;
     static TransportManager server;
 

@@ -1,15 +1,35 @@
 package com.smithsgaming.transportmanager.client.gui;
 
-import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
+import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public class GuiController implements IRenderer {
+public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHandler {
+
+    public static final GuiController instance = new GuiController();
+    private static ArrayList<Integer> mousebuttons = new ArrayList<>();
+    private static ArrayList<Integer> mouseactions = new ArrayList<>();
+
+    static {
+        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_LEFT);
+        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_RIGHT);
+        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_MIDDLE);
+
+        mouseactions.add(GLFW.GLFW_PRESS);
+    }
 
     Stack<GuiAbstract> openedGuiStack = new Stack<>();
+
+    private GuiController() {
+        MouseInputHandler.instance.registerMouseInputHandler(this);
+    }
 
     /**
      * Method called by the RenderManager to process the rendering for this renderer.
@@ -42,5 +62,20 @@ public class GuiController implements IRenderer {
 
     public boolean isGuiOpen () {
         return openedGuiStack.size() != 0;
+    }
+
+    @Override
+    public ArrayList<Integer> getHandledButtons() {
+        return mousebuttons;
+    }
+
+    @Override
+    public ArrayList<Integer> getActionTypeForButton(Integer key) {
+        return mouseactions;
+    }
+
+    @Override
+    public void onKeyPressed(int key, int action) {
+        TransportManagerClient.clientLogger.info("Handled key click!");
     }
 }

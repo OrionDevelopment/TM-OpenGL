@@ -1,7 +1,7 @@
 package com.smithsgaming.transportmanager.client.render;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.gui.*;
+import com.smithsgaming.transportmanager.client.graphics.SkyBox;
+import com.smithsgaming.transportmanager.client.gui.GuiController;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -9,7 +9,7 @@ import com.smithsgaming.transportmanager.client.gui.*;
 public class RenderHandler {
     static WorldRenderer worldRenderer = new WorldRenderer();
     static SkyBox skyBox = new SkyBox();
-    static GuiController guiController = new GuiController();
+    static GuiController guiController = GuiController.instance;
 
     public static void doRender () {
         if (guiController.isGuiOpen()) {
