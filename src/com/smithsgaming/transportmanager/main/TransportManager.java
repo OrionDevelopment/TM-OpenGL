@@ -1,13 +1,17 @@
 
 package com.smithsgaming.transportmanager.main;
 
-import com.smithsgaming.transportmanager.main.core.*;
-import com.smithsgaming.transportmanager.network.server.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.event.*;
-import org.apache.logging.log4j.*;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
+import com.smithsgaming.transportmanager.main.core.WorldManager;
+import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
+import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.event.IEventController;
+import com.smithsgaming.transportmanager.util.event.TMEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
  * Game class for the TransportManager game.
@@ -35,7 +39,7 @@ public class TransportManager implements Runnable, IEventController {
         WorldManager.instance.generateWorld();
 
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));
-        serverNetworkThread.run();
+        //serverNetworkThread.run();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;

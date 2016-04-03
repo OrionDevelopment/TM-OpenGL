@@ -1,25 +1,32 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.gui.*;
-import com.smithsgaming.transportmanager.client.input.*;
-import com.smithsgaming.transportmanager.client.render.*;
-import com.smithsgaming.transportmanager.main.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.event.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.event.EventClientGuiClose;
+import com.smithsgaming.transportmanager.client.event.EventClientGuiOpen;
+import com.smithsgaming.transportmanager.client.gui.GuiGameLoading;
+import com.smithsgaming.transportmanager.client.gui.GuiMainMenu;
+import com.smithsgaming.transportmanager.client.input.KeyboardInputHandler;
+import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
+import com.smithsgaming.transportmanager.client.render.RenderHandler;
+import com.smithsgaming.transportmanager.main.TransportManager;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.event.IEventController;
+import com.smithsgaming.transportmanager.util.event.TMEvent;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.KHRDebug;
 import org.lwjgl.opengl.GLDebugMessageCallback;
+import org.lwjgl.opengl.KHRDebug;
 import org.lwjgl.system.Library;
 import org.lwjgl.system.MemoryUtil;
 
-import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -194,6 +201,25 @@ public class Display implements Runnable, IEventController
             TransportManagerClient.instance.loadGraphics();
 
             RenderHandler.getGuiController().openGui(new GuiGameLoading());
+
+            Thread delayedLoadingScreenThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    TransportManagerClient.clientLogger.info("Starting loading screen wait");
+
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    TransportManagerClient.clientLogger.info("Going to main menu");
+
+                    TransportManagerClient.getDisplay().registerEvent(new EventClientGuiClose());
+                    TransportManagerClient.getDisplay().registerEvent(new EventClientGuiOpen(new GuiMainMenu()));
+                }
+            });
+            delayedLoadingScreenThread.start();
 
             runRender();
 

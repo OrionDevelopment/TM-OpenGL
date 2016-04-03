@@ -1,9 +1,9 @@
 package com.smithsgaming.transportmanager.client.gui;
 
-import com.smithsgaming.transportmanager.client.gui.components.*;
-import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.gui.components.GuiComponentAbstract;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
@@ -44,5 +44,9 @@ public abstract class GuiAbstract extends GuiComponentAbstract implements IRende
     @Override
     public void render () {
         components.forEach(GuiComponentAbstract::render);
+    }
+
+    public ArrayList<GuiComponentAbstract> getComponents() {
+        return components;
     }
 }

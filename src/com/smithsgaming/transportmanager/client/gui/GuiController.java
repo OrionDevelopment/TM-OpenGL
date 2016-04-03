@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.gui.components.GuiComponentAbstract;
+import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IMouseInputComponent;
 import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
@@ -18,17 +20,22 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
     private static ArrayList<Integer> mousebuttons = new ArrayList<>();
     private static ArrayList<Integer> mouseactions = new ArrayList<>();
 
-    static {
-        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_LEFT);
-        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_RIGHT);
-        mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_MIDDLE);
-
-        mouseactions.add(GLFW.GLFW_PRESS);
-    }
-
     Stack<GuiAbstract> openedGuiStack = new Stack<>();
 
     private GuiController() {
+        if (mousebuttons == null) {
+            mousebuttons = new ArrayList<>();
+            mouseactions = new ArrayList<>();
+        }
+
+        if (mousebuttons.size() == 0) {
+            mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_LEFT);
+            mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_RIGHT);
+            mousebuttons.add(GLFW.GLFW_MOUSE_BUTTON_MIDDLE);
+
+            mouseactions.add(GLFW.GLFW_PRESS);
+        }
+
         MouseInputHandler.instance.registerMouseInputHandler(this);
     }
 
@@ -79,6 +86,20 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
     public ActionProcessingResult onKeyPressed(int key, int action) {
         TransportManagerClient.clientLogger.info("Handled key click!");
 
-        return ActionProcessingResult.NEUTRAL;
+        ActionProcessingResult result = ActionProcessingResult.NEUTRAL;
+
+        for (GuiComponentAbstract componentAbstract : openedGuiStack.peek().getComponents()) {
+            if (componentAbstract instanceof IMouseInputComponent && componentAbstract.getOccupiedArea().isMouseInPlane()) {
+                IMouseInputComponent mouseInputComponent = (IMouseInputComponent) componentAbstract;
+                if (mouseInputComponent.componentCanHandleMouseInput()) {
+                    result = mouseInputComponent.handleKeyAction(key, action);
+                    if (result != ActionProcessingResult.NEUTRAL) {
+                        return result;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

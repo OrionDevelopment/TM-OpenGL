@@ -27,6 +27,8 @@ public class MouseInputHandler {
         }
     };
     private HashMap<Integer, HashMap<Integer, ArrayList<IMouseInputHandler>>> mouseInputHandlerHashmap = new HashMap<>();
+    private float mouseX;
+    private float mouseY;
     public static final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK = new GLFWMouseButtonCallback() {
         @Override
         public void invoke(long window, int button, int action, int mods) {
@@ -41,6 +43,8 @@ public class MouseInputHandler {
             if (!instance.mouseInputHandlerHashmap.get(button).containsKey(action))
                 return;
 
+            TransportManagerClient.clientLogger.info("Handled mouse click on: " + instance.getMouseX() + "-" + instance.getMouseY());
+
             ActionProcessingResult result = ActionProcessingResult.NEUTRAL;
             for (IMouseInputHandler handler : instance.mouseInputHandlerHashmap.get(button).get(action)) {
                 result = handler.onKeyPressed(button, action);
@@ -49,13 +53,11 @@ public class MouseInputHandler {
             }
         }
     };
-    private float mouseX;
-    private float mouseY;
     public static final GLFWCursorPosCallback CURSOR_POS_CALLBACK = new GLFWCursorPosCallback() {
         @Override
         public void invoke(long window, double xpos, double ypos) {
-            instance.mouseX = (float) (xpos / TransportManagerClient.getDisplay().getSizeHorizontal()) * GuiScale.FWVGA.getHorizontalResolution();
-            instance.mouseY = (float) (1 - (ypos / TransportManagerClient.getDisplay().getSizeVertical())) * GuiScale.FWVGA.getVerticalResolution();
+            instance.mouseX = (float) (xpos / TransportManagerClient.getDisplay().getSizeHorizontal()) * GuiScale.FWVGA.getHorizontalResolution() - (GuiScale.FWVGA.getHorizontalResolution() / 2);
+            instance.mouseY = (float) (1 - (ypos / TransportManagerClient.getDisplay().getSizeVertical())) * GuiScale.FWVGA.getVerticalResolution() - (GuiScale.FWVGA.getVerticalResolution() / 2);
         }
     };
 

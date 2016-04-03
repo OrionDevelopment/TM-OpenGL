@@ -1,39 +1,47 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
-import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IInputSAM;
+import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IMouseInputComponent;
+import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.util.Color;
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  * @Author Marc (Created on: 31.03.2016)
  */
-public class GuiComponentButton extends GuiComponentAbstract {
+public class GuiComponentButton extends GuiComponentAbstract implements IMouseInputComponent {
 
     private GuiComponentAbstract componentOuterBackground;
     private GuiComponentAbstract componentInnerBackground;
+    private GuiComponentAbstract componentInnerBackgroundHovered;
     private GuiComponentAbstract componentContent;
 
     private GuiPlaneI area;
     private boolean centerAlign;
     private Vector2i contentLocation;
 
-    public GuiComponentButton (GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlaneI area, boolean centerAlign) {
+    private IInputSAM inputHandler;
+
+    public GuiComponentButton(GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlaneI area, boolean centerAlign, IInputSAM sam) {
         super(parent);
         this.componentContent = componentContent;
         this.area = area;
         this.centerAlign = centerAlign;
 
         this.componentOuterBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
-        this.componentInnerBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(1)), (Color) Color.LTGREY);
+        this.componentInnerBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(65, 65, 65));
+        this.componentInnerBackgroundHovered = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(75, 75, 75));
 
         if (!this.centerAlign) {
-            contentLocation = new Vector2i(3, 3);
+            contentLocation = new Vector2i(20, 20);
         } else {
             GuiPlaneI contentArea = componentContent.getOccupiedArea();
             this.contentLocation = new Vector2i(area.getCenterCoord()).sub(new Vector2i(contentArea.getWidth() / 2, contentArea.getHeight() / 2));
         }
+
+        this.inputHandler = sam;
     }
 
     @Override
@@ -50,6 +58,7 @@ public class GuiComponentButton extends GuiComponentAbstract {
     public void loadGeometry () {
         componentOuterBackground.loadGeometry();
         componentInnerBackground.loadGeometry();
+        componentInnerBackgroundHovered.loadGeometry();
         componentContent.loadGeometry();
     }
 
@@ -62,6 +71,7 @@ public class GuiComponentButton extends GuiComponentAbstract {
     public void unLoadGeometry () {
         componentOuterBackground.unLoadGeometry();
         componentInnerBackground.unLoadGeometry();
+        componentInnerBackgroundHovered.unLoadGeometry();
         componentContent.unLoadGeometry();
     }
 
@@ -70,15 +80,30 @@ public class GuiComponentButton extends GuiComponentAbstract {
      */
     @Override
     public void render () {
-        Camera.Gui.pushMatrix();
-        Camera.Gui.translateModel(new Vector3f(contentLocation.x, contentLocation.y, 0f));
-        Camera.Gui.pushMatrix();
-
         componentOuterBackground.render();
-        componentInnerBackground.render();
-        componentContent.render();
 
-        Camera.Gui.popMatrix();
-        Camera.Gui.popMatrix();
+        if (getOccupiedArea().isMouseInPlane()) {
+            componentInnerBackgroundHovered.render();
+        } else {
+            componentInnerBackground.render();
+        }
+
+        componentContent.render();
+    }
+
+    @Override
+    public boolean componentCanHandleMouseInput() {
+        //TODO: Make the button have a possibilty to be disabled.
+        return true;
+    }
+
+    @Override
+    public ActionProcessingResult handleKeyAction(int key, int action) {
+        if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+            inputHandler.invoke();
+            return ActionProcessingResult.ACCEPTED;
+        }
+
+        return ActionProcessingResult.NEUTRAL;
     }
 }

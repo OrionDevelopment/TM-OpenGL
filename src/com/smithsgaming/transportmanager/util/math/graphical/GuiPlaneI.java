@@ -1,5 +1,7 @@
 package com.smithsgaming.transportmanager.util.math.graphical;
 
+import com.smithsgaming.transportmanager.client.graphics.GuiScale;
+import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 
 /**
@@ -47,6 +49,10 @@ public class GuiPlaneI {
         this.centerCoord = toCopy.getCenterCoord().copy();
     }
 
+    public GuiPlaneI() {
+        this(new Vector2i((int) -(GuiScale.FWVGA.getHorizontalResolution() / 2), (int) (GuiScale.FWVGA.getVerticalResolution() / 2)), new Vector2i((int) (GuiScale.FWVGA.getHorizontalResolution() / 2), (int) -(GuiScale.FWVGA.getVerticalResolution() / 2)));
+    }
+
     public Vector2i getTopLeftCoordinate() {
         return topLeftCoordinate;
     }
@@ -75,6 +81,14 @@ public class GuiPlaneI {
         return centerCoord;
     }
 
+    public boolean isPointInPlane(Vector2i point) {
+        return (point.x >= topLeftCoordinate.x) && (point.x <= topRightCoordinate.x) && (point.y <= topLeftCoordinate.y) && (point.y >= lowerLeftCoordinate.y);
+    }
+
+    public boolean isMouseInPlane() {
+        return isPointInPlane(new Vector2i((int) MouseInputHandler.instance.getMouseX(), (int) MouseInputHandler.instance.getMouseY()));
+    }
+
     public GuiPlaneI getMovedVariant(Vector2i diff) {
         return new GuiPlaneI(topLeftCoordinate.add(diff), lowerRightCoordinate.add(diff));
     }
@@ -101,5 +115,6 @@ public class GuiPlaneI {
     public GuiPlaneI getShrinkedVariant(int topShrink, int rightShrink, int bottomShrink, int leftShrink) {
         return new GuiPlaneI(new Vector2i(getTopLeftCoordinate().x + leftShrink, topLeftCoordinate.y - topShrink), new Vector2i(getLowerRightCoordinate().x - rightShrink, getLowerRightCoordinate().y + bottomShrink));
     }
+
 
 }
