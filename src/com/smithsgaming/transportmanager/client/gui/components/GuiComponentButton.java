@@ -40,7 +40,13 @@ public class GuiComponentButton extends GuiComponentAbstract implements IMouseIn
             contentLocation = new Vector2i(20, 20);
         } else {
             GuiPlaneI contentArea = componentContent.getOccupiedArea();
-            this.contentLocation = new Vector2i(area.getCenterCoord()).sub(new Vector2i(contentArea.getWidth() / 2, contentArea.getHeight() / 2));
+            //this.contentLocation = new Vector2i(area.getCenterCoord()).sub(new Vector2i(contentArea.getWidth() / 2, contentArea.getHeight() / 2));
+
+            this.contentLocation = new Vector2i(20, 20);
+
+            if (componentContent instanceof GuiComponentText && ((GuiComponentText) componentContent).isCenter()) {
+                this.contentLocation = new Vector2i(0, 0);
+            }
         }
 
         this.inputHandler = sam;

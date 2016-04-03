@@ -22,7 +22,7 @@ public class GuiMainMenu extends GuiAbstract {
 
         registerComponent(new GuiComponentFlatArea(this, new GuiPlaneI(new Vector2i((int) -horizontalHalf, (int) verticalHalf), new Vector2i((int) horizontalHalf, (int) -verticalHalf)), (Color) Color.WHITE));
         registerComponent(new GuiComponentImage(this, "/textures/gui/background/Menu.png", new GuiPlaneI(new Vector2i((int) -horizontalHalf, (int) verticalHalf), new Vector2i((int) horizontalHalf, (int) -verticalHalf))));
-        registerComponent(new GuiComponentButton(this, new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Create new Game", new Vector2i(0, 0), true, (Color) Color.WHITE), new GuiPlaneI(new Vector2i((int) (horizontalHalf / 2), (int) (verticalHalf - 10)), new Vector2i((int) (horizontalHalf - 10), (int) (verticalHalf - 20 - TextureRegistry.Fonts.Courier.getLineHeight()))), true, new IInputSAM() {
+        registerComponent(new GuiComponentButton(this, new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Create new Game", new Vector2i(0, 0), true, (Color) Color.WHITE), new GuiPlaneI(new Vector2i((int) (horizontalHalf - 20 - TextureRegistry.Fonts.Courier.getOccupiedAreaForText("Create new Game").getWidth()), (int) (verticalHalf - 10)), new Vector2i((int) (horizontalHalf - 10), (int) (verticalHalf - 20 - TextureRegistry.Fonts.Courier.getLineHeight()))), true, new IInputSAM() {
             @Override
             public void invoke() {
                 TransportManagerClient.clientLogger.info("Creating new World.");

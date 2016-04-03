@@ -248,7 +248,7 @@ public class TrueTypeFont {
 
             OpenGLUtil.drawGeometryWithShaderAndTexture(camera, charGeometry, charTexture, ShaderRegistry.Shaders.guiTextured);
 
-            currentX += charTexture.getWidth() + 5;
+            currentX += charTexture.getWidth();
 
             camera.popMatrix();
         }

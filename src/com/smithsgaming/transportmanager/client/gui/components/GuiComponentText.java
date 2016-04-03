@@ -54,6 +54,14 @@ public class GuiComponentText extends GuiComponentAbstract {
 
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public boolean isCenter() {
+        return center;
+    }
+
     /**
      * Method called by the RenderManager to process the rendering for this renderer.
      */
