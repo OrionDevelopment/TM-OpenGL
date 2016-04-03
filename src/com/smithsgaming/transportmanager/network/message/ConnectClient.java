@@ -1,8 +1,9 @@
 package com.smithsgaming.transportmanager.network.message;
 
-import com.smithsgaming.transportmanager.main.player.*;
-import com.smithsgaming.transportmanager.util.*;
-import io.netty.channel.*;
+import com.smithsgaming.transportmanager.main.player.GamePlayer;
+import com.smithsgaming.transportmanager.main.player.PlayerManager;
+import com.smithsgaming.transportmanager.util.Side;
+import io.netty.channel.Channel;
 
 /**
  * @Author Marc (Created on: 15.03.2016)
@@ -23,6 +24,6 @@ public class ConnectClient extends TMNetworkingMessage
         PlayerManager.instance.onPlayerConnected(connectingPlayer);
         System.out.println("[Server] PLAYER: " + connectingPlayer.getDisplayName() + " connected!");
 
-        return new OperationAcceptedMessage(OperationAcceptedMessage.Operation.PLAYERCONNECTED);
+        return new OperationProcessedMessage(OperationProcessedMessage.Operation.PLAYERCONNECTED);
     }
 }

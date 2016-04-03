@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.client.gui;
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
+import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -75,7 +76,9 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
     }
 
     @Override
-    public void onKeyPressed(int key, int action) {
+    public ActionProcessingResult onKeyPressed(int key, int action) {
         TransportManagerClient.clientLogger.info("Handled key click!");
+
+        return ActionProcessingResult.NEUTRAL;
     }
 }

@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.input;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.graphics.GuiScale;
+import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -40,8 +41,12 @@ public class MouseInputHandler {
             if (!instance.mouseInputHandlerHashmap.get(button).containsKey(action))
                 return;
 
-            for (IMouseInputHandler handler : instance.mouseInputHandlerHashmap.get(button).get(action))
-                handler.onKeyPressed(button, action);
+            ActionProcessingResult result = ActionProcessingResult.NEUTRAL;
+            for (IMouseInputHandler handler : instance.mouseInputHandlerHashmap.get(button).get(action)) {
+                result = handler.onKeyPressed(button, action);
+                if (result != ActionProcessingResult.NEUTRAL)
+                    return;
+            }
         }
     };
     private float mouseX;
@@ -118,6 +123,6 @@ public class MouseInputHandler {
 
         ArrayList<Integer> getActionTypeForButton(Integer key);
 
-        void onKeyPressed(int key, int action);
+        ActionProcessingResult onKeyPressed(int key, int action);
     }
 }
