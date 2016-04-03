@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
+import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IInputSAM;
 import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IMouseInputComponent;
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
@@ -7,6 +8,7 @@ import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.util.Color;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * @Author Marc (Created on: 31.03.2016)
@@ -85,10 +87,18 @@ public class GuiComponentButton extends GuiComponentAbstract implements IMouseIn
         if (getOccupiedArea().isMouseInPlane()) {
             componentInnerBackgroundHovered.render();
         } else {
-            componentInnerBackground.render();
+            componentInnerBackground.render(
+            );
         }
 
+        Camera.Gui.pushMatrix();
+        Camera.Gui.translateModel(new Vector3f(area.getCenterCoord().x, area.getCenterCoord().y, 0f));
+        Camera.Gui.pushMatrix();
+
         componentContent.render();
+
+        Camera.Gui.popMatrix();
+        Camera.Gui.popMatrix();
     }
 
     @Override
@@ -99,7 +109,7 @@ public class GuiComponentButton extends GuiComponentAbstract implements IMouseIn
 
     @Override
     public ActionProcessingResult handleKeyAction(int key, int action) {
-        if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+        if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
             inputHandler.invoke();
             return ActionProcessingResult.ACCEPTED;
         }
