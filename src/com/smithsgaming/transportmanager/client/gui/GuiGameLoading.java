@@ -21,7 +21,7 @@ public class GuiGameLoading extends GuiAbstract {
 
         registerComponent(new GuiComponentFlatArea(this, new GuiPlaneI(new Vector2i((int) -horizontalHalf, (int) verticalHalf), new Vector2i((int) horizontalHalf, (int) -verticalHalf)), (Color) Color.WHITE));
         registerComponent(new GuiComponentImage(this, "/textures/gui/background/logo.png", new GuiPlaneI(new Vector2i(-177, 62), new Vector2i(177, -62))));
-        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", new Vector2i(0, -200), true, (Color) Color.BLUE));
+        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", new Vector2i(0, -70), true, (Color) Color.BLUE));
     }
 
     @Override
