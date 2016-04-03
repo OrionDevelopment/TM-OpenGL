@@ -1,21 +1,23 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.*;
-import org.lwjgl.util.*;
-import org.lwjgl.util.vector.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.util.GraphicUtil;
+import com.smithsgaming.transportmanager.util.MathUtil;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.util.Color;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
-import java.nio.*;
-import java.util.*;
+import java.nio.FloatBuffer;
+import java.util.Stack;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
  */
 public class Camera {
 
-    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
     public static final Camera Gui = new Camera();
     private Stack<Matrix4f> modelMatrixStack = new Stack<>();
     private Matrix4f renderingModelMatrix = new Matrix4f();
@@ -31,8 +33,8 @@ public class Camera {
     private float viewDistanceInChunks = 4;
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
-
     private Frustum activeFrustum;
+    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
 
     public Camera () {
         this.activeFrustum = new Frustum(this);
@@ -323,7 +325,7 @@ public class Camera {
      * @param modelTranslation The translation to perform.
      */
     public void translateModel (Vector3f modelTranslation) {
-        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / TransportManagerClient.instance.getSettings().getCurrentScale().getHorizontalResolution(), modelTranslation.getY() / TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution(), modelTranslation.getZ()));
+        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / (TransportManagerClient.instance.getSettings().getCurrentScale().getHorizontalResolution() / 2), modelTranslation.getY() / (TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution() / 2), modelTranslation.getZ()));
         isActingMatrixLive = false;
     }
 
