@@ -211,17 +211,23 @@ public class TrueTypeFont {
     }
 
     public void drawString (Camera camera, float x, float y, String text, int format) {
+        GuiPlaneI area = getOccupiedAreaForText(text);
+
         float startY = y;
+
+        if (format == ALIGN_CENTER) {
+            startY -= (area.getHeight() / 2);
+        }
 
         String lines[] = text.split("\\r?\\n");
 
         for (String line : lines) {
             switch (format) {
                 case ALIGN_RIGHT:
-                    drawStringLine(camera, x - fontMetrics.stringWidth(line), startY, line);
+                    drawStringLine(camera, x - getOccupiedAreaForLine(line).getWidth(), startY, line);
                     break;
                 case ALIGN_CENTER:
-                    drawStringLine(camera, x - fontMetrics.stringWidth(line) / 2f, startY, line);
+                    drawStringLine(camera, x - getOccupiedAreaForLine(line).getWidth() / 2f, startY, line);
                     break;
                 case ALIGN_LEFT:
                 default:

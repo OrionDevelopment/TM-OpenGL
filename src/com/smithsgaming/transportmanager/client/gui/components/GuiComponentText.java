@@ -18,6 +18,7 @@ public class GuiComponentText extends GuiComponentAbstract {
     private boolean center;
     private Color color;
     private GuiPlaneI area;
+    private Vector2i coreRenderingOffset = new Vector2i(0, 0);
 
     public GuiComponentText(GuiComponentAbstract parent, TrueTypeFont font, String text, Vector2i location, boolean center, Color color) {
         super(parent);
@@ -25,7 +26,14 @@ public class GuiComponentText extends GuiComponentAbstract {
         this.text = text;
         this.center = center;
         this.color = color;
-        this.area = font.getOccupiedAreaForText(text).getMovedVariant(location);
+
+        GuiPlaneI boundsArea = font.getOccupiedAreaForText(text).getMovedVariant(location);
+        if (center) {
+            boundsArea = boundsArea.getMovedVariant(new Vector2i(-boundsArea.getWidth() / 2, boundsArea.getHeight() / 2));
+            coreRenderingOffset = new Vector2i(boundsArea.getWidth() / 2, -boundsArea.getHeight() / 2);
+        }
+
+        this.area = boundsArea;
     }
 
 
@@ -70,7 +78,7 @@ public class GuiComponentText extends GuiComponentAbstract {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Camera.Gui.setActiveColor(color);
-        font.drawString(Camera.Gui, area.getTopLeftCoordinate().x, area.getTopLeftCoordinate().y, text, center ? TrueTypeFont.ALIGN_CENTER : TrueTypeFont.ALIGN_LEFT);
+        font.drawString(Camera.Gui, area.getTopLeftCoordinate().x + coreRenderingOffset.x, area.getTopLeftCoordinate().y - coreRenderingOffset.y, text, center ? TrueTypeFont.ALIGN_CENTER : TrueTypeFont.ALIGN_LEFT);
         glDisable(GL_BLEND);
     }
 }
