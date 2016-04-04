@@ -2,18 +2,20 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import org.lwjgl.*;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
+import org.lwjgl.util.vector.Matrix4f;
 
-import java.io.*;
-import java.nio.*;
+import java.io.FileNotFoundException;
+import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glTexSubImage2D;
 
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
@@ -169,7 +171,7 @@ public class OpenGLUtil {
 
         int indicesBuffer = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getType().getIndicesBuffer(), GL15.GL_STATIC_DRAW);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getIndicesBuffer(), GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
         geometry.setOpenGLVertaxArrayId(arrayBuffer);

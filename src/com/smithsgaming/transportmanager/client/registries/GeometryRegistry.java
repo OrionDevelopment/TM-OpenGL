@@ -1,13 +1,15 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.TexturedVertex;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
-import java.nio.*;
-import java.util.*;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.HashMap;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -152,6 +154,10 @@ public class GeometryRegistry {
 
         public void setOpenGLVertexIndexID (int openGLVertexIndexID) {
             this.openGLVertexIndexID = openGLVertexIndexID;
+        }
+
+        public ByteBuffer getIndicesBuffer() {
+            return getType().getIndicesBuffer();
         }
     }
 

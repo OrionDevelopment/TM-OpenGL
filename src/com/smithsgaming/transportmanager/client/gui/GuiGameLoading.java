@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.gui.components.GuiComponentFlatArea;
+import com.smithsgaming.transportmanager.client.gui.components.GuiComponentImage;
 import com.smithsgaming.transportmanager.client.gui.components.GuiComponentText;
 import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
@@ -19,8 +20,8 @@ public class GuiGameLoading extends GuiAbstract {
         float verticalHalf = TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution() / 2f;
 
         registerComponent(new GuiComponentFlatArea(this, new GuiPlaneI(new Vector2i((int) -horizontalHalf, (int) verticalHalf), new Vector2i((int) horizontalHalf, (int) -verticalHalf)), (Color) Color.WHITE));
-        //registerComponent(new GuiComponentImage(this, "/textures/gui/background/logo.png", new GuiPlaneI(new Vector2i(-177, 62), new Vector2i(177, -62))));
-        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", new Vector2i(0, 0), true, (Color) Color.BLUE));
+        registerComponent(new GuiComponentImage(this, "/textures/gui/background/logo.png", new GuiPlaneI(new Vector2i(-177, 62), new Vector2i(177, -62))));
+        registerComponent(new GuiComponentText(this, TextureRegistry.Fonts.Courier, "Loading...", new Vector2i(0, -80), true, (Color) Color.BLUE));
     }
 
     @Override
