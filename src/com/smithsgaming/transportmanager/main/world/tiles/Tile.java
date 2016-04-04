@@ -21,5 +21,5 @@ public abstract class Tile implements Serializable {
         return identity;
     }
 
-    public abstract boolean canBeOverridenBy(World world, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ, Tile newTile);
+    public abstract boolean canBeOverridenBy(World world, int tileWorldPosX, int tileWorldPosZ, Tile newTile);
 }

@@ -12,7 +12,7 @@ public class BridgableTile extends Tile {
     }
 
     @Override
-    public boolean canBeOverridenBy (World world, int tileWorldPosX, int tileWorldPosY, int tileWorldPosZ, Tile newTile) {
+    public boolean canBeOverridenBy (World world, int tileWorldPosX, int tileWorldPosZ, Tile newTile) {
         return false;
     }
 }

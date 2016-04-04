@@ -2,7 +2,8 @@
 
 package com.smithsgaming.transportmanager.main.core;
 
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
+import com.smithsgaming.transportmanager.main.TransportManager;
+import com.smithsgaming.transportmanager.main.tileentity.TileEntity;
 
 import java.util.*;
 
@@ -16,14 +17,14 @@ public class TileEntityRegistry {
 
     private HashMap<String, Class<? extends TileEntity>> tileHashMap = new HashMap<>();
 
-    protected TileEntityRegistry () {
+    protected TileEntityRegistry() {
         tileHashMap.put(NULLTILEIDENTITY, null);
     }
 
     /**
      * Method to initialize the TileRegistry.
      */
-    public static void init () {
+    public static void init() {
 
     }
 
@@ -31,10 +32,9 @@ public class TileEntityRegistry {
      * Method to get a Tile for a given Identity name;
      *
      * @param identity The identity you are trying to get a lookup for.
-     *
      * @return The tile registered with the TileRegistry or null if nothing is registered with that name.
      */
-    public TileEntity getTileEntityForIdentity (String identity) {
+    public TileEntity getTileEntityForIdentity(String identity) {
         Class<? extends TileEntity> clazz = tileHashMap.get(identity);
 
         if (clazz == null)
@@ -54,26 +54,26 @@ public class TileEntityRegistry {
     /**
      * Method to register a Tile. If two tiles with the same identity are being registered the last one is being kept.
      *
-     * @param tile The tile to register.
+     * @param tileEntityClass The tile to register.
      */
-    public void registerTile (Class<? extends TileEntity> tileEntityClass) {
+    public void registerTile(Class<? extends TileEntity> tileEntityClass) {
         TileEntity tileEntity = null;
 
         try {
             tileEntity = tileEntityClass.newInstance();
         } catch (InstantiationException e) {
-            System.err.println("Failed to register: " + tileEntityClass + " as TileEntity!");
+            TransportManager.serverLogger.error("Failed to register: " + tileEntityClass + " as TileEntity!\n" + e.getLocalizedMessage());
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            System.err.println("Failed to register: " + tileEntityClass + " as TileEntity!");
+            TransportManager.serverLogger.error("Failed to register: " + tileEntityClass + " as TileEntity!\n" + e.getLocalizedMessage());
             e.printStackTrace();
         }
 
-        tileHashMap.put(tileEntity.getIdentity(), tileEntityClass);
+        tileHashMap.put(tileEntity.getClass().getTypeName(), tileEntityClass);
     }
 
     /**
-     * Class holds the identities of all tileentities. used in the Game.
+     * Class holds the identities of all tileentity. used in the Game.
      */
     public static class TileEntityNames {
 

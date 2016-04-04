@@ -1,27 +1,25 @@
 package com.smithsgaming.transportmanager.main.saveable;
 
-import com.google.common.base.*;
-import com.smithsgaming.transportmanager.client.world.*;
-import com.smithsgaming.transportmanager.client.world.chunk.*;
-import com.smithsgaming.transportmanager.main.*;
+import com.smithsgaming.transportmanager.client.world.WorldClient;
+import com.smithsgaming.transportmanager.client.world.chunk.ChunkClient;
+import com.smithsgaming.transportmanager.main.TransportManager;
 import com.smithsgaming.transportmanager.main.core.TileEntityRegistry;
-import com.smithsgaming.transportmanager.main.core.*;
-import com.smithsgaming.transportmanager.main.world.*;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
-import com.smithsgaming.transportmanager.util.nbt.*;
-
-import java.util.concurrent.*;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
+import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.tileentity.ITileEntityProvider;
+import com.smithsgaming.transportmanager.main.tileentity.TileEntity;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 
 /**
- * Created by marcf on 3/13/2016.
+ * @author Tim
  */
 public class WorldSaveHandler {
 
     public static WorldSaveHandler instance = new WorldSaveHandler();
 
-    public NBTTagCompound writeTagForWorld (World world) {
+    public NBTTagCompound writeTagForWorld(World world) {
         NBTTagCompound worldTag = new NBTTagCompound();
         worldTag.writeInt(NBTTags.WORLD_TYPE, world.getWorldTypeOrdinal());
         for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
@@ -32,9 +30,7 @@ public class WorldSaveHandler {
         return worldTag;
     }
 
-    public void writeTagForChunk (NBTTagCompound worldTag, World world, int chunkPosX, int chunkPosZ) {
-        System.out.println("Started writing chunk to Tag: " + chunkPosX + ", " + chunkPosZ);
-        Stopwatch stopwatch = Stopwatch.createStarted();
+    public void writeTagForChunk(NBTTagCompound worldTag, World world, int chunkPosX, int chunkPosZ) {
         NBTTagCompound chunkTag = new NBTTagCompound();
         Chunk chunk = world.getCoreData().getChunkAtPos(chunkPosX, chunkPosZ);
         for (int x = 0; x < Chunk.chunkSize; x++) {
@@ -43,10 +39,9 @@ public class WorldSaveHandler {
             }
         }
         worldTag.writeCompoundTag(NBTTags.CHUNK + "_" + chunkPosX + "_" + chunkPosZ, chunkTag.toCompoundTag(NBTTags.CHUNK));
-        TransportManager.serverLogger.debug("   ==> Finished converting in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
     }
 
-    public void writeTagForTile (NBTTagCompound chunkTag, Chunk chunk, int tileChunkPosX, int tileChunkPosZ) {
+    public void writeTagForTile(NBTTagCompound chunkTag, Chunk chunk, int tileChunkPosX, int tileChunkPosZ) {
         NBTTagCompound tileTag = new NBTTagCompound();
         tileTag.writeInt(NBTTags.TILE_CHUNK_POS_X, tileChunkPosX);
         tileTag.writeInt(NBTTags.TILE_CHUNK_POS_Z, tileChunkPosZ);
@@ -62,7 +57,7 @@ public class WorldSaveHandler {
         chunkTag.writeCompoundTag(NBTTags.TILE + "_" + tileChunkPosX + "_" + tileChunkPosZ, tileTag.toCompoundTag(NBTTags.TILE));
     }
 
-    public void writeTagForTileEntity (NBTTagCompound tileTag, Chunk chunk, int tileChunkPosX, int tileChunkPosZ) {
+    public void writeTagForTileEntity(NBTTagCompound tileTag, Chunk chunk, int tileChunkPosX, int tileChunkPosZ) {
         NBTTagCompound tileEntityTag = new NBTTagCompound();
         TileEntity tileEntity = chunk.getTileEntityAtPos(tileChunkPosX, tileChunkPosZ);
         if (tileEntity == null) {
@@ -81,7 +76,7 @@ public class WorldSaveHandler {
         }
     }
 
-    public void loadWorldFromTag (World world, NBTTagCompound worldTag) {
+    public void loadWorldFromTag(World world, NBTTagCompound worldTag) {
         world.setType(World.WorldType.values()[worldTag.getInt(NBTTags.WORLD_TYPE)]);
         for (int x = 0; x < world.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < world.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
@@ -91,7 +86,7 @@ public class WorldSaveHandler {
         }
     }
 
-    public void loadChunkForTagIntoWorld (NBTTagCompound chunkTag, World world, int chunkPosX, int chunkPosZ) {
+    public void loadChunkForTagIntoWorld(NBTTagCompound chunkTag, World world, int chunkPosX, int chunkPosZ) {
         Chunk chunk = world.getCoreData().getChunkAtPos(chunkPosX, chunkPosZ);
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
@@ -101,7 +96,7 @@ public class WorldSaveHandler {
         }
     }
 
-    public void loadTileForTagIntoChunk (NBTTagCompound tileTag, Chunk chunk, int x, int z) {
+    public void loadTileForTagIntoChunk(NBTTagCompound tileTag, Chunk chunk, int x, int z) {
         int tileChunkPosX = tileTag.getInt(NBTTags.TILE_CHUNK_POS_X);
         int tileChunkPosZ = tileTag.getInt(NBTTags.TILE_CHUNK_POS_Z);
         Tile tile = TileRegistry.instance.getTileForIdentity(tileTag.getString(NBTTags.TILE_IDENTITY));
@@ -116,14 +111,13 @@ public class WorldSaveHandler {
         }
     }
 
-    public void loadTileEntityForTagIntoChunk (Chunk chunk, NBTTagCompound tileEntityTag, int tileChunkPosX, int tileChunkPosZ) {
+    public void loadTileEntityForTagIntoChunk(Chunk chunk, NBTTagCompound tileEntityTag, int tileChunkPosX, int tileChunkPosZ) {
         TileEntity tileEntity = TileEntityRegistry.instance.getTileEntityForIdentity(tileEntityTag.getString(NBTTags.TILE_ENTITY_IDENTITY));
         if (tileEntity == null) {
             chunk.setTileEntityAtPos(null, tileChunkPosX, tileChunkPosZ);
         } else {
             if (tileEntityTag.getInt(NBTTags.TILE_ENTITY_ERRORED) == 1) {
                 TransportManager.serverLogger.error("Loading errored TE on pos: " + +tileChunkPosX + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ());
-                // System.err.println("Loading errored TE on pos: " + +tileChunkPosX + "-" + tileChunkPosY + "-" + tileChunkPosZ + " for Chunk: " + chunk.getChunkX() + "-" + chunk.getChunkZ());
                 chunk.setTileEntityAtPos(null, tileChunkPosX, tileChunkPosZ);
                 return;
             }
@@ -132,12 +126,12 @@ public class WorldSaveHandler {
         }
     }
 
-    public void setChunkInWorld (World world, Chunk chunk) {
+    public void setChunkInWorld(World world, Chunk chunk) {
         chunk.setWorld(world);
         world.getCoreData().setChunk(chunk);
     }
 
-    public void setChunkInWorldClient (WorldClient world, ChunkClient chunk) {
+    public void setChunkInWorldClient(WorldClient world, ChunkClient chunk) {
         chunk.setWorld(world);
         world.getCoreData().setChunk(chunk);
     }

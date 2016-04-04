@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.main.world.tileentities;
+package com.smithsgaming.transportmanager.main.tileentity;
 
 import com.smithsgaming.transportmanager.main.world.*;
 

@@ -1,7 +1,7 @@
 package com.smithsgaming.transportmanager.main.world.chunk;
 
 import com.smithsgaming.transportmanager.main.world.*;
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
+import com.smithsgaming.transportmanager.main.tileentity.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
 import java.io.*;

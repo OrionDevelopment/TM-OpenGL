@@ -4,7 +4,7 @@ import com.hoten.delaunay.voronoi.nodename.as3delaunay.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
+import com.smithsgaming.transportmanager.main.tileentity.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
 import java.awt.image.*;

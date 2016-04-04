@@ -3,7 +3,6 @@ package com.smithsgaming.transportmanager.client.world.chunk;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.tileentities.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import org.lwjgl.util.vector.*;
 

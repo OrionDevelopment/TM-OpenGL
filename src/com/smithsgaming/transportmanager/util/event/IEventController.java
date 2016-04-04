@@ -5,14 +5,11 @@ import java.util.*;
 /**
  * @Author Marc (Created on: 15.03.2016)
  */
-public interface IEventController
-{
+public interface IEventController {
     Queue<TMEvent> getEventQueue();
 
-    default void registerEvent (TMEvent event)
-    {
-        synchronized (getEventQueue())
-        {
+    default void registerEvent(TMEvent event) {
+        synchronized (getEventQueue()) {
             getEventQueue().add(event);
         }
     }

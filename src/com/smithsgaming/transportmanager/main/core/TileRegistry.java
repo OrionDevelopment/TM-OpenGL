@@ -16,14 +16,14 @@ public class TileRegistry {
 
     private HashMap<String, Tile> tileHashMap = new HashMap<>();
 
-    protected TileRegistry () {
+    protected TileRegistry() {
         tileHashMap.put(NULL_TILE_IDENTITY, null);
     }
 
     /**
      * Method to initialize the TileRegistry.
      */
-    public static void init () {
+    public static void init() {
         instance.registerTile(new NonBuildableTile(TileNames.OCEAN));
         instance.registerTile(new BuildableTile(TileNames.GRASS));
         instance.registerTile(new BuildableTile(TileNames.DRY_GRASS));
@@ -37,16 +37,16 @@ public class TileRegistry {
         instance.registerTile(new BuildableTile(TileNames.ICE_BUSH_BROWN));
         instance.registerTile(new NonBuildableTile(TileNames.LAKE));
         instance.registerTile(new BuildableTile(TileNames.SCORCHED));
+        instance.registerTile(new BuildingTile(TileNames.BUILDING));
     }
 
     /**
      * Method to get a Tile for a given Identity name;
      *
      * @param identity The identity you are trying to get a lookup for.
-     *
      * @return The tile registered with the TileRegistry or null if nothing is registered with that name.
      */
-    public Tile getTileForIdentity (String identity) {
+    public Tile getTileForIdentity(String identity) {
         return tileHashMap.get(identity);
     }
 
@@ -55,8 +55,19 @@ public class TileRegistry {
      *
      * @param tile The tile to register.
      */
-    public void registerTile (Tile tile) {
+    public void registerTile(Tile tile) {
         tileHashMap.put(tile.getIdentity(), tile);
+    }
+
+    public String getIdentityForTile(Tile tile) {
+        if (tileHashMap.containsValue(tile)) {
+            for (Map.Entry<String, Tile> e : tileHashMap.entrySet()) {
+                if (e.getValue() == tile) {
+                    return e.getKey();
+                }
+            }
+        }
+        return NULL_TILE_IDENTITY;
     }
 
     /**
@@ -77,9 +88,8 @@ public class TileRegistry {
         public static final String ICE_BUSH_BROWN = "tile.buildable.IceBushBrown";
         public static final String ICE_BUSH_YELLOW = "tile.buildable.IceBushYellow";
         public static final String SCORCHED = "tile.buildable.Scorched";
+        public static final String BUILDING = "tile.nonbuildable.Building";
     }
-
-
 }
 
 
