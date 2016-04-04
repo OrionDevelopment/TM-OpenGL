@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.client.gui.components;
+package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
@@ -6,19 +6,19 @@ import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public abstract class GuiComponentAbstract implements IRenderer {
+public abstract class GuiComponent implements IRenderer {
 
-    protected GuiComponentAbstract parent;
+    protected GuiComponent parent;
 
-    public GuiComponentAbstract () {
+    public GuiComponent() {
         this.parent = this;
     }
 
-    public GuiComponentAbstract (GuiComponentAbstract parent) {
+    public GuiComponent(GuiComponent parent) {
         this.parent = parent;
     }
 
-    public GuiComponentAbstract getParent () {
+    public GuiComponent getParent () {
         return parent;
     }
 

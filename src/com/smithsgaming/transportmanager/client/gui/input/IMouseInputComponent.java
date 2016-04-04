@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.client.gui.components.inputhandling;
+package com.smithsgaming.transportmanager.client.gui.input;
 
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 

@@ -1,6 +1,5 @@
 package com.smithsgaming.transportmanager.client.gui;
 
-import com.smithsgaming.transportmanager.client.gui.components.GuiComponentAbstract;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
 
 import java.util.ArrayList;
@@ -8,34 +7,34 @@ import java.util.ArrayList;
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public abstract class GuiAbstract extends GuiComponentAbstract implements IRenderer {
+public abstract class GuiScreen extends GuiComponent implements IRenderer {
 
-    ArrayList<GuiComponentAbstract> components = new ArrayList<>();
+    ArrayList<GuiComponent> components = new ArrayList<>();
 
     protected abstract void loadGui ();
 
-    protected void registerComponent (GuiComponentAbstract component) {
+    protected void registerComponent (GuiComponent component) {
         components.add(component);
     }
 
     @Override
     public void loadTextures () {
-        components.forEach(GuiComponentAbstract::loadTextures);
+        components.forEach(GuiComponent::loadTextures);
     }
 
     @Override
     public void unLoadTextures () {
-        components.forEach(GuiComponentAbstract::unLoadTextures);
+        components.forEach(GuiComponent::unLoadTextures);
     }
 
     @Override
     public void loadGeometry () {
-        components.forEach(GuiComponentAbstract::loadGeometry);
+        components.forEach(GuiComponent::loadGeometry);
     }
 
     @Override
     public void unLoadGeometry () {
-        components.forEach(GuiComponentAbstract::unLoadGeometry);
+        components.forEach(GuiComponent::unLoadGeometry);
     }
 
     /**
@@ -43,10 +42,10 @@ public abstract class GuiAbstract extends GuiComponentAbstract implements IRende
      */
     @Override
     public void render () {
-        components.forEach(GuiComponentAbstract::render);
+        components.forEach(GuiComponent::render);
     }
 
-    public ArrayList<GuiComponentAbstract> getComponents() {
+    public ArrayList<GuiComponent> getComponents() {
         return components;
     }
 }

@@ -10,9 +10,9 @@ import com.smithsgaming.transportmanager.util.event.*;
  */
 public class EventClientGuiOpen extends TMEvent {
 
-    GuiAbstract guiToOpen;
+    GuiScreen guiToOpen;
 
-    public EventClientGuiOpen (GuiAbstract guiToOpen) {
+    public EventClientGuiOpen (GuiScreen guiToOpen) {
         this.guiToOpen = guiToOpen;
     }
 

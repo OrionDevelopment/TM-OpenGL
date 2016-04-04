@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.graphics.TrueTypeFont;
+import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.lwjgl.util.Color;
@@ -11,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @Author Marc (Created on: 27.03.2016)
  */
-public class GuiComponentText extends GuiComponentAbstract {
+public class GuiText extends GuiComponent {
 
     private TrueTypeFont font;
     private String text;
@@ -20,7 +21,7 @@ public class GuiComponentText extends GuiComponentAbstract {
     private GuiPlaneI area;
     private Vector2i coreRenderingOffset = new Vector2i(0, 0);
 
-    public GuiComponentText(GuiComponentAbstract parent, TrueTypeFont font, String text, Vector2i location, boolean center, Color color) {
+    public GuiText(GuiComponent parent, TrueTypeFont font, String text, Vector2i location, boolean center, Color color) {
         super(parent);
         this.font = font;
         this.text = text;

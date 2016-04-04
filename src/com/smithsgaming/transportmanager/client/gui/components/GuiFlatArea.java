@@ -1,33 +1,27 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.ResourceUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 import org.lwjgl.util.vector.Vector3f;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-
 /**
- * @Author Marc (Created on: 25.03.2016)
+ * @Author Marc (Created on: 27.03.2016)
  */
-public class GuiComponentImage extends GuiComponentAbstract {
-
-    private GuiPlaneI area;
-    private String resourcePath;
-    private Texture textureToRender;
+public class GuiFlatArea extends GuiComponent {
+    GuiPlaneI area;
+    Color color;
     private GeometryRegistry.Geometry geometryToRender;
 
-    public GuiComponentImage(GuiComponentAbstract parent, String resourcePath, GuiPlaneI area) {
+    public GuiFlatArea(GuiComponent parent, GuiPlaneI area, Color color) {
         super(parent);
-        this.resourcePath = resourcePath;
-        this.area = area;
-
         this.geometryToRender = GeometryRegistry.getDefaultQuadGeometry();
+        this.area = area;
+        this.color = color;
     }
 
     @Override
@@ -37,8 +31,6 @@ public class GuiComponentImage extends GuiComponentAbstract {
 
     @Override
     public void loadTextures () {
-        textureToRender = ResourceUtil.loadPNGTexture(resourcePath);
-        OpenGLUtil.loadTextureIntoGPU(textureToRender);
     }
 
     @Override
@@ -47,12 +39,10 @@ public class GuiComponentImage extends GuiComponentAbstract {
 
     @Override
     public void unLoadTextures () {
-        OpenGLUtil.destroyTexture(textureToRender);
     }
 
     @Override
     public void unLoadGeometry () {
-
     }
 
     /**
@@ -60,17 +50,15 @@ public class GuiComponentImage extends GuiComponentAbstract {
      */
     @Override
     public void render () {
+        Camera.Gui.setActiveColor(color);
+
         Camera.Gui.pushMatrix();
         Camera.Gui.translateModel(new Vector3f(area.getCenterCoord().x, area.getCenterCoord().y, 0f));
         Camera.Gui.scaleModel(new Vector3f(area.getWidth(), area.getHeight(), 1f));
         Camera.Gui.pushMatrix();
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGLUtil.drawGeometryWithShader(Camera.Gui, geometryToRender, ShaderRegistry.Shaders.guiColored);
 
-        OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Gui, geometryToRender, textureToRender, ShaderRegistry.Shaders.guiTextured);
-
-        GL11.glDisable(GL_BLEND);
         Camera.Gui.popMatrix();
         Camera.Gui.popMatrix();
     }

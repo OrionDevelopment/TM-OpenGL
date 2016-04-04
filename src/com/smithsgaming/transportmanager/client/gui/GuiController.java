@@ -1,8 +1,7 @@
 package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.gui.components.GuiComponentAbstract;
-import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IMouseInputComponent;
+import com.smithsgaming.transportmanager.client.gui.input.IMouseInputComponent;
 import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
@@ -20,7 +19,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
     private static ArrayList<Integer> mousebuttons = new ArrayList<>();
     private static ArrayList<Integer> mouseactions = new ArrayList<>();
 
-    Stack<GuiAbstract> openedGuiStack = new Stack<>();
+    Stack<GuiScreen> openedGuiStack = new Stack<>();
 
     private GuiController() {
         if (mousebuttons == null) {
@@ -47,11 +46,11 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
         if (openedGuiStack.size() == 0)
             return;
 
-        GuiAbstract guiOpen = openedGuiStack.peek();
+        GuiScreen guiOpen = openedGuiStack.peek();
         guiOpen.render();
     }
 
-    public void openGui (GuiAbstract gui) {
+    public void openGui (GuiScreen gui) {
         openedGuiStack.push(gui);
 
         gui.loadGui();
@@ -63,7 +62,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
         if (openedGuiStack.size() == 0)
             throw new IllegalStateException("No gui open!");
 
-        GuiAbstract guiToBeClosed = openedGuiStack.pop();
+        GuiScreen guiToBeClosed = openedGuiStack.pop();
         guiToBeClosed.unLoadGeometry();
         guiToBeClosed.unLoadTextures();
     }
@@ -88,7 +87,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
 
         ActionProcessingResult result = ActionProcessingResult.NEUTRAL;
 
-        for (GuiComponentAbstract componentAbstract : openedGuiStack.peek().getComponents()) {
+        for (GuiComponent componentAbstract : openedGuiStack.peek().getComponents()) {
             if (componentAbstract instanceof IMouseInputComponent && componentAbstract.getOccupiedArea().isMouseInPlane()) {
                 IMouseInputComponent mouseInputComponent = (IMouseInputComponent) componentAbstract;
                 if (mouseInputComponent.componentCanHandleMouseInput()) {

@@ -1,8 +1,9 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
-import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IInputSAM;
-import com.smithsgaming.transportmanager.client.gui.components.inputhandling.IMouseInputComponent;
+import com.smithsgaming.transportmanager.client.gui.GuiComponent;
+import com.smithsgaming.transportmanager.client.gui.input.IButtonListener;
+import com.smithsgaming.transportmanager.client.gui.input.IMouseInputComponent;
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
@@ -13,28 +14,30 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * @Author Marc (Created on: 31.03.2016)
  */
-public class GuiComponentButton extends GuiComponentAbstract implements IMouseInputComponent {
+public class GuiButton extends GuiComponent implements IMouseInputComponent {
 
-    private GuiComponentAbstract componentOuterBackground;
-    private GuiComponentAbstract componentInnerBackground;
-    private GuiComponentAbstract componentInnerBackgroundHovered;
-    private GuiComponentAbstract componentContent;
+    private GuiComponent componentOuterBackground;
+    private GuiComponent componentInnerBackground;
+    private GuiComponent componentInnerBackgroundHovered;
+    private GuiComponent componentContent;
 
     private GuiPlaneI area;
     private boolean centerAlign;
     private Vector2i contentLocation;
 
-    private IInputSAM inputHandler;
+    private int id;
+    private IButtonListener inputHandler;
 
-    public GuiComponentButton(GuiComponentAbstract parent, GuiComponentAbstract componentContent, GuiPlaneI area, boolean centerAlign, IInputSAM sam) {
+    public GuiButton(int id, GuiComponent parent, GuiComponent componentContent, GuiPlaneI area, boolean centerAlign, IButtonListener sam) {
         super(parent);
+        this.id = id;
         this.componentContent = componentContent;
         this.area = area;
         this.centerAlign = centerAlign;
 
-        this.componentOuterBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
-        this.componentInnerBackground = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(65, 65, 65));
-        this.componentInnerBackgroundHovered = new GuiComponentFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(75, 75, 75));
+        this.componentOuterBackground = new GuiFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
+        this.componentInnerBackground = new GuiFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(65, 65, 65));
+        this.componentInnerBackgroundHovered = new GuiFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(75, 75, 75));
 
         if (!this.centerAlign) {
             contentLocation = new Vector2i(20, 20);
@@ -111,10 +114,9 @@ public class GuiComponentButton extends GuiComponentAbstract implements IMouseIn
     @Override
     public ActionProcessingResult handleKeyAction(int key, int action) {
         if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-            inputHandler.invoke();
+            inputHandler.buttonPressed(id, this);
             return ActionProcessingResult.ACCEPTED;
         }
-
         return ActionProcessingResult.NEUTRAL;
     }
 }
