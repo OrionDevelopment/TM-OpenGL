@@ -61,7 +61,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         MouseInputHandler.instance.registerScrollInputHandler(inputHandler);
         KeyboardInputHandler.instance.registerKeyInputHandler(inputHandler);
 
-        clientLogger.info("Client thread loaded, waiting for server...");
+        clientLogger.info("Client thread loaded!");
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
 
         long lastTime = System.nanoTime();

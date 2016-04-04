@@ -26,7 +26,7 @@ public class TransportManager implements Runnable, IEventController {
 
     public static boolean isRunning = true;
     static Thread serverNetworkThread;
-    static int targetUPS = 60;
+    public static final int targetUPS = 60;
 
     private Queue<TMEvent> eventQueue = new ArrayDeque<>();
 
@@ -39,7 +39,7 @@ public class TransportManager implements Runnable, IEventController {
         WorldManager.instance.generateWorld();
 
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));
-        //serverNetworkThread.run();
+        serverNetworkThread.run();
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
