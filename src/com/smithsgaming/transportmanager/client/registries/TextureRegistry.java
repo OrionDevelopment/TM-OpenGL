@@ -1,20 +1,14 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.graphics.Display;
-import com.smithsgaming.transportmanager.client.graphics.TextureStitcher;
-import com.smithsgaming.transportmanager.client.graphics.TrueTypeFont;
-import com.smithsgaming.transportmanager.client.render.textures.StandardTileTexture;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import com.smithsgaming.transportmanager.main.world.tiles.Tile;
-import com.smithsgaming.transportmanager.main.world.tiles.TileNames;
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.ResourceUtil;
+import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.main.world.tiles.*;
+import com.smithsgaming.transportmanager.util.*;
 
 import java.awt.*;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Collectors;
+import java.nio.*;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -95,10 +89,13 @@ public class TextureRegistry {
             Tiles.beach = StandardTileTexture.loadTexture(TileNames.BEACH, "/textures/tiles/world/beach.png");
             Tiles.desert = StandardTileTexture.loadTexture(TileNames.DESERT, "/textures/tiles/world/desert.png");
             Tiles.river = StandardTileTexture.loadTexture(TileNames.RIVER, "/textures/tiles/world/shallowWater_0.png");
+            Tiles.lake = StandardTileTexture.loadTexture(TileNames.LAKE, "/textures/tiles/world/shallowWater_0.png");
             Tiles.snow = StandardTileTexture.loadTexture(TileNames.SNOW, "/textures/tiles/world/snow.png");
             Tiles.stoneOverground = StandardTileTexture.loadTexture(TileNames.STONE_OVERGROUND, "/textures/tiles/world/stoneOverground.png");
             Tiles.stoneUnderground = StandardTileTexture.loadTexture(TileNames.STONE_UNDERGROUND, "/textures/tiles/world/stoneUnderground.png");
             Tiles.ice = StandardTileTexture.loadTexture(TileNames.ICE, "/textures/tiles/world/ice_0.png");
+            Tiles.ice_bush_brown = StandardTileTexture.loadTexture(TileNames.ICE_BUSH_BROWN, "/textures/tiles/world/ice_1.png");
+            Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
         }
 
         public static class SkyBox {
@@ -116,6 +113,9 @@ public class TextureRegistry {
             public static Texture stoneOverground;
             public static Texture stoneUnderground;
             public static Texture ice;
+            public static Texture ice_bush_brown;
+            public static Texture scorched;
+            public static Texture lake;
         }
     }
 

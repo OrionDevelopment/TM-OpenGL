@@ -1,17 +1,14 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
-import com.smithsgaming.transportmanager.util.GraphicUtil;
-import com.smithsgaming.transportmanager.util.MathUtil;
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
+import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.util.*;
+import org.lwjgl.*;
+import org.lwjgl.util.*;
+import org.lwjgl.util.vector.*;
 
-import java.nio.FloatBuffer;
-import java.util.Stack;
+import java.nio.*;
+import java.util.*;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -19,6 +16,7 @@ import java.util.Stack;
 public class Camera {
 
     public static final Camera Gui = new Camera();
+    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -99f, 0));
     private Stack<Matrix4f> modelMatrixStack = new Stack<>();
     private Matrix4f renderingModelMatrix = new Matrix4f();
     private Matrix4f currentActingMatrix = new Matrix4f();
@@ -34,7 +32,6 @@ public class Camera {
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
     private Frustum activeFrustum;
-    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -25f, 0f));
 
     public Camera () {
         this.activeFrustum = new Frustum(this);
@@ -191,6 +188,8 @@ public class Camera {
         viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
+
+        System.out.println(cameraPosition.x + "-" + cameraPosition.getZ());
 
         return this;
     }

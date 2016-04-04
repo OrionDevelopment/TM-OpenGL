@@ -22,4 +22,18 @@ public abstract class Tile implements Serializable {
     }
 
     public abstract boolean canBeOverridenBy(World world, int tileWorldPosX, int tileWorldPosZ, Tile newTile);
+
+    public boolean shouldUseDefaultRenderer () {
+        return true;
+    }
+
+    @Override
+    public boolean equals (Object obj) {
+        if (obj instanceof Tile) {
+            Tile tile = (Tile) obj;
+            return tile.getIdentity().equals(getIdentity());
+        }
+
+        return false;
+    }
 }

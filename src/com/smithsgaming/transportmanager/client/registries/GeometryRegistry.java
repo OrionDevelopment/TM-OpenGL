@@ -125,6 +125,10 @@ public class GeometryRegistry {
             this.vertices = vertices;
         }
 
+        public TexturedVertex[] getVertices () {
+            return vertices;
+        }
+
         public FloatBuffer getBufferData () {
             FloatBuffer data = BufferUtils.createFloatBuffer(TexturedVertex.stride * vertices.length);
             for (TexturedVertex vertex : vertices) {
@@ -206,11 +210,20 @@ public class GeometryRegistry {
             super(GeometryType.QUAD, texturedVertices);
         }
 
-        public static Geometry constructFromPlaneForTexture (GuiPlaneI geometryPlane, GuiPlaneI texturePlane) {
+        public static Geometry constructFromPlaneForTexture (GuiPlaneI geometryPlane, GuiPlaneF texturePlane) {
             final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopLeftCoordinate().x, texturePlane.getTopLeftCoordinate().y).setXYZ(geometryPlane.getTopLeftCoordinate().x, geometryPlane.getTopLeftCoordinate().y, 0);
             final TexturedVertex topRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopRightCoordinate().x, texturePlane.getTopRightCoordinate().y).setXYZ(geometryPlane.getTopRightCoordinate().x, geometryPlane.getTopRightCoordinate().y, 0);
             final TexturedVertex bottomRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerRightCoordinate().x, texturePlane.getLowerRightCoordinate().y).setXYZ(geometryPlane.getLowerRightCoordinate().x, geometryPlane.getLowerRightCoordinate().y, 0);
             final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerLeftCoordinate().x, texturePlane.getLowerLeftCoordinate().y).setXYZ(geometryPlane.getLowerLeftCoordinate().x, geometryPlane.getLowerLeftCoordinate().y, 0);
+
+            return new QuadGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
+        }
+
+        public static Geometry constructFromPlaneForTextureOnZ (GuiPlaneI geometryPlane, GuiPlaneF texturePlane) {
+            final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopLeftCoordinate().x, texturePlane.getTopLeftCoordinate().y).setXYZ(geometryPlane.getTopLeftCoordinate().x, 0, geometryPlane.getTopLeftCoordinate().y);
+            final TexturedVertex topRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopRightCoordinate().x, texturePlane.getTopRightCoordinate().y).setXYZ(geometryPlane.getTopRightCoordinate().x, 0, geometryPlane.getTopRightCoordinate().y);
+            final TexturedVertex bottomRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerRightCoordinate().x, texturePlane.getLowerRightCoordinate().y).setXYZ(geometryPlane.getLowerRightCoordinate().x, 0, geometryPlane.getLowerRightCoordinate().y);
+            final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerLeftCoordinate().x, texturePlane.getLowerLeftCoordinate().y).setXYZ(geometryPlane.getLowerLeftCoordinate().x, 0, geometryPlane.getLowerLeftCoordinate().y);
 
             return new QuadGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
         }

@@ -69,6 +69,10 @@ public class TileRegistry {
         }
         return NULL_TILE_IDENTITY;
     }
+
+    public Collection<Tile> getTiles () {
+        return tileHashMap.values();
+    }
 }
 
 

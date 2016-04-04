@@ -34,14 +34,17 @@ public class AABox {
             x = -x;
             this.corner.x -= x;
         }
+
         if (y < 0.0) {
             y = -y;
             this.corner.y -= y;
         }
+
         if (z < 0.0) {
             z = -z;
             this.corner.z -= z;
         }
+
         this.x = x;
         this.y = y;
         this.z = z;
@@ -52,7 +55,7 @@ public class AABox {
 
     Vector3f getVertexP (Vector3f normal) {
 
-        Vector3f res = corner;
+        Vector3f res = new Vector3f(corner);
 
         if (normal.x > 0)
             res.x += x;
@@ -69,7 +72,7 @@ public class AABox {
 
     Vector3f getVertexN (Vector3f normal) {
 
-        Vector3f res = corner;
+        Vector3f res = new Vector3f(corner);
 
         if (normal.x < 0)
             res.x += x;

@@ -1,9 +1,7 @@
 package com.smithsgaming.transportmanager.main.world.tiles;
 
-import com.smithsgaming.transportmanager.main.tileentity.ITileEntityProvider;
-import com.smithsgaming.transportmanager.main.tileentity.TileEntity;
-import com.smithsgaming.transportmanager.main.tileentity.TileEntityBuilding;
-import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.main.tileentity.*;
+import com.smithsgaming.transportmanager.main.world.*;
 
 /**
  * Created by Tim on 04/04/2016.
@@ -19,5 +17,10 @@ public class BuildingTile extends NonBuildableTile implements ITileEntityProvide
         TileEntityBuilding te = new TileEntityBuilding();
         te.setWorld(world);
         return te;
+    }
+
+    @Override
+    public boolean shouldUseDefaultRenderer () {
+        return false;
     }
 }

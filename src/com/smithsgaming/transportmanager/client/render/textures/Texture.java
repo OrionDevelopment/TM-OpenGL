@@ -1,8 +1,10 @@
 package com.smithsgaming.transportmanager.client.render.textures;
 
-import org.lwjgl.opengl.GL11;
+import com.smithsgaming.transportmanager.util.math.graphical.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.*;
 
-import java.nio.ByteBuffer;
+import java.nio.*;
 
 /**
  * Created by Tim on 01/04/2016.
@@ -88,6 +90,10 @@ public class Texture {
 
     public void setU(float u) {
         this.u = u;
+    }
+
+    public GuiPlaneF getArea () {
+        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() - this.getHeight()));
     }
 
     public int getTextureStitchId() {
