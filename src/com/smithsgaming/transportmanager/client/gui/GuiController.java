@@ -42,7 +42,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
      * Method called by the RenderManager to process the rendering for this renderer.
      */
     @Override
-    public void render () {
+    public void render() {
         if (openedGuiStack.size() == 0)
             return;
 
@@ -50,7 +50,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
         guiOpen.render();
     }
 
-    public void openGui (GuiScreen gui) {
+    public void openGui(GuiScreen gui) {
         openedGuiStack.push(gui);
 
         gui.loadGui();
@@ -58,7 +58,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
         gui.loadTextures();
     }
 
-    public void closeGui () {
+    public void closeGui() {
         if (openedGuiStack.size() == 0)
             throw new IllegalStateException("No gui open!");
 
@@ -67,7 +67,7 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
         guiToBeClosed.unLoadTextures();
     }
 
-    public boolean isGuiOpen () {
+    public boolean isGuiOpen() {
         return openedGuiStack.size() != 0;
     }
 
@@ -87,18 +87,19 @@ public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHa
 
         ActionProcessingResult result = ActionProcessingResult.NEUTRAL;
 
-        for (GuiComponent componentAbstract : openedGuiStack.peek().getComponents()) {
-            if (componentAbstract instanceof IMouseInputComponent && componentAbstract.getOccupiedArea().isMouseInPlane()) {
-                IMouseInputComponent mouseInputComponent = (IMouseInputComponent) componentAbstract;
-                if (mouseInputComponent.componentCanHandleMouseInput()) {
-                    result = mouseInputComponent.handleKeyAction(key, action);
-                    if (result != ActionProcessingResult.NEUTRAL) {
-                        return result;
+        if (!openedGuiStack.isEmpty()) {
+            for (GuiComponent componentAbstract : openedGuiStack.peek().getComponents()) {
+                if (componentAbstract instanceof IMouseInputComponent && componentAbstract.getOccupiedArea().isMouseInPlane()) {
+                    IMouseInputComponent mouseInputComponent = (IMouseInputComponent) componentAbstract;
+                    if (mouseInputComponent.componentCanHandleMouseInput()) {
+                        result = mouseInputComponent.handleKeyAction(key, action);
+                        if (result != ActionProcessingResult.NEUTRAL) {
+                            return result;
+                        }
                     }
                 }
             }
         }
-
         return result;
     }
 }
