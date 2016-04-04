@@ -40,7 +40,7 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry {
     }
 
     private TexturedVertex[][] collectVerticesOrdered() {
-
+        return null;
     }
 
     @Override
