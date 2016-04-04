@@ -2,20 +2,18 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.graphics.Camera;
-import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
-import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import org.lwjgl.BufferUtils;
+import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.*;
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.*;
 
-import java.io.FileNotFoundException;
-import java.nio.FloatBuffer;
+import java.io.*;
+import java.nio.*;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glTexSubImage2D;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
@@ -264,7 +262,7 @@ public class OpenGLUtil {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getType().getVertexCount(), GL11.GL_UNSIGNED_BYTE, 0);
+        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getType().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);

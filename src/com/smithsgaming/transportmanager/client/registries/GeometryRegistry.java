@@ -1,15 +1,13 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.TexturedVertex;
-import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Color;
+import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.graphical.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.*;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.HashMap;
+import java.nio.*;
+import java.util.*;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -69,15 +67,15 @@ public class GeometryRegistry {
     }
 
     public enum GeometryType {
-        TRIANGLE(3, GL11.GL_TRIANGLES, -1, (byte) 0, (byte) 1, (byte) 2),
-        QUAD(4, GL11.GL_TRIANGLE_STRIP, -1, (byte) 0, (byte) 1, (byte) 2, (byte) 3);
+        TRIANGLE(3, GL11.GL_TRIANGLES, -1, 0, 1, 2),
+        QUAD(4, GL11.GL_TRIANGLE_STRIP, -1, 0, 1, 2, 3);
 
         private int vertexCount;
-        private byte[] vertexOrder;
+        private int[] vertexOrder;
         private int openGLRenderType;
         private int resetIndex;
 
-        GeometryType(int vertexCount, int openGLRenderType, int resetIndex, byte... vertexOrder) {
+        GeometryType (int vertexCount, int openGLRenderType, int resetIndex, int... vertexOrder) {
             this.vertexCount = vertexCount;
             this.openGLRenderType = openGLRenderType;
             this.vertexOrder = vertexOrder;
@@ -88,7 +86,7 @@ public class GeometryRegistry {
             return openGLRenderType;
         }
 
-        public byte[] getVertexOrder () {
+        public int[] getVertexOrder () {
             return vertexOrder;
         }
 
@@ -105,8 +103,8 @@ public class GeometryRegistry {
             return resetIndex;
         }
 
-        public ByteBuffer getIndicesBuffer () {
-            ByteBuffer indicesBuffer = BufferUtils.createByteBuffer(vertexOrder.length);
+        public IntBuffer getIndicesBuffer () {
+            IntBuffer indicesBuffer = BufferUtils.createIntBuffer(vertexOrder.length);
             indicesBuffer.put(vertexOrder);
             indicesBuffer.flip();
 
@@ -179,7 +177,7 @@ public class GeometryRegistry {
             return getType().getResetIndex();
         }
 
-        public ByteBuffer getIndicesBuffer() {
+        public IntBuffer getIndicesBuffer () {
             return getType().getIndicesBuffer();
         }
     }

@@ -10,6 +10,8 @@ public class StandardTileTexture extends Texture {
 
     private StandardTileTexture (Texture source, String tileIdentity) {
         super(tileIdentity, source.getData(), source.getWidth(), source.getHeight());
+
+        setRequiringTextureStitching(false);
     }
 
     public static Texture loadTexture (String tileIdentity, String texturePath) {

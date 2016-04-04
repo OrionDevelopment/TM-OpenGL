@@ -1,10 +1,8 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
+import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.opengl.*;
 
 import java.awt.*;
 import java.nio.*;
@@ -17,6 +15,7 @@ import java.util.stream.*;
 public class TextureRegistry {
     public static final TextureRegistry instance = new TextureRegistry();
 
+    public HashMap<String, Texture> namedBufferedTextured = new HashMap<>();
     public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
     public HashMap<Integer, Texture> stitchedTextures = new HashMap<>();
 
@@ -34,8 +33,13 @@ public class TextureRegistry {
             OpenGLUtil.loadTextureIntoGPU(toLoad);
 
         bufferedTextures.put(toLoad.getOpenGLTextureId(), toLoad);
+        namedBufferedTextured.put(toLoad.getTextureName(), toLoad);
 
         return toLoad;
+    }
+
+    public Texture getTextureForName (String name) {
+        return namedBufferedTextured.get(name);
     }
 
     public Texture getTextureForOpenGLID (int id) {
@@ -68,6 +72,7 @@ public class TextureRegistry {
         bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);
 
         bufferedTextures.clear();
+        namedBufferedTextured.clear();
     }
 
     public static class Textures {
