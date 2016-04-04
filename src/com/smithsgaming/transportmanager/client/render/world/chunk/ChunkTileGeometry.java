@@ -87,6 +87,11 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
     }
 
     @Override
+    public int getVertexCount () {
+        return verticesIndecis.length;
+    }
+
+    @Override
     public void render () {
         OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, this, texture, ShaderRegistry.Shaders.textured);
     }

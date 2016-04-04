@@ -262,7 +262,7 @@ public class OpenGLUtil {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getType().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
