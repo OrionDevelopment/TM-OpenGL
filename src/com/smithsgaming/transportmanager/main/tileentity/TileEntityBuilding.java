@@ -3,6 +3,7 @@ package com.smithsgaming.transportmanager.main.tileentity;
 import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.main.world.structure.BuildingProperties;
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileNames;
 import com.smithsgaming.transportmanager.util.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class TileEntityBuilding extends TileEntity {
 
     @Override
     public Tile getTile() {
-        return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.BUILDING);
+        return TileRegistry.instance.getTileForIdentity(TileNames.BUILDING);
     }
 
     public void setProperties(BuildingProperties properties) {

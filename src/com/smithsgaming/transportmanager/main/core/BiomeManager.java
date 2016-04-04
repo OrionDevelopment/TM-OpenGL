@@ -22,7 +22,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.OCEAN);
+                return TileRegistry.instance.getTileForIdentity(TileNames.OCEAN);
             }
         });
 
@@ -34,7 +34,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.LAKE);
+                return TileRegistry.instance.getTileForIdentity(TileNames.LAKE);
             }
         });
 
@@ -46,7 +46,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.BEACH);
+                return TileRegistry.instance.getTileForIdentity(TileNames.BEACH);
             }
         });
 
@@ -58,7 +58,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.SNOW);
+                return TileRegistry.instance.getTileForIdentity(TileNames.SNOW);
             }
         });
 
@@ -72,9 +72,9 @@ public class BiomeManager {
             public Tile getTile () {
                 Random random = new Random();
                 if (random.nextInt(7) == 0) {
-                    return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE_BUSH_BROWN);
+                    return TileRegistry.instance.getTileForIdentity(TileNames.ICE_BUSH_BROWN);
                 }
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE);
+                return TileRegistry.instance.getTileForIdentity(TileNames.ICE);
             }
         });
 
@@ -86,7 +86,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.STONE_OVERGROUND);
+                return TileRegistry.instance.getTileForIdentity(TileNames.STONE_OVERGROUND);
             }
         });
 
@@ -98,7 +98,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.SCORCHED);
+                return TileRegistry.instance.getTileForIdentity(TileNames.SCORCHED);
             }
         });
 
@@ -113,11 +113,11 @@ public class BiomeManager {
                 Random random = new Random();
                 if (random.nextInt(5) == 0)
                     if (random.nextBoolean())
-                        return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE_BUSH_BROWN);
+                        return TileRegistry.instance.getTileForIdentity(TileNames.ICE_BUSH_BROWN);
                     else
-                        return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE_BUSH_YELLOW);
+                        return TileRegistry.instance.getTileForIdentity(TileNames.ICE_BUSH_YELLOW);
 
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE);
+                return TileRegistry.instance.getTileForIdentity(TileNames.ICE);
             }
         });
 
@@ -131,9 +131,9 @@ public class BiomeManager {
             public Tile getTile () {
                 Random random = new Random();
                 if (random.nextBoolean())
-                    return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.STONE_OVERGROUND);
+                    return TileRegistry.instance.getTileForIdentity(TileNames.STONE_OVERGROUND);
 
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.DRY_GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.DRY_GRASS);
             }
         });
 
@@ -145,7 +145,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.DESERT);
+                return TileRegistry.instance.getTileForIdentity(TileNames.DESERT);
             }
         });
 
@@ -157,7 +157,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -169,7 +169,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -181,7 +181,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -193,7 +193,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.DRY_GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.DRY_GRASS);
             }
         });
 
@@ -205,7 +205,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.ICE);
+                return TileRegistry.instance.getTileForIdentity(TileNames.ICE);
             }
         });
 
@@ -219,9 +219,9 @@ public class BiomeManager {
             public Tile getTile () {
                 Random random = new Random();
                 if (random.nextInt(10) == 0) {
-                    return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.LAKE);
+                    return TileRegistry.instance.getTileForIdentity(TileNames.LAKE);
                 }
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -233,7 +233,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -245,7 +245,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.GRASS);
+                return TileRegistry.instance.getTileForIdentity(TileNames.GRASS);
             }
         });
 
@@ -257,7 +257,7 @@ public class BiomeManager {
 
             @Override
             public Tile getTile () {
-                return TileRegistry.instance.getTileForIdentity(TileRegistry.TileNames.RIVER);
+                return TileRegistry.instance.getTileForIdentity(TileNames.RIVER);
             }
         });
 

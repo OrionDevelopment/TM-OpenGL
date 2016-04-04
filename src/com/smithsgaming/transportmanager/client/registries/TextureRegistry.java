@@ -1,13 +1,20 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.render.textures.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.graphics.Display;
+import com.smithsgaming.transportmanager.client.graphics.TextureStitcher;
+import com.smithsgaming.transportmanager.client.graphics.TrueTypeFont;
+import com.smithsgaming.transportmanager.client.render.textures.StandardTileTexture;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileNames;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.ResourceUtil;
 
 import java.awt.*;
-import java.nio.*;
-import java.util.*;
-import java.util.stream.*;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -19,16 +26,16 @@ public class TextureRegistry {
     public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
     public HashMap<Integer, Texture> stitchedTextures = new HashMap<>();
 
-    private TextureRegistry () {
+    private TextureRegistry() {
     }
 
-    public Texture loadTexture (String fileName) {
+    public Texture loadTexture(String fileName) {
         Texture texture = ResourceUtil.loadStitchablePNGTexture(fileName);
 
         return this.loadTexture(texture);
     }
 
-    public Texture loadTexture (Texture toLoad) {
+    public Texture loadTexture(Texture toLoad) {
         if (!toLoad.isRequiringTextureStitching())
             OpenGLUtil.loadTextureIntoGPU(toLoad);
 
@@ -38,15 +45,15 @@ public class TextureRegistry {
         return toLoad;
     }
 
-    public Texture getTextureForName (String name) {
+    public Texture getTextureForName(String name) {
         return namedBufferedTextured.get(name);
     }
 
-    public Texture getTextureForOpenGLID (int id) {
+    public Texture getTextureForOpenGLID(int id) {
         return bufferedTextures.get(id);
     }
 
-    public Texture initializeTextureStitching (int textureStitchingId) {
+    public Texture initializeTextureStitching(int textureStitchingId) {
         ArrayList<Texture> texturesToCombine = bufferedTextures.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));
 
         TextureStitcher stitcher = new TextureStitcher(Display.getMaxTextureSize(), Display.getMaxTextureSize(), true);
@@ -68,7 +75,7 @@ public class TextureRegistry {
         return null;
     }
 
-    public void unLoad () {
+    public void unLoad() {
         bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);
 
         bufferedTextures.clear();
@@ -76,22 +83,22 @@ public class TextureRegistry {
     }
 
     public static class Textures {
-        public static void init () {
+        public static void init() {
             SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/tiles/world/deepWater_0.png");
             SkyBox.skyBoxOcean.setRequiringTextureStitching(false);
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);
 
-            Tiles.deepWater = TextureRegistry.instance.loadTexture("/textures/tiles/world/deepWater_0.png");
-            Tiles.grass = TextureRegistry.instance.loadTexture("/textures/tiles/world/grass.png");
-            Tiles.dryGrass = TextureRegistry.instance.loadTexture("/textures/tiles/world/dryGrass.png");
-            Tiles.beach = TextureRegistry.instance.loadTexture("/textures/tiles/world/beach.png");
-            Tiles.desert = TextureRegistry.instance.loadTexture("/textures/tiles/world/desert.png");
-            Tiles.river = TextureRegistry.instance.loadTexture("/textures/tiles/world/shallowWater_0.png");
-            Tiles.snow = TextureRegistry.instance.loadTexture("/textures/tiles/world/snow.png");
-            Tiles.stoneOverground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneOverground.png");
-            Tiles.stoneUnderground = TextureRegistry.instance.loadTexture("/textures/tiles/world/stoneUnderground.png");
-            Tiles.ice = TextureRegistry.instance.loadTexture("/textures/tiles/world/ice_0.png");
+            Tiles.deepWater = StandardTileTexture.loadTexture(TileNames.OCEAN, "/textures/tiles/world/deepWater_0.png");
+            Tiles.grass = StandardTileTexture.loadTexture(TileNames.GRASS, "/textures/tiles/world/grass.png");
+            Tiles.dryGrass = StandardTileTexture.loadTexture(TileNames.DRY_GRASS, "/textures/tiles/world/dryGrass.png");
+            Tiles.beach = StandardTileTexture.loadTexture(TileNames.BEACH, "/textures/tiles/world/beach.png");
+            Tiles.desert = StandardTileTexture.loadTexture(TileNames.DESERT, "/textures/tiles/world/desert.png");
+            Tiles.river = StandardTileTexture.loadTexture(TileNames.RIVER, "/textures/tiles/world/shallowWater_0.png");
+            Tiles.snow = StandardTileTexture.loadTexture(TileNames.SNOW, "/textures/tiles/world/snow.png");
+            Tiles.stoneOverground = StandardTileTexture.loadTexture(TileNames.STONE_OVERGROUND, "/textures/tiles/world/stoneOverground.png");
+            Tiles.stoneUnderground = StandardTileTexture.loadTexture(TileNames.STONE_UNDERGROUND, "/textures/tiles/world/stoneUnderground.png");
+            Tiles.ice = StandardTileTexture.loadTexture(TileNames.ICE, "/textures/tiles/world/ice_0.png");
         }
 
         public static class SkyBox {
@@ -116,12 +123,12 @@ public class TextureRegistry {
         public static TrueTypeFont Courier;
         public static TrueTypeFont TimesNewRoman;
 
-        public static void init () {
+        public static void init() {
             Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), false);
             TimesNewRoman = new TrueTypeFont(new Font("Times New Roman", java.awt.Font.PLAIN, 25), true);
         }
 
-        public static void unLoad () {
+        public static void unLoad() {
             Courier.destroy();
             TimesNewRoman.destroy();
         }
