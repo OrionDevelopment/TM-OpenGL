@@ -69,17 +69,19 @@ public class GeometryRegistry {
     }
 
     public enum GeometryType {
-        TRIANGLE(3, GL11.GL_TRIANGLES, (byte) 0, (byte) 1, (byte) 2),
-        QUAD(4, GL11.GL_TRIANGLE_STRIP, (byte) 0, (byte) 1, (byte) 2, (byte) 3);
+        TRIANGLE(3, GL11.GL_TRIANGLES, -1, (byte) 0, (byte) 1, (byte) 2),
+        QUAD(4, GL11.GL_TRIANGLE_STRIP, -1, (byte) 0, (byte) 1, (byte) 2, (byte) 3);
 
         private int vertexCount;
         private byte[] vertexOrder;
         private int openGLRenderType;
+        private int resetIndex;
 
-        GeometryType (int vertexCount, int openGLRenderType, byte... vertexOrder) {
+        GeometryType(int vertexCount, int openGLRenderType, int resetIndex, byte... vertexOrder) {
             this.vertexCount = vertexCount;
             this.openGLRenderType = openGLRenderType;
             this.vertexOrder = vertexOrder;
+            this.resetIndex = resetIndex;
         }
 
         public int getOpenGLRenderType () {
@@ -95,6 +97,14 @@ public class GeometryRegistry {
             return vertexCount;
         }
 
+        public boolean requiresResetting() {
+            return resetIndex > -1;
+        }
+
+        public int getResetIndex() {
+            return resetIndex;
+        }
+
         public ByteBuffer getIndicesBuffer () {
             ByteBuffer indicesBuffer = BufferUtils.createByteBuffer(vertexOrder.length);
             indicesBuffer.put(vertexOrder);
@@ -105,8 +115,8 @@ public class GeometryRegistry {
     }
 
     public static class Geometry {
-        GeometryType type;
-        TexturedVertex[] vertices;
+        protected GeometryType type;
+        protected TexturedVertex[] vertices;
 
         int openGLVertaxArrayId;
         int openGLVertexDataId;
@@ -154,6 +164,19 @@ public class GeometryRegistry {
 
         public void setOpenGLVertexIndexID (int openGLVertexIndexID) {
             this.openGLVertexIndexID = openGLVertexIndexID;
+        }
+
+        public int getVertexCount() {
+
+            return getType().getVertexCount();
+        }
+
+        public boolean requiresResetting() {
+            return getType().requiresResetting();
+        }
+
+        public int getResetIndex() {
+            return getType().getResetIndex();
         }
 
         public ByteBuffer getIndicesBuffer() {

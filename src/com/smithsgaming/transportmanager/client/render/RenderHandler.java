@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.render;
 
 import com.smithsgaming.transportmanager.client.graphics.SkyBox;
 import com.smithsgaming.transportmanager.client.gui.GuiController;
+import com.smithsgaming.transportmanager.client.render.world.WorldRenderer;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
