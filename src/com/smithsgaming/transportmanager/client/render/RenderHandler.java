@@ -23,7 +23,7 @@ public class RenderHandler {
 
         skyBox.render();
 
-        if (true) {
+        if (false) {
             if (testRenderer == null)
                 testRenderer = new ResetIndexedRenderer();
 

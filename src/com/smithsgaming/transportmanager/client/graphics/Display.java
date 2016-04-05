@@ -1,33 +1,23 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.event.EventClientGuiClose;
-import com.smithsgaming.transportmanager.client.event.EventClientGuiOpen;
-import com.smithsgaming.transportmanager.client.gui.screens.GuiGameLoading;
-import com.smithsgaming.transportmanager.client.gui.menus.GuiMainMenu;
-import com.smithsgaming.transportmanager.client.input.KeyboardInputHandler;
-import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
-import com.smithsgaming.transportmanager.client.render.RenderHandler;
-import com.smithsgaming.transportmanager.main.TransportManager;
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.Side;
-import com.smithsgaming.transportmanager.util.event.IEventController;
-import com.smithsgaming.transportmanager.util.event.TMEvent;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLDebugMessageCallback;
-import org.lwjgl.opengl.KHRDebug;
-import org.lwjgl.system.Library;
-import org.lwjgl.system.MemoryUtil;
+import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.event.*;
+import com.smithsgaming.transportmanager.client.gui.menus.*;
+import com.smithsgaming.transportmanager.client.gui.screens.*;
+import com.smithsgaming.transportmanager.client.input.*;
+import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.main.*;
+import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.event.*;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.system.*;
 
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
 
+import static com.smithsgaming.transportmanager.client.TransportManagerClient.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -50,6 +40,8 @@ public class Display implements Runnable, IEventController
     private GLDebugMessageCallback debugMessageKHRCallback;
     private long window;
     private Queue<TMEvent> eventQueue = new ArrayDeque<>();
+    private long lastFPS = getTime();
+    private int fps;
 
     public Display(){
     }
@@ -122,7 +114,7 @@ public class Display implements Runnable, IEventController
             glfwSetScrollCallback(window, MouseInputHandler.SCROLL_CALLBACK);
 
             glfwMakeContextCurrent(window);
-            glfwSwapInterval(1);
+            glfwSwapInterval(0);
 
             // Make the window visible
             glfwShowWindow(window);
@@ -157,11 +149,26 @@ public class Display implements Runnable, IEventController
             glfwSwapBuffers(window); // swap the color buffers
 
             glfwPollEvents();
+
+            updateFPS();
         }
     }
 
     private void doRenderLoop () {
         RenderHandler.doRender();
+    }
+
+    /**
+     * Calculate the FPS and set it in the title bar
+     */
+    public void updateFPS () {
+        if (getTime() - lastFPS > 1000) {
+            glfwSetWindowTitle(window, "FPS: " + fps);
+            fps = 0; //reset the FPS counter
+            lastFPS += 1000; //add one second
+        }
+
+        fps++;
     }
 
     private void doProcessEventLoop () {

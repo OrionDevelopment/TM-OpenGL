@@ -38,23 +38,23 @@ public class WorldInputHandler implements KeyboardInputHandler.IKeyInputHandler,
     public void onKeyPressed (int key, int action) {
         switch (key) {
             case GLFW.GLFW_KEY_W:
-                Camera.Player.moveCamera(new Vector3f(0, 0, 0.25f));
+                Camera.Player.moveCamera(new Vector3f(0, 0, -0.25f * Camera.Player.getCameraPosition().y));
                 break;
             case GLFW.GLFW_KEY_S:
-                Camera.Player.moveCamera(new Vector3f(0, 0, -0.25f));
+                Camera.Player.moveCamera(new Vector3f(0, 0, 0.25f * Camera.Player.getCameraPosition().y));
                 break;
             case GLFW.GLFW_KEY_A:
-                Camera.Player.moveCamera(new Vector3f(0.25f, 0, 0));
+                Camera.Player.moveCamera(new Vector3f(-0.25f * Camera.Player.getCameraPosition().y, 0, 0));
                 break;
             case GLFW.GLFW_KEY_D:
-                Camera.Player.moveCamera(new Vector3f(-0.25f, 0, 0));
+                Camera.Player.moveCamera(new Vector3f(0.25f * Camera.Player.getCameraPosition().y, 0, 0));
                 break;
         }
     }
 
     @Override
     public void handleScroll (float xOffSet, float yOffSet) {
-        if (Camera.Player.getCameraPosition().getY() + yOffSet > -2F || Camera.Player.getCameraPosition().getY() + yOffSet < -99F)
+        if (Camera.Player.getCameraPosition().getY() + yOffSet > -2F || Camera.Player.getCameraPosition().getY() + yOffSet < -549F)
             return;
 
         Camera.Player.moveCamera(new Vector3f(0, yOffSet, 0));

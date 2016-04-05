@@ -1,23 +1,16 @@
 package com.smithsgaming.transportmanager.client;
 
-import com.smithsgaming.transportmanager.client.graphics.Display;
-import com.smithsgaming.transportmanager.client.input.KeyboardInputHandler;
-import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
-import com.smithsgaming.transportmanager.client.input.WorldInputHandler;
-import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
-import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
-import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
-import com.smithsgaming.transportmanager.client.settings.ClientSettings;
-import com.smithsgaming.transportmanager.main.TransportManager;
-import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
-import com.smithsgaming.transportmanager.util.Side;
-import com.smithsgaming.transportmanager.util.event.IEventController;
-import com.smithsgaming.transportmanager.util.event.TMEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.input.*;
+import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.settings.*;
+import com.smithsgaming.transportmanager.main.*;
+import com.smithsgaming.transportmanager.network.client.*;
+import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.event.*;
+import org.apache.logging.log4j.*;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 
 
 /**
@@ -36,10 +29,7 @@ public class TransportManagerClient implements Runnable, IEventController {
     private static Thread displayThread;
     private static Display display;
     private static int targetUPS = 60;
-
-    static {
-
-    }
+    private static long lastFrame;
 
     private Queue<TMEvent> eventQueue = new ArrayDeque<>();
     private ClientSettings settings = ClientSettings.loadSettings();
@@ -49,6 +39,23 @@ public class TransportManagerClient implements Runnable, IEventController {
 
     public static Display getDisplay() {
         return display;
+    }
+
+    /**
+     * Get the time in milliseconds
+     *
+     * @return The system time in milliseconds
+     */
+    public static long getTime () {
+        return System.nanoTime() / 1000000;
+    }
+
+    public static int getDelta () {
+        long time = getTime();
+        int delta = (int) ( time - lastFrame );
+        lastFrame = time;
+
+        return delta;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Camera {
     public Camera (float angle, Vector3f rotationAxis) {
         this.activeFrustum = new Frustum(this);
 
-        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
+        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
         this.projectionMatrix.store(projectionMatrixBuffer);
         this.projectionMatrixBuffer.flip();
 
@@ -67,7 +67,7 @@ public class Camera {
      * Method to create a perspective View, should be used for WorldRendering.
      */
     private void createProjectionMatrix () {
-        setProjectionMatrix(com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f));
+        setProjectionMatrix(com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f));
     }
 
     /**
@@ -79,7 +79,7 @@ public class Camera {
     }
 
     public void updateProjectionMatrix () {
-        com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
+        com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
     }
 
     /**
