@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.render;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.gui.*;
+import com.smithsgaming.transportmanager.client.render.test.*;
 import com.smithsgaming.transportmanager.client.render.world.*;
 
 /**
@@ -12,6 +13,8 @@ public class RenderHandler {
     static SkyBox skyBox = new SkyBox();
     static GuiController guiController = GuiController.instance;
 
+    static ResetIndexedRenderer testRenderer;
+
     public static void doRender () {
         if (guiController.isGuiOpen()) {
             guiController.render();
@@ -19,6 +22,15 @@ public class RenderHandler {
         }
 
         skyBox.render();
+
+        if (true) {
+            if (testRenderer == null)
+                testRenderer = new ResetIndexedRenderer();
+
+            testRenderer.render();
+
+            return;
+        }
 
         if (worldRenderer.getWorldClient() != null)
             worldRenderer.render();

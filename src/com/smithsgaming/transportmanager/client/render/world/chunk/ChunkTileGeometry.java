@@ -48,7 +48,13 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 if (chunkClient.getTileAtPos(x, z) != null && chunkClient.getTileAtPos(x, z).equals(tile)) {
                     //TODO: Update the position of the Quad.
-                    GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(chunkClient.getChunkX() + x, chunkClient.getChunkZ() + z), new Vector2i(chunkClient.getChunkX() + x + 1, chunkClient.getChunkZ() + z - 1)), texture.getArea());
+                    Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
+                    Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
+
+                    //Vector2i topLeftQuadCorner = new Vector2i(0,0);
+                    // Vector2i lowerRightQuadCorner = new Vector2i(1, -1);
+
+                    GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), texture.getArea());
 
                     Collections.addAll(texturedVertices, positionGeometry.getVertices());
                 }
@@ -56,7 +62,7 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
         }
 
         resetIndex = texturedVertices.size();
-        verticesIndecis = new int[texturedVertices.size() + texturedVertices.size() % 4];
+        verticesIndecis = new int[texturedVertices.size() + texturedVertices.size() / 4];
         for (int i = 0; i < verticesIndecis.length; i++) {
             if (i % 5 == 4)
                 verticesIndecis[i] = resetIndex;

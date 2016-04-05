@@ -9,6 +9,8 @@ import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.*;
+import com.smithsgaming.transportmanager.util.math.graphical.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,6 +25,8 @@ public class WorldRenderer implements IRenderer {
     WorldClient worldClient;
     HashMap<ChunkClient, ChunkRenderer> rendererHashMap = new HashMap<>();
 
+    GeometryRegistry.Geometry testGeometry;
+
     /**
      * Method called by the RenderManager to process the rendering for this renderer.
      */
@@ -30,6 +34,16 @@ public class WorldRenderer implements IRenderer {
     public void render () {
         if (worldClient == null)
             OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, GeometryRegistry.getDefaultQuadGeometry(), TextureRegistry.Textures.Tiles.deepWater, ShaderRegistry.Shaders.textured);
+
+        if (false) {
+            if (testGeometry == null) {
+                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(1, -1)), TextureRegistry.Textures.Tiles.grass.getArea());
+                OpenGLUtil.loadGeometryIntoGPU(testGeometry);
+            }
+            OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, testGeometry, TextureRegistry.Textures.Tiles.grass, ShaderRegistry.Shaders.textured);
+
+            return;
+        }
 
         for (int x = 0; x < worldClient.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < worldClient.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {

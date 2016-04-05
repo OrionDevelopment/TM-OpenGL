@@ -220,10 +220,10 @@ public class GeometryRegistry {
         }
 
         public static Geometry constructFromPlaneForTextureOnZ (GuiPlaneI geometryPlane, GuiPlaneF texturePlane) {
-            final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopLeftCoordinate().x, texturePlane.getTopLeftCoordinate().y).setXYZ(geometryPlane.getTopLeftCoordinate().x, 0, geometryPlane.getTopLeftCoordinate().y);
-            final TexturedVertex topRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getTopRightCoordinate().x, texturePlane.getTopRightCoordinate().y).setXYZ(geometryPlane.getTopRightCoordinate().x, 0, geometryPlane.getTopRightCoordinate().y);
-            final TexturedVertex bottomRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerRightCoordinate().x, texturePlane.getLowerRightCoordinate().y).setXYZ(geometryPlane.getLowerRightCoordinate().x, 0, geometryPlane.getLowerRightCoordinate().y);
-            final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(texturePlane.getLowerLeftCoordinate().x, texturePlane.getLowerLeftCoordinate().y).setXYZ(geometryPlane.getLowerLeftCoordinate().x, 0, geometryPlane.getLowerLeftCoordinate().y);
+            final TexturedVertex topLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getTopLeftCoordinate().x), Math.abs(texturePlane.getTopLeftCoordinate().y)).setXYZ(geometryPlane.getTopLeftCoordinate().x, 0, geometryPlane.getTopLeftCoordinate().y);
+            final TexturedVertex topRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getTopRightCoordinate().x), Math.abs(texturePlane.getTopRightCoordinate().y)).setXYZ(geometryPlane.getTopRightCoordinate().x, 0, geometryPlane.getTopRightCoordinate().y);
+            final TexturedVertex bottomRight = new TexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getLowerRightCoordinate().x), Math.abs(texturePlane.getLowerRightCoordinate().y)).setXYZ(geometryPlane.getLowerRightCoordinate().x, 0, geometryPlane.getLowerRightCoordinate().y);
+            final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getLowerLeftCoordinate().x), Math.abs(texturePlane.getLowerLeftCoordinate().y)).setXYZ(geometryPlane.getLowerLeftCoordinate().x, 0, geometryPlane.getLowerLeftCoordinate().y);
 
             return new QuadGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
         }
