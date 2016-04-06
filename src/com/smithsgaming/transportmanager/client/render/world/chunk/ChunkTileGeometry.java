@@ -20,10 +20,10 @@ import java.util.*;
  */
 public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRenderer {
 
+    public static int VertexCount = 0;
     private ChunkClient chunkClient;
     private Tile tile;
     private Texture texture;
-
     private int[] verticesIndecis;
     private int resetIndex;
 
@@ -51,15 +51,14 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
                     Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
                     Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
 
-                    //Vector2i topLeftQuadCorner = new Vector2i(0,0);
-                    // Vector2i lowerRightQuadCorner = new Vector2i(1, -1);
-
                     GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), texture.getArea());
 
                     Collections.addAll(texturedVertices, positionGeometry.getVertices());
                 }
             }
         }
+
+        VertexCount += texturedVertices.size();
 
         resetIndex = texturedVertices.size();
         verticesIndecis = new int[texturedVertices.size() + texturedVertices.size() / 4];

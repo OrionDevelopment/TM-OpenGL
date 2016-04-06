@@ -1,8 +1,7 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.google.common.collect.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
+import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.util.*;
 
 import java.util.*;
@@ -63,20 +62,22 @@ public class TextureStitcher {
     }
 
     public List<Texture> getStitchSlots () {
-        List<TextureStitcher.Slot> stitchedSlots = Lists.<TextureStitcher.Slot> newArrayList();
+        List<TextureStitcher.Slot> stitchedSlots = Lists.newArrayList();
 
         for (TextureStitcher.Slot slot : this.stitchSlots) {
             slot.getAllStitchSlots(stitchedSlots);
         }
 
-        List<Texture> stitchedTextures = Lists.<Texture> newArrayList();
+        List<Texture> stitchedTextures = Lists.newArrayList();
 
         for (TextureStitcher.Slot slot : stitchedSlots) {
             TextureStitcher.Holder holder = slot.getStitchHolder();
             Texture texture = holder.getAtlasSprite();
 
-            texture.setU(slot.getOriginX());
-            texture.setV(slot.getOriginY());
+            texture.setU(slot.getOriginX() / ( (float) getCurrentStitchedWidth() ));
+            texture.setV(slot.getOriginY() / ( (float) getCurrentStitchedHeight() ));
+            texture.setWidth(texture.getPixelWidth() / ( (float) getCurrentStitchedWidth() ));
+            texture.setHeight(texture.getPixelHeight() / ( (float) getCurrentStitchedHeight() ));
             texture.setStitched(true);
 
             stitchedTextures.add(texture);
@@ -170,8 +171,8 @@ public class TextureStitcher {
 
         public Holder (Texture texture) {
             this.texture = texture;
-            this.width = texture.getWidth();
-            this.height = texture.getHeight();
+            this.width = texture.getPixelWidth();
+            this.height = texture.getPixelHeight();
         }
 
         public Texture getAtlasSprite () {
@@ -247,7 +248,7 @@ public class TextureStitcher {
                         return true;
                     } else {
                         if (this.subSlots == null) {
-                            this.subSlots = Lists.<TextureStitcher.Slot> newArrayListWithCapacity(1);
+                            this.subSlots = Lists.newArrayListWithCapacity(1);
                             this.subSlots.add(new TextureStitcher.Slot(this.originX, this.originY, holderWidth, holderHeight));
                             int restWidth = this.width - holderWidth;
                             int restHeight = this.height - holderHeight;

@@ -1,11 +1,17 @@
 package com.smithsgaming.transportmanager.client.registries;
 
+import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import com.smithsgaming.transportmanager.util.*;
+import org.lwjgl.opengl.*;
 
+import javax.imageio.*;
+import javax.imageio.stream.*;
 import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
 import java.nio.*;
 import java.util.*;
 import java.util.stream.*;
@@ -48,17 +54,19 @@ public class TextureRegistry {
     }
 
     public Texture initializeTextureStitching(int textureStitchingId) {
-        ArrayList<Texture> texturesToCombine = bufferedTextures.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Texture> texturesToCombine = namedBufferedTextured.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));
 
         TextureStitcher stitcher = new TextureStitcher(Display.getMaxTextureSize(), Display.getMaxTextureSize(), true);
         stitcher.addSprites(texturesToCombine);
+
+        stitcher.doStitch();
+
+        texturesToCombine = (ArrayList<Texture>) stitcher.getStitchSlots();
 
         Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId, ByteBuffer.allocateDirect(
                 4 * stitcher.getCurrentStitchedWidth() * stitcher.getCurrentStitchedHeight()), stitcher.getCurrentStitchedWidth(), stitcher.getCurrentStitchedHeight(), 0, 0, false, false, textureStitchingId);
 
         OpenGLUtil.loadTextureIntoGPU(stitchedTexture);
-
-        texturesToCombine = (ArrayList<Texture>) stitcher.getStitchSlots();
 
         for (Texture texture : texturesToCombine) {
             OpenGLUtil.loadSubTextureRegionIntoGPU(stitchedTexture, texture);
@@ -66,7 +74,30 @@ public class TextureRegistry {
             texture.setOpenGLTextureId(stitchedTexture.getOpenGLTextureId());
         }
 
-        return null;
+
+        if (TransportManagerClient.instance.getSettings().isShouldWriteTextureStichtedImagesToDisk()) {
+            ByteBuffer pixelData = ByteBuffer.allocateDirect(
+                    4 * stitcher.getCurrentStitchedWidth() * stitcher.getCurrentStitchedHeight());
+
+            GL13.glActiveTexture(stitchedTexture.getBoundTextureUnit());
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, stitchedTexture.getOpenGLTextureId());
+            GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, stitchedTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, pixelData);
+
+            try {
+                FileWriter writer = new FileWriter(new File("/" + stitchedTexture.getTextureName() + ".png"));
+
+                pixelData.rewind();
+                byte[] buffer = pixelData.array();
+                BufferedImage img = new BufferedImage(stitchedTexture.getPixelWidth(), stitchedTexture.getPixelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+                img.getRaster().setDataElements(0, 0, stitchedTexture.getPixelWidth(), stitchedTexture.getPixelHeight(), buffer);
+                ImageIO.write(img, "PNG", (ImageOutputStream) writer);
+            } catch (Exception ex) {
+                System.out.println("Failed to write stitched image to disk:");
+                ex.printStackTrace();
+            }
+        }
+
+        return stitchedTexture;
     }
 
     public void unLoad() {
@@ -96,6 +127,8 @@ public class TextureRegistry {
             Tiles.ice = StandardTileTexture.loadTexture(TileNames.ICE, "/textures/tiles/world/ice_0.png");
             Tiles.ice_bush_brown = StandardTileTexture.loadTexture(TileNames.ICE_BUSH_BROWN, "/textures/tiles/world/ice_1.png");
             Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
+
+            TextureRegistry.instance.initializeTextureStitching(0);
         }
 
         public static class SkyBox {

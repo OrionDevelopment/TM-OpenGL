@@ -9,7 +9,7 @@ import com.smithsgaming.transportmanager.util.*;
 public class StandardTileTexture extends Texture {
 
     private StandardTileTexture (Texture source, String tileIdentity) {
-        super(tileIdentity, source.getData(), source.getWidth(), source.getHeight());
+        super(tileIdentity, source.getData(), source.getPixelWidth(), source.getPixelHeight());
 
         setRequiringTextureStitching(false);
     }

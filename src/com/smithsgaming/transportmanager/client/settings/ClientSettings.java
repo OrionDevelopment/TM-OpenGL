@@ -11,10 +11,12 @@ public class ClientSettings {
 
     private GuiScale currentScale;
     private GuiAspectRatio currentRatio;
+    private boolean shouldWriteTextureStichtedImagesToDisk = true;
 
-    private ClientSettings (GuiScale currentScale, GuiAspectRatio currentRatio) {
+    private ClientSettings (GuiScale currentScale, GuiAspectRatio currentRatio, boolean shouldWriteTextureStichtedImagesToDisk) {
         this.currentScale = currentScale;
         this.currentRatio = currentRatio;
+        this.shouldWriteTextureStichtedImagesToDisk = shouldWriteTextureStichtedImagesToDisk;
     }
 
     /**
@@ -25,7 +27,7 @@ public class ClientSettings {
      * @return A instance of this class that holds the Settings of the Client.
      */
     public static ClientSettings loadSettings () {
-        return new ClientSettings(GuiScale.FWVGA, GuiAspectRatio.HD);
+        return new ClientSettings(GuiScale.FWVGA, GuiAspectRatio.HD, false);
     }
 
     /**
@@ -42,6 +44,7 @@ public class ClientSettings {
     public void setToDefault () {
         this.currentScale = GuiScale.FWVGA;
         this.currentRatio = GuiAspectRatio.HD;
+        this.shouldWriteTextureStichtedImagesToDisk = true;
     }
 
     public GuiScale getCurrentScale () {
@@ -58,5 +61,13 @@ public class ClientSettings {
 
     public void setCurrentRatio (GuiAspectRatio currentRatio) {
         this.currentRatio = currentRatio;
+    }
+
+    public boolean isShouldWriteTextureStichtedImagesToDisk () {
+        return shouldWriteTextureStichtedImagesToDisk;
+    }
+
+    public void setShouldWriteTextureStichtedImagesToDisk (boolean shouldWriteTextureStichtedImagesToDisk) {
+        this.shouldWriteTextureStichtedImagesToDisk = shouldWriteTextureStichtedImagesToDisk;
     }
 }

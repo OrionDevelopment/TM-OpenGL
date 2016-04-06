@@ -12,8 +12,12 @@ import java.nio.*;
 public class Texture {
     protected ByteBuffer data;
     private String textureName;
-    private int width;
-    private int height;
+
+    private float width = 1f;
+    private float height = 1f;
+
+    private int pixelWidth;
+    private int pixelHeight;
 
     private int openGLTextureId;
     private int boundTextureUnit;
@@ -28,17 +32,17 @@ public class Texture {
     private int internalFormat = GL11.GL_RGBA;
     private int format = GL11.GL_RGBA;
 
-    public Texture(String textureName, ByteBuffer data, int width, int height) {
-        this(textureName, data, width, height, 0, 0, false, true, 0);
+    public Texture (String textureName, ByteBuffer data, int pixelWidth, int pixelHeight) {
+        this(textureName, data, pixelWidth, pixelHeight, 0, 0, false, true, 0);
     }
 
-    public Texture(String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
+    public Texture (String textureName, ByteBuffer data, int pixelWidth, int pixelHeight, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
         this.textureName = textureName;
         this.isStitched = isStitched;
         this.requiringTextureStitching = requiringTextureStitching;
         this.textureStitchId = textureStitchId;
-        this.height = height;
-        this.width = width;
+        this.pixelHeight = pixelHeight;
+        this.pixelWidth = pixelWidth;
         this.data = data;
         this.u = u;
         this.v = v;
@@ -52,12 +56,12 @@ public class Texture {
         return data;
     }
 
-    public int getWidth() {
-        return width;
+    public int getPixelWidth () {
+        return pixelWidth;
     }
 
-    public int getHeight() {
-        return height;
+    public int getPixelHeight () {
+        return pixelHeight;
     }
 
     public int getOpenGLTextureId() {
@@ -92,9 +96,25 @@ public class Texture {
         this.u = u;
     }
 
+    public float getWidth () {
+        return width;
+    }
+
+    public void setWidth (float width) {
+        this.width = width;
+    }
+
+    public float getHeight () {
+        return height;
+    }
+
+    public void setHeight (float height) {
+        this.height = height;
+    }
+
     public GuiPlaneF getArea () {
-        //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() - this.getHeight()));
-        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
+        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() - this.getHeight()));
+        //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
     }
 
     public int getTextureStitchId() {

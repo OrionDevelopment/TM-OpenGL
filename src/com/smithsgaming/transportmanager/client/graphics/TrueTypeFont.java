@@ -1,27 +1,20 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
-import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.TexturedVertex;
-import com.smithsgaming.transportmanager.util.math.Vector2i;
-import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import javafx.util.Pair;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
+import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.*;
+import com.smithsgaming.transportmanager.util.math.graphical.*;
+import javafx.util.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.*;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.image.*;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
 
 public class TrueTypeFont {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
@@ -254,7 +247,7 @@ public class TrueTypeFont {
 
             OpenGLUtil.drawGeometryWithShaderAndTexture(camera, charGeometry, charTexture, ShaderRegistry.Shaders.guiTextured);
 
-            currentX += charTexture.getWidth();
+            currentX += charTexture.getPixelWidth();
 
             camera.popMatrix();
         }
@@ -283,10 +276,10 @@ public class TrueTypeFont {
         int width = 0, height = 0;
 
         for (Character c : line.toCharArray()) {
-            width += characterPairHashMap.get(c).getValue().getWidth();
+            width += characterPairHashMap.get(c).getValue().getPixelWidth();
 
-            if (height < characterPairHashMap.get(c).getValue().getHeight())
-                height = characterPairHashMap.get(c).getValue().getHeight();
+            if (height < characterPairHashMap.get(c).getValue().getPixelHeight())
+                height = characterPairHashMap.get(c).getValue().getPixelHeight();
         }
 
         return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
@@ -303,13 +296,13 @@ public class TrueTypeFont {
         }
 
         public static CharGeometry getForChar (Texture charTexture, float mapHeight, float mapWidth) {
-            int charWidth = charTexture.getWidth();
-            int charHeight = charTexture.getHeight();
+            int charWidth = charTexture.getPixelWidth();
+            int charHeight = charTexture.getPixelHeight();
 
             TexturedVertex topLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV()).setXYZ(0, 0, 0);
-            TexturedVertex topRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getWidth() / mapWidth ), charTexture.getV()).setXYZ(charWidth, 0, 0);
-            TexturedVertex bottomRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getWidth() / mapWidth ), charTexture.getV() + ( charTexture.getHeight() / mapHeight )).setXYZ(charWidth, charHeight, 0);
-            TexturedVertex bottomLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV() + ( charTexture.getHeight() / mapHeight )).setXYZ(0, charHeight, 0);
+            TexturedVertex topRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getPixelWidth() / mapWidth ), charTexture.getV()).setXYZ(charWidth, 0, 0);
+            TexturedVertex bottomRight = new TexturedVertex().setST(charTexture.getU() + ( charTexture.getPixelWidth() / mapWidth ), charTexture.getV() + ( charTexture.getPixelHeight() / mapHeight )).setXYZ(charWidth, charHeight, 0);
+            TexturedVertex bottomLeft = new TexturedVertex().setST(charTexture.getU(), charTexture.getV() + ( charTexture.getPixelHeight() / mapHeight )).setXYZ(0, charHeight, 0);
 
             return new CharGeometry(new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
         }

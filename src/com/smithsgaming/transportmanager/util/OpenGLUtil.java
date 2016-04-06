@@ -188,7 +188,7 @@ public class OpenGLUtil {
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 
         // Upload the texture data and generate mip maps (for scaling)
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, texture.getInternalFormat(), texture.getWidth(), texture.getHeight(), 0,
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, texture.getInternalFormat(), texture.getPixelWidth(), texture.getPixelHeight(), 0,
                 texture.getFormat(), GL11.GL_UNSIGNED_BYTE, texture.getData());
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
@@ -217,7 +217,7 @@ public class OpenGLUtil {
     public static void loadSubTextureRegionIntoGPU (Texture masterTexture, Texture subTexture) {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, masterTexture.getOpenGLTextureId());
-        glTexSubImage2D(GL_TEXTURE_2D, 0, (int) subTexture.getU(), (int) subTexture.getV(), subTexture.getWidth(), subTexture.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, subTexture.getData());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, (int) subTexture.getU(), (int) subTexture.getV(), subTexture.getPixelWidth(), subTexture.getPixelHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, subTexture.getData());
 
         checkGlState("Subtexture loading. Master: " + masterTexture.getTextureName() + " - Sub: " + subTexture.getTextureName());
     }
