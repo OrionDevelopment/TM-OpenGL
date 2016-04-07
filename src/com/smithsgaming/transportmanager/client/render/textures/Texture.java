@@ -32,11 +32,11 @@ public class Texture {
     private int internalFormat = GL11.GL_RGBA;
     private int format = GL11.GL_RGBA;
 
-    public Texture (String textureName, ByteBuffer data, int pixelWidth, int pixelHeight) {
+    public Texture(String textureName, ByteBuffer data, int pixelWidth, int pixelHeight) {
         this(textureName, data, pixelWidth, pixelHeight, 0, 0, false, true, 0);
     }
 
-    public Texture (String textureName, ByteBuffer data, int pixelWidth, int pixelHeight, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
+    public Texture(String textureName, ByteBuffer data, int pixelWidth, int pixelHeight, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
         this.textureName = textureName;
         this.isStitched = isStitched;
         this.requiringTextureStitching = requiringTextureStitching;
@@ -56,11 +56,11 @@ public class Texture {
         return data;
     }
 
-    public int getPixelWidth () {
+    public int getPixelWidth() {
         return pixelWidth;
     }
 
-    public int getPixelHeight () {
+    public int getPixelHeight() {
         return pixelHeight;
     }
 
@@ -96,23 +96,23 @@ public class Texture {
         this.u = u;
     }
 
-    public float getWidth () {
+    public float getWidth() {
         return width;
     }
 
-    public void setWidth (float width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public float getHeight () {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight (float height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
-    public GuiPlaneF getArea () {
+    public GuiPlaneF getArea() {
         return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() - this.getHeight()));
         //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
     }
