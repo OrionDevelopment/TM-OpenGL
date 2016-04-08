@@ -29,6 +29,7 @@ public class Frustum {
 
     protected void updateFrustum () {
         Matrix4f.mul(activeCamera.getViewMatrix(), activeCamera.getProjectionMatrix(), viewProjectionMatrix);
+        viewProjectionMatrix.invert();
 
         nearFrustumPlane.setCoefficients(viewProjectionMatrix.m20 + viewProjectionMatrix.m30, viewProjectionMatrix.m21 + viewProjectionMatrix.m31, viewProjectionMatrix.m22 + viewProjectionMatrix.m32, viewProjectionMatrix.m23 + viewProjectionMatrix.m33);
         farFrustumPlane.setCoefficients(-viewProjectionMatrix.m20 + viewProjectionMatrix.m30, -viewProjectionMatrix.m21 + viewProjectionMatrix.m31, -viewProjectionMatrix.m22 + viewProjectionMatrix.m32, -viewProjectionMatrix.m23 + viewProjectionMatrix.m33);

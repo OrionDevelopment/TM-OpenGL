@@ -32,7 +32,10 @@ public class ChunkRenderer implements IRenderer {
             if (!tile.shouldUseDefaultRenderer())
                 continue;
 
-            geometryHashMap.put(tile, new ChunkTileGeometry(chunkClient, tile));
+            ChunkTileGeometry geometry = new ChunkTileGeometry(chunkClient, tile);
+            if (geometry.getVertexCount() > 0)
+                geometryHashMap.put(tile, geometry);
+
         }
 
         geometryHashMap.values().forEach(OpenGLUtil::loadGeometryIntoGPU);

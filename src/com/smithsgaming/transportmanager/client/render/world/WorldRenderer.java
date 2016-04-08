@@ -59,7 +59,7 @@ public class WorldRenderer implements IRenderer {
     private void drawChunk (ChunkClient chunk) {
 
 
-        if (!isChunkInView(chunk) && false) {
+        if (false && !isChunkInView(chunk)) {
             ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
 
             if (oldGeometry != null)
