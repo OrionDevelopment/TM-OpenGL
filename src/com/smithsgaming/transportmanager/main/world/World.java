@@ -12,31 +12,28 @@ public abstract class World {
     protected WorldGenerationData coreData;
     protected WorldType type;
 
-    protected World (WorldGenerationData data, WorldType type) {
+    protected World(WorldGenerationData data, WorldType type) {
         this.coreData = data;
         this.type = type;
     }
 
-    public WorldGenerationData getCoreData () {
+    public WorldGenerationData getCoreData() {
         return coreData;
     }
 
-    public void setType (WorldType type) {
+    public void setType(WorldType type) {
         this.type = type;
     }
 
-    public int getWorldTypeOrdinal () {
+    public int getWorldTypeOrdinal() {
         return type.ordinal();
     }
 
-    public WorldType getWorldType () {
+    public WorldType getWorldType() {
         return type;
     }
 
-    public void generate () {
-    }
-
-    public abstract void update ();
+    public abstract void update();
 
     public enum WorldType implements Serializable {
         OVERGROUND, UNDERGROUND
