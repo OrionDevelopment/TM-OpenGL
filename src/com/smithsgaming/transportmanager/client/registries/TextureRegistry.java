@@ -63,8 +63,7 @@ public class TextureRegistry {
 
         texturesToCombine = (ArrayList<Texture>) stitcher.getStitchSlots();
 
-        Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId, ByteBuffer.allocateDirect(
-                4 * stitcher.getCurrentStitchedWidth() * stitcher.getCurrentStitchedHeight()), stitcher.getCurrentStitchedWidth(), stitcher.getCurrentStitchedHeight(), 0, 0, false, false, textureStitchingId);
+        Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId, null, stitcher.getCurrentStitchedWidth(), stitcher.getCurrentStitchedHeight(), 0, 0, false, false, textureStitchingId);
 
         OpenGLUtil.loadTextureIntoGPU(stitchedTexture);
 
@@ -84,18 +83,36 @@ public class TextureRegistry {
             GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, stitchedTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, pixelData);
 
             try {
-                FileWriter writer = new FileWriter(new File("/" + stitchedTexture.getTextureName() + ".png"));
+                File imageFile = new File("textures/stitched/" + stitchedTexture.getTextureName() + ".png");
 
-                pixelData.rewind();
-                byte[] buffer = pixelData.array();
-                BufferedImage img = new BufferedImage(stitchedTexture.getPixelWidth(), stitchedTexture.getPixelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-                img.getRaster().setDataElements(0, 0, stitchedTexture.getPixelWidth(), stitchedTexture.getPixelHeight(), buffer);
-                ImageIO.write(img, "PNG", (ImageOutputStream) writer);
+                if (!imageFile.exists()) {
+                    imageFile.getParentFile().mkdirs();
+                }
+
+                FileImageOutputStream writer = new FileImageOutputStream(imageFile);
+
+                BufferedImage image = new BufferedImage(stitchedTexture.getPixelWidth(), stitchedTexture.getPixelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+
+                for (int x = 0; x < stitcher.getCurrentStitchedWidth(); x++) {
+                    for (int y = 0; y < stitcher.getCurrentStitchedHeight(); y++) {
+                        int i = ( x + ( stitcher.getCurrentStitchedWidth() * y ) ) * 4;
+                        int r = pixelData.get(i) & 0xFF;
+                        int g = pixelData.get(i + 1) & 0xFF;
+                        int b = pixelData.get(i + 2) & 0xFF;
+                        int a = pixelData.get(i + 3) & 0xFF;
+                        image.setRGB(x, stitcher.getCurrentStitchedHeight() - ( y + 1 ), ( a << 24 ) | ( r << 16 ) | ( g << 8 ) | b);
+                    }
+                }
+
+                ImageIO.write(image, "PNG", writer);
+                writer.close();
             } catch (Exception ex) {
                 System.out.println("Failed to write stitched image to disk:");
                 ex.printStackTrace();
             }
         }
+
+        loadTexture(stitchedTexture);
 
         return stitchedTexture;
     }

@@ -1,9 +1,11 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.google.common.collect.*;
+import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.util.*;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -70,6 +72,45 @@ public class TextureStitcher {
 
         List<Texture> stitchedTextures = Lists.newArrayList();
 
+        if (TransportManagerClient.instance.getSettings().isShouldWriteTextureStichtedImagesToDisk()) {
+            try {
+                File dataFile = new File("textures/stitched/last-stitch-data.txt");
+                if (!dataFile.exists())
+                    dataFile.getParentFile().mkdirs();
+
+                PrintWriter out = new PrintWriter(dataFile);
+
+                for (TextureStitcher.Slot slot : stitchedSlots) {
+                    TextureStitcher.Holder holder = slot.getStitchHolder();
+                    Texture texture = holder.getAtlasSprite();
+
+                    out.println(texture.getTextureName());
+                    out.println("===================================================");
+
+                    out.print("  * U:        " + slot.getOriginX() / ( (float) getCurrentStitchedWidth() ));
+                    out.println();
+                    out.print("  * V:        " + slot.getOriginY() / ( (float) getCurrentStitchedHeight() ));
+                    out.println();
+                    out.print("  * Width:    " + texture.getPixelWidth() / ( (float) getCurrentStitchedWidth() ));
+                    out.println();
+                    out.print("  * Height:   " + texture.getPixelHeight() / ( (float) getCurrentStitchedHeight() ));
+                    out.println();
+                    out.print("  * Origin X: " + slot.getOriginX());
+                    out.println();
+                    out.print("  * Origin Y: " + slot.getOriginY());
+                    out.println();
+
+                    out.println();
+                    out.println();
+                }
+
+                out.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("Failed to write stitch data to disk!");
+                e.printStackTrace();
+            }
+        }
+
         for (TextureStitcher.Slot slot : stitchedSlots) {
             TextureStitcher.Holder holder = slot.getStitchHolder();
             Texture texture = holder.getAtlasSprite();
@@ -78,6 +119,8 @@ public class TextureStitcher {
             texture.setV(slot.getOriginY() / ( (float) getCurrentStitchedHeight() ));
             texture.setWidth(texture.getPixelWidth() / ( (float) getCurrentStitchedWidth() ));
             texture.setHeight(texture.getPixelHeight() / ( (float) getCurrentStitchedHeight() ));
+            texture.setOriginX(slot.getOriginX());
+            texture.setOriginY(slot.getOriginY());
             texture.setStitched(true);
 
             stitchedTextures.add(texture);

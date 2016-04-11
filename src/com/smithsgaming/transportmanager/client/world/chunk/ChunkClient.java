@@ -22,11 +22,11 @@ public class ChunkClient extends Chunk {
     }
 
     public AABox getBoundingBox() {
-        return new AABox(new Vector3f(chunkX * Chunk.chunkSize, 0, chunkZ * Chunk.chunkSize), Chunk.chunkSize, world.getCoreData().getWorldHeight(), Chunk.chunkSize);
+        return new AABox(new Vector3f(getWorld().getCoreData().getWorldWidth() / -2f + chunkX * Chunk.chunkSize, 0, getWorld().getCoreData().getWorldHeight() / 2f - chunkZ * Chunk.chunkSize), Chunk.chunkSize, 1, Chunk.chunkSize);
     }
 
     public Vector3f getChunkCenterForCamera(Camera camera) {
-        return new Vector3f(chunkX * Chunk.chunkSize + Chunk.chunkSize / 2, camera.getCameraPosition().getY(), chunkZ * Chunk.chunkSize + Chunk.chunkSize / 2);
+        return new Vector3f(getWorld().getCoreData().getWorldWidth() / -2f + chunkX * Chunk.chunkSize + Chunk.chunkSize / 2, camera.getCameraPosition().getY(), getWorld().getCoreData().getWorldHeight() / 2f - chunkZ * Chunk.chunkSize - Chunk.chunkSize / 2);
     }
 
     private void onTileUpdated(Tile oldTile, Tile newTile){

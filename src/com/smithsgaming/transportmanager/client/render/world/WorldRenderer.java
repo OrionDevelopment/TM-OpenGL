@@ -53,17 +53,22 @@ public class WorldRenderer implements IRenderer {
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0 && Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
     }
 
     private void drawChunk (ChunkClient chunk) {
 
 
         if (false && !isChunkInView(chunk)) {
-            ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
+            if (rendererHashMap.containsKey(chunk)) {
+                ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
 
-            if (oldGeometry != null)
-                oldGeometry.onDestroyed();
+                System.out.println("Destroying geometry ChunkCache " + chunk.getChunkX() + "-" + chunk.getChunkZ());
+
+                if (oldGeometry != null) {
+                    oldGeometry.onDestroyed();
+                }
+            }
 
             return;
         }

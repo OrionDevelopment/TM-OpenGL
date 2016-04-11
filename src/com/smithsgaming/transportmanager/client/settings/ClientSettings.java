@@ -27,7 +27,7 @@ public class ClientSettings {
      * @return A instance of this class that holds the Settings of the Client.
      */
     public static ClientSettings loadSettings () {
-        return new ClientSettings(GuiScale.FWVGA, GuiAspectRatio.HD, false);
+        return new ClientSettings(GuiScale.FWVGA, GuiAspectRatio.HD, true);
     }
 
     /**

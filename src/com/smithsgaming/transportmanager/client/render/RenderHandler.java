@@ -14,6 +14,7 @@ public class RenderHandler {
     static GuiController guiController = GuiController.instance;
 
     static ResetIndexedRenderer testRenderer;
+    static StitchedTextureRenderer stitchedTextureRenderer;
 
     public static void doRender () {
         if (guiController.isGuiOpen()) {
@@ -23,11 +24,16 @@ public class RenderHandler {
 
         skyBox.render();
 
-        if (false) {
+        if (true) {
             if (testRenderer == null)
                 testRenderer = new ResetIndexedRenderer();
 
             testRenderer.render();
+
+            if (stitchedTextureRenderer == null)
+                stitchedTextureRenderer = new StitchedTextureRenderer();
+
+            stitchedTextureRenderer.render();
 
             return;
         }

@@ -215,9 +215,12 @@ public class OpenGLUtil {
      * @param subTexture    The texture to copy from.
      */
     public static void loadSubTextureRegionIntoGPU (Texture masterTexture, Texture subTexture) {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        if (masterTexture.getFormat() != subTexture.getFormat())
+            throw new IllegalStateException("The given sub and mastertextures are not compatible.");
+
+        GL13.glActiveTexture(masterTexture.getBoundTextureUnit());
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, masterTexture.getOpenGLTextureId());
-        glTexSubImage2D(GL_TEXTURE_2D, 0, (int) subTexture.getU(), (int) subTexture.getV(), subTexture.getPixelWidth(), subTexture.getPixelHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, subTexture.getData());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, subTexture.getOriginX(), subTexture.getOriginY(), subTexture.getPixelWidth(), subTexture.getPixelHeight(), masterTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, subTexture.getData());
 
         checkGlState("Subtexture loading. Master: " + masterTexture.getTextureName() + " - Sub: " + subTexture.getTextureName());
     }

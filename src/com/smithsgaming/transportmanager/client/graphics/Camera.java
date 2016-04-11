@@ -16,7 +16,7 @@ import java.util.*;
 public class Camera {
 
     public static final Camera Gui = new Camera();
-    public static final Camera Player = new Camera(MathUtil.toRadiant(90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, -99f, 0));
+    public static final Camera Player = new Camera(MathUtil.toRadiant(-90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, 99f, 0));
     private Stack<Matrix4f> modelMatrixStack = new Stack<>();
     private Matrix4f renderingModelMatrix = new Matrix4f();
     private Matrix4f currentActingMatrix = new Matrix4f();
@@ -28,7 +28,7 @@ public class Camera {
     private FloatBuffer projectionMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private FloatBuffer viewMatrixBuffer = BufferUtils.createFloatBuffer(16);
     private Vector3f cameraPosition = new Vector3f();
-    private float viewDistanceInChunks = 4;
+    private float viewDistanceInChunks = 6;
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
     private Frustum activeFrustum;
@@ -189,7 +189,7 @@ public class Camera {
 
         activeFrustum.updateFrustum();
 
-        System.out.println(cameraPosition.x + "-" + cameraPosition.getZ());
+        System.out.println(cameraPosition.x + "-" + cameraPosition.y + "-" + cameraPosition.getZ());
 
         return this;
     }

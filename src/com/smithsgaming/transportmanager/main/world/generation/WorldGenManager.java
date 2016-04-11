@@ -48,7 +48,9 @@ public class WorldGenManager {
             onThreadProgressionChanged(0F, 0, "");
             WorldGraphFeaturesGenerator.instance.generate(data, this);
             onThreadProgressionChanged(0.5F, 0, "");
-            WorldGraphFeaturesGenerator.instance.generate(data, this);
+
+            //FIXME: Why is the Features Generator ran twice??
+            // WorldGraphFeaturesGenerator.instance.generate(data, this);
             onThreadProgressionChanged(1F, 0, "");
 
             worldGenerationData = data;

@@ -2,6 +2,11 @@ package com.smithsgaming.transportmanager.main.world.generation;
 
 import com.smithsgaming.transportmanager.util.concurrent.*;
 
+import javax.imageio.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+
 /**
  * Created by Tim on 29/03/2016.
  */
@@ -20,5 +25,23 @@ public class WorldGraphFeaturesGenerator implements IWorldGenFeature {
         worldGenerationData.setTransportManagerWorldGraph(worldGraph);
         worldGenerationData.setPregenImage(worldGraph.createMap());
         progressionNotifierThread.onThreadProgressionChanged(1F, 1, "Finished generating world graph...");
+
+        //TODO: Add a copy of the Settings system used on the client to the Server side as well.
+        if (true) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+            Date date = new Date();
+
+            try {
+                //ImageIO.write(worldGenerationData.getPregenImage(), "PNG", );
+                File imageFile = new File("./WorldGen/Images/WorldGenPreImage (" + dateFormat.format(date) + ").png");
+                imageFile.mkdirs();
+                if (!imageFile.exists())
+                    imageFile.createNewFile();
+
+                ImageIO.write(worldGenerationData.getPregenImage(), "PNG", imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

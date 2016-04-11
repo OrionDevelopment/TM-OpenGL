@@ -29,6 +29,9 @@ public class Texture {
     private float u;
     private float v;
 
+    private int originX;
+    private int originY;
+
     private int internalFormat = GL11.GL_RGBA;
     private int format = GL11.GL_RGBA;
 
@@ -94,6 +97,22 @@ public class Texture {
 
     public void setU(float u) {
         this.u = u;
+    }
+
+    public int getOriginX () {
+        return originX;
+    }
+
+    public void setOriginX (int originX) {
+        this.originX = originX;
+    }
+
+    public int getOriginY () {
+        return originY;
+    }
+
+    public void setOriginY (int originY) {
+        this.originY = originY;
     }
 
     public float getWidth() {

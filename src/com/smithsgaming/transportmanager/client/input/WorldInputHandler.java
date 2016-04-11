@@ -54,7 +54,7 @@ public class WorldInputHandler implements KeyboardInputHandler.IKeyInputHandler,
 
     @Override
     public void handleScroll (float xOffSet, float yOffSet) {
-        if (Camera.Player.getCameraPosition().getY() + yOffSet > -2F || Camera.Player.getCameraPosition().getY() + yOffSet < -549F)
+        if (Camera.Player.getCameraPosition().getY() + yOffSet < 2F || Camera.Player.getCameraPosition().getY() + yOffSet > 549F)
             return;
 
         Camera.Player.moveCamera(new Vector3f(0, yOffSet, 0));

@@ -47,7 +47,6 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 if (chunkClient.getTileAtPos(x, z) != null && chunkClient.getTileAtPos(x, z).equals(tile)) {
-                    //TODO: Update the position of the Quad.
                     Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
                     Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
 

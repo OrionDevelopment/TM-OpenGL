@@ -50,7 +50,7 @@ class FrustumPlane {
 
     void setCoefficients (float a, float b, float c, float d) {
         normal.set(a, b, c);
-        float l = normal.length();
+        float l = (float) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2) + Math.pow(d, 2));
         normal.set(a / l, b / l, c / l);
         this.d = d / l;
     }
