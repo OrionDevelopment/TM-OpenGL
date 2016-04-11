@@ -42,6 +42,6 @@ public class WorldServer extends World {
 
     @Override
     public void update() {
-        //this.coreData.setTileAtPos(TileRegistry.instance.getTileForIdentity(TileNames.BEACH), 3, 3);
+        this.coreData.setTileAtPos(TileRegistry.instance.getTileForIdentity(TileNames.BEACH), 3, 3);
     }
 }

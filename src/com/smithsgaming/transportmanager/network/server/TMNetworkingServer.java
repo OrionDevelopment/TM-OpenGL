@@ -10,12 +10,16 @@ import io.netty.channel.nio.*;
 import io.netty.channel.socket.nio.*;
 import io.netty.handler.logging.*;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * Created by marcf on 3/14/2016.
  */
 public class TMNetworkingServer implements Runnable {
 
-    private static Channel activeComChannel;
+
+    private static CopyOnWriteArrayList<Channel> activeChannels = new CopyOnWriteArrayList<>();
+
     private int hostPort;
 
     public TMNetworkingServer(int hostPort) {
@@ -23,34 +27,27 @@ public class TMNetworkingServer implements Runnable {
     }
 
     public static void setActiveComChannel(Channel channel) {
-        if (activeComChannel == null) {
-            activeComChannel = channel;
-            return;
-        }
+        activeChannels.add(channel);
+    }
 
-        synchronized (activeComChannel) {
-            activeComChannel = channel;
-        }
+    public static void setInactiveComChannel(Channel channel) {
+        activeChannels.remove(channel);
     }
 
     public static void clearActiveComChannel() {
-        synchronized (activeComChannel) {
-            activeComChannel = null;
-        }
+        activeChannels = new CopyOnWriteArrayList<>();
     }
 
     public static boolean isConnectionEstablished() {
-        return activeComChannel != null;
+        return !activeChannels.isEmpty();
     }
 
     public static void sendMessage(TMNetworkingMessage message) {
-        if (activeComChannel == null)
+        if (activeChannels.isEmpty()) {
             return;
-
-        synchronized (activeComChannel) {
-            if (activeComChannel != null) {
-                activeComChannel.writeAndFlush(message);
-            }
+        }
+        for (Channel c : activeChannels) {
+            c.writeAndFlush(message);
         }
     }
 

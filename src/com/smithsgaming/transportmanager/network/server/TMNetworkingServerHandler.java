@@ -11,6 +11,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * Created by marcf on 3/14/2016.
  */
 public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<TMNetworkingMessage> {
+
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
         System.out.println("[Server] Networking: Handling: " + tmNetworkingMessage.toString());
@@ -24,6 +25,21 @@ public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<TMNet
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         TMNetworkingServer.setActiveComChannel(ctx.channel());
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        TMNetworkingServer.setInactiveComChannel(ctx.channel());
+    }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        TMNetworkingServer.setActiveComChannel(ctx.channel());
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        TMNetworkingServer.setInactiveComChannel(ctx.channel());
     }
 
     @Override
