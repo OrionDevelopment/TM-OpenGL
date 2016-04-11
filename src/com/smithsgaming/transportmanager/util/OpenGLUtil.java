@@ -226,6 +226,19 @@ public class OpenGLUtil {
     }
 
     /**
+     * Method to activate an already in the GPU stored texture for rendering on screen.
+     *
+     * @param texture  The Texture to render the geometry with.
+     */
+    public static void activateTextureInGPU (Texture texture) {
+        if (texture == null)
+            return;
+
+        GL13.glActiveTexture(texture.getBoundTextureUnit());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getOpenGLTextureId());
+    }
+
+    /**
      * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader and Texture.
      *
      * @param geometry The Geometry to render.

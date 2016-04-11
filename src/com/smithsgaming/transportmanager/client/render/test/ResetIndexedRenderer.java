@@ -41,7 +41,7 @@ public class ResetIndexedRenderer implements IRenderer {
         public void buildGeometry () {
             ArrayList<TexturedVertex> texturedVertices = new ArrayList<>();
 
-            for (int x = 0; x < 2; x++) {
+            for (int x = 0; x < 1000; x++) {
                 Vector2i topLeftQuadCorner = new Vector2i(0 + x, 0 + x);
                 Vector2i lowerRightQuadCorner = new Vector2i(1 + x, -1 + x);
 

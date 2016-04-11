@@ -132,7 +132,7 @@ public class Texture {
     }
 
     public GuiPlaneF getArea() {
-        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() - this.getHeight()));
+        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() + this.getHeight()));
         //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
     }
 

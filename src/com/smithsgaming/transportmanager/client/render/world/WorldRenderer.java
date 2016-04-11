@@ -45,6 +45,8 @@ public class WorldRenderer implements IRenderer {
             return;
         }
 
+        OpenGLUtil.activateTextureInGPU(TextureRegistry.instance.getTextureForName("Stitched-0"));
+
         for (int x = 0; x < worldClient.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < worldClient.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
                 drawChunk(worldClient.getChunkAtPos(x, z));
