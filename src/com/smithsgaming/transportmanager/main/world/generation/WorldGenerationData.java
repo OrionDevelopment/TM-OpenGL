@@ -1,6 +1,9 @@
 package com.smithsgaming.transportmanager.main.world.generation;
 
 import com.hoten.delaunay.voronoi.nodename.as3delaunay.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.event.EventClientChunkChangePost;
+import com.smithsgaming.transportmanager.client.event.EventClientChunkChangePre;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
@@ -33,11 +36,11 @@ public class WorldGenerationData implements Serializable {
     private transient BaseBiome[][] biomeMap;
     private transient Chunk[][] chunks;
 
-    public WorldGenerationData (long worldSeed, int worldWidth, int worldHeight, int waterHeight, int maxTileHeight) {
+    public WorldGenerationData(long worldSeed, int worldWidth, int worldHeight, int waterHeight, int maxTileHeight) {
         this.WORLD_SEED = worldSeed;
 
         this.generationRandom = new Random(worldSeed);
-        this.voronoiGenerator = new Voronoi(( worldWidth / 20 ) * ( worldHeight / 20 ), worldWidth, worldHeight, this.getGenerationRandom(), null);
+        this.voronoiGenerator = new Voronoi((worldWidth / 20) * (worldHeight / 20), worldWidth, worldHeight, this.getGenerationRandom(), null);
 
         this.WORLD_WIDTH = worldWidth;
         this.WORLD_HEIGHT = worldHeight;
@@ -49,119 +52,135 @@ public class WorldGenerationData implements Serializable {
         this.chunks = new Chunk[worldWidth / Chunk.chunkSize + 1][worldHeight / Chunk.chunkSize + 1];
     }
 
-    public void setWorld (World world) {
+    public void setWorld(World world) {
         this.world = world;
     }
 
-    public int getWorldWidth () {
+    public int getWorldWidth() {
         return WORLD_WIDTH;
     }
 
-    public int getWorldHeight () {
+    public int getWorldHeight() {
         return WORLD_HEIGHT;
     }
 
-    public long getWorldSeed () {
+    public long getWorldSeed() {
         return WORLD_SEED;
     }
 
-    public Chunk getChunkAtPos (int chunkPosX, int chunkPosZ) {
+    public Chunk getChunkAtPos(int chunkPosX, int chunkPosZ) {
         return chunks[chunkPosX][chunkPosZ];
     }
 
-    public void setChunk (Chunk chunkForPos) {
-        chunks[chunkForPos.getChunkX()][chunkForPos.getChunkZ()] = chunkForPos;
-    }
-
-    public Tile getTileAtPos (int tileWorldPosX, int tileWorldPosZ) {
+    public Tile getTileAtPos(int tileWorldPosX, int tileWorldPosZ) {
         return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public TileEntity getTileEntityAtPos (int tileWorldPosX, int tileWorldPosZ) {
+    public TileEntity getTileEntityAtPos(int tileWorldPosX, int tileWorldPosZ) {
         return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
     }
 
-    public void setTileAtPos (Tile tile, int tileWorldPosX, int tileWorldPosZ) {
-        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileAtPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+    public void setChunk(Chunk chunk) {
+        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
+        chunks[chunk.getChunkX()][chunk.getChunkZ()] = chunk;
+        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
     }
 
-    public void setTileEntityAtPos (TileEntity tileEntity, int tileWorldPosX, int tileWorldPosZ) {
-        getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).setTileEntityAtPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+    public void setTileAtPos(Tile tile, int tileWorldPosX, int tileWorldPosZ) {
+        Chunk chunk = getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize);
+        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
+        chunk.setTileAtPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
     }
 
-    public TransportManagerWorldGraph getWorldGraph () {
+    public void setTileEntityAtPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosZ) {
+        Chunk chunk = getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize);
+        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
+        chunk.setTileEntityAtPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
+        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
+    }
+
+    public TransportManagerWorldGraph getWorldGraph() {
         return worldGraph;
     }
 
-    public void setTransportManagerWorldGraph (TransportManagerWorldGraph worldGraph) {
+    public void setTransportManagerWorldGraph(TransportManagerWorldGraph worldGraph) {
         this.worldGraph = worldGraph;
     }
 
-    public BufferedImage getPregenImage () {
+    public BufferedImage getPregenImage() {
         return pregenImage;
     }
 
-    public void setPregenImage (BufferedImage pregenImage) {
+    public void setPregenImage(BufferedImage pregenImage) {
         this.pregenImage = pregenImage;
     }
 
-    public void loadFromDisk () {
+    public void loadFromDisk() {
         worldGraph = new TransportManagerWorldGraph(this.getVoronoiGenerator(), 2, this.getGenerationRandom());
         this.pregenImage = worldGraph.createMap();
     }
 
-    public int getWaterHeight () {
+    public int getWaterHeight() {
         return WATER_HEIGHT;
     }
 
-    public int getMaxTileHeight () {
+    public int getMaxTileHeight() {
         return MAX_TILE_HEIGHT;
     }
 
-    public int[][] getHeightMap () {
+    public int[][] getHeightMap() {
         return heightMap;
     }
 
-    public void setHeightMap (int[][] heightMap) {
+    public void setHeightMap(int[][] heightMap) {
         this.heightMap = heightMap;
     }
 
-    public int getHeightAtPos (int x, int y) {
+    public int getHeightAtPos(int x, int y) {
         if (x < 0 || y < 0 || x >= WORLD_WIDTH || y >= WORLD_HEIGHT) {
             return Integer.MAX_VALUE;
         }
         return heightMap[x][y];
     }
 
-    public BaseBiome[][] getBiomeMap () {
+    public BaseBiome[][] getBiomeMap() {
         return biomeMap;
     }
 
-    public void setBiomeMap (BaseBiome[][] biomeMap) {
+    public void setBiomeMap(BaseBiome[][] biomeMap) {
         this.biomeMap = biomeMap;
     }
 
-    public BaseBiome getBiomeAtPos (int x, int y) {
+    public BaseBiome getBiomeAtPos(int x, int y) {
         if (x < 0 || y < 0 || x >= WORLD_WIDTH || y >= WORLD_HEIGHT) {
             return null;
         }
         return biomeMap[x][y];
     }
 
-    public Chunk[][] getChunkMap () {
+    public Chunk[][] getChunkMap() {
         return chunks;
     }
 
-    public void setChunks (Chunk[][] chunks) {
+    public void setChunks(Chunk[][] chunks) {
         this.chunks = chunks;
     }
 
-    public Random getGenerationRandom () {
+    public Random getGenerationRandom() {
         return generationRandom;
     }
 
-    public Voronoi getVoronoiGenerator () {
+    public Voronoi getVoronoiGenerator() {
         return voronoiGenerator;
+    }
+
+    private void sendChunkChangeMessagePost(int x, int y) {
+        TransportManagerClient.instance.registerEvent(new EventClientChunkChangePost(this.world.getWorldType(), x, y));
+    }
+
+    private void sendChunkChangeMessagePre(int x, int y) {
+        TransportManagerClient.instance.registerEvent(new EventClientChunkChangePre(this.world.getWorldType(), x, y));
     }
 
 }
