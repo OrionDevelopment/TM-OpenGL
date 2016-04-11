@@ -2,9 +2,10 @@
 
 package com.smithsgaming.transportmanager.network.server;
 
-import com.smithsgaming.transportmanager.network.message.*;
-import com.smithsgaming.transportmanager.util.*;
-import io.netty.channel.*;
+import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
+import com.smithsgaming.transportmanager.util.Side;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * Created by marcf on 3/14/2016.
@@ -21,7 +22,12 @@ public class TMNetworkingServerHandler extends SimpleChannelInboundHandler<TMNet
     }
 
     @Override
-    public void channelReadComplete (ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
+        TMNetworkingServer.setActiveComChannel(ctx.channel());
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
     }
 

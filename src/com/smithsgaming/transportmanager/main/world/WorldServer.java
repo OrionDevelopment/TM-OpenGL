@@ -3,9 +3,11 @@
 package com.smithsgaming.transportmanager.main.world;
 
 import com.smithsgaming.transportmanager.main.core.EntityRegistry;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.main.entity.Entity;
 import com.smithsgaming.transportmanager.main.world.generation.*;
 import com.smithsgaming.transportmanager.main.world.structure.Building;
+import com.smithsgaming.transportmanager.main.world.tiles.TileNames;
 import com.smithsgaming.transportmanager.util.exception.EntityRegistrationException;
 
 import java.util.UUID;
@@ -40,6 +42,6 @@ public class WorldServer extends World {
 
     @Override
     public void update() {
-
+        //this.coreData.setTileAtPos(TileRegistry.instance.getTileForIdentity(TileNames.BEACH), 3, 3);
     }
 }

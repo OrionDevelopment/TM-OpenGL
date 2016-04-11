@@ -2,6 +2,7 @@
 
 package com.smithsgaming.transportmanager.network.server;
 
+import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.local.*;
@@ -14,10 +15,43 @@ import io.netty.handler.logging.*;
  */
 public class TMNetworkingServer implements Runnable {
 
+    private static Channel activeComChannel;
     private int hostPort;
 
     public TMNetworkingServer(int hostPort) {
         this.hostPort = hostPort;
+    }
+
+    public static void setActiveComChannel(Channel channel) {
+        if (activeComChannel == null) {
+            activeComChannel = channel;
+            return;
+        }
+
+        synchronized (activeComChannel) {
+            activeComChannel = channel;
+        }
+    }
+
+    public static void clearActiveComChannel() {
+        synchronized (activeComChannel) {
+            activeComChannel = null;
+        }
+    }
+
+    public static boolean isConnectionEstablished() {
+        return activeComChannel != null;
+    }
+
+    public static void sendMessage(TMNetworkingMessage message) {
+        if (activeComChannel == null)
+            return;
+
+        synchronized (activeComChannel) {
+            if (activeComChannel != null) {
+                activeComChannel.writeAndFlush(message);
+            }
+        }
     }
 
     @Override

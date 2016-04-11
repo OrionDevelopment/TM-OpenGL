@@ -1,13 +1,12 @@
 package com.smithsgaming.transportmanager.client.event;
 
-import com.smithsgaming.transportmanager.client.render.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.event.*;
+import com.smithsgaming.transportmanager.client.render.RenderHandler;
+import com.smithsgaming.transportmanager.util.Side;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
  */
-public class EventClientGuiClose extends TMEvent {
+public class EventClientGuiClose extends TMClientEvent {
 
     @Override
     public void processEvent (Side side) {

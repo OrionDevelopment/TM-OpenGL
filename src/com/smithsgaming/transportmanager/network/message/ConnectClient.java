@@ -8,18 +8,19 @@ import io.netty.channel.Channel;
 /**
  * @Author Marc (Created on: 15.03.2016)
  */
-public class ConnectClient extends TMNetworkingMessage
-{
+public class ConnectClient extends TMNetworkingMessage {
+
     GamePlayer connectingPlayer;
 
-    public ConnectClient() {}
+    public ConnectClient() {
+    }
 
-    public ConnectClient (GamePlayer connectingPlayer) {
+    public ConnectClient(GamePlayer connectingPlayer) {
         this.connectingPlayer = connectingPlayer;
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived(Channel channel, Side side) {
         connectingPlayer = new GamePlayer(connectingPlayer.getDisplayName(), channel);
         PlayerManager.instance.onPlayerConnected(connectingPlayer);
         System.out.println("[Server] PLAYER: " + connectingPlayer.getDisplayName() + " connected!");

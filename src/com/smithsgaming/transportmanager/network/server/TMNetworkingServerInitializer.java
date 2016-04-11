@@ -11,6 +11,7 @@ import io.netty.handler.logging.*;
  * Created by marcf on 3/14/2016.
  */
 public class TMNetworkingServerInitializer extends ChannelInitializer<SocketChannel> {
+
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline channelPipeline = socketChannel.pipeline();

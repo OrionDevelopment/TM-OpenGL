@@ -9,6 +9,8 @@ import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.tileentity.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
+import com.smithsgaming.transportmanager.network.message.ClientEventProcessMessage;
+import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
 
 import java.awt.image.*;
 import java.io.*;
@@ -175,12 +177,15 @@ public class WorldGenerationData implements Serializable {
         return voronoiGenerator;
     }
 
-    private void sendChunkChangeMessagePost(int x, int y) {
-        TransportManagerClient.instance.registerEvent(new EventClientChunkChangePost(this.world.getWorldType(), x, y));
-    }
-
     private void sendChunkChangeMessagePre(int x, int y) {
-        TransportManagerClient.instance.registerEvent(new EventClientChunkChangePre(this.world.getWorldType(), x, y));
+        if (this.world instanceof WorldServer) {
+            TMNetworkingServer.sendMessage(new ClientEventProcessMessage(new EventClientChunkChangePre(this.world.getWorldType(), x, y)));
+        }
     }
 
+    private void sendChunkChangeMessagePost(int x, int y) {
+        if (this.world instanceof WorldServer) {
+            TMNetworkingServer.sendMessage(new ClientEventProcessMessage(new EventClientChunkChangePost(this.world.getWorldType(), x, y)));
+        }
+    }
 }

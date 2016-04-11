@@ -2,12 +2,13 @@ package com.smithsgaming.transportmanager.client.event;
 
 import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.util.Side;
-import com.smithsgaming.transportmanager.util.event.TMEvent;
+
+import java.io.Serializable;
 
 /**
  * Created by Tim on 11/04/2016.
  */
-public class EventClientChunkChangePre extends TMEvent {
+public class EventClientChunkChangePre extends TMClientEvent implements Serializable {
 
     private World.WorldType type;
     private int chunkX, chunkY;
