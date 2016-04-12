@@ -83,7 +83,7 @@ public class TileEntityBuilding extends TileEntity {
         properties = BuildingProperties.values()[tag.getInt("buildingProperties")];
         backgroundTile = TileRegistry.instance.getTileForIdentity(tag.getString("backgroundTile"));
         if (!isParent) {
-            parentTile = (TileEntityBuilding) world.getCoreData().getTileEntityAtPos(tag.getInt("parentX"), tag.getInt("parentY"));
+            parentTile = (TileEntityBuilding) world.getTileEntityAtPos(tag.getInt("parentX"), tag.getInt("parentY"));
         } else {
             parentTile = this;
         }
@@ -92,7 +92,7 @@ public class TileEntityBuilding extends TileEntity {
             int childSize = children.getInt("childSize");
             childTiles = new ArrayList<>();
             for (int i = 0; i < childSize; i++) {
-                childTiles.add(world.getCoreData().getTileEntityAtPos(children.getInt("child_" + i + "_x"), children.getInt("child_" + i + "_y")));
+                childTiles.add(world.getTileEntityAtPos(children.getInt("child_" + i + "_x"), children.getInt("child_" + i + "_y")));
             }
         }
     }

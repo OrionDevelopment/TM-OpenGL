@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.client.event;
 
 import com.smithsgaming.transportmanager.main.world.World;
+import com.smithsgaming.transportmanager.client.event.util.ChunkChangeType;
 import com.smithsgaming.transportmanager.util.Side;
 
 import java.io.Serializable;
@@ -11,10 +12,12 @@ import java.io.Serializable;
 public class EventClientChunkChangePre extends TMClientEvent implements Serializable {
 
     private World.WorldType type;
+    private ChunkChangeType changeType;
     private int chunkX, chunkY;
 
-    public EventClientChunkChangePre(World.WorldType type, int chunkX, int chunkY) {
+    public EventClientChunkChangePre(World.WorldType type, ChunkChangeType changeType, int chunkX, int chunkY) {
         this.type = type;
+        this.changeType = changeType;
         this.chunkX = chunkX;
         this.chunkY = chunkY;
     }
