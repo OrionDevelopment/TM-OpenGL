@@ -16,3 +16,4 @@ target/
 # idea
 .idea/
 TM-OpenGL.iml
+resource-test/
