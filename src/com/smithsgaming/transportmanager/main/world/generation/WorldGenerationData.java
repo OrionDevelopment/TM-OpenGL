@@ -70,38 +70,6 @@ public class WorldGenerationData implements Serializable {
         return WORLD_SEED;
     }
 
-    public Chunk getChunkAtPos(int chunkPosX, int chunkPosZ) {
-        return chunks[chunkPosX][chunkPosZ];
-    }
-
-    public Tile getTileAtPos(int tileWorldPosX, int tileWorldPosZ) {
-        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
-    }
-
-    public TileEntity getTileEntityAtPos(int tileWorldPosX, int tileWorldPosZ) {
-        return getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize).getTileEntityAtPos(tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
-    }
-
-    public void setChunk(Chunk chunk) {
-        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
-        chunks[chunk.getChunkX()][chunk.getChunkZ()] = chunk;
-        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
-    }
-
-    public void setTileAtPos(Tile tile, int tileWorldPosX, int tileWorldPosZ) {
-        Chunk chunk = getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize);
-        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
-        chunk.setTileAtPos(tile, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
-        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
-    }
-
-    public void setTileEntityAtPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosZ) {
-        Chunk chunk = getChunkAtPos(tileWorldPosX / Chunk.chunkSize, tileWorldPosZ / Chunk.chunkSize);
-        sendChunkChangeMessagePre(chunk.getChunkX(), chunk.getChunkZ());
-        chunk.setTileEntityAtPos(tileEntity, tileWorldPosX % Chunk.chunkSize, tileWorldPosZ % Chunk.chunkSize);
-        sendChunkChangeMessagePost(chunk.getChunkX(), chunk.getChunkZ());
-    }
-
     public TransportManagerWorldGraph getWorldGraph() {
         return worldGraph;
     }
@@ -175,17 +143,5 @@ public class WorldGenerationData implements Serializable {
 
     public Voronoi getVoronoiGenerator() {
         return voronoiGenerator;
-    }
-
-    private void sendChunkChangeMessagePre(int x, int y) {
-        if (this.world instanceof WorldServer) {
-            TMNetworkingServer.sendMessage(new ClientEventProcessMessage(new EventClientChunkChangePre(this.world.getWorldType(), x, y)));
-        }
-    }
-
-    private void sendChunkChangeMessagePost(int x, int y) {
-        if (this.world instanceof WorldServer) {
-            TMNetworkingServer.sendMessage(new ClientEventProcessMessage(new EventClientChunkChangePost(this.world.getWorldType(), x, y)));
-        }
     }
 }

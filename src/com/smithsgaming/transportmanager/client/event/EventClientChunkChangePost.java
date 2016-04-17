@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.client.event;
 
+import com.smithsgaming.transportmanager.client.event.util.ChunkChangeType;
 import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
 import com.smithsgaming.transportmanager.network.message.RequestChunkDataMessage;
@@ -13,10 +14,12 @@ import java.io.Serializable;
 public class EventClientChunkChangePost extends TMClientEvent implements Serializable {
 
     private World.WorldType type;
+    private ChunkChangeType changeType;
     private int chunkX, chunkY;
 
-    public EventClientChunkChangePost(World.WorldType type, int chunkX, int chunkY) {
+    public EventClientChunkChangePost(World.WorldType type, ChunkChangeType changeType, int chunkX, int chunkY) {
         this.type = type;
+        this.changeType = changeType;
         this.chunkX = chunkX;
         this.chunkY = chunkY;
     }

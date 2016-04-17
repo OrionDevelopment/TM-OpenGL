@@ -24,7 +24,7 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
 
         for (int x = 0; x < worldGenerationData.getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < worldGenerationData.getWorldHeight() / Chunk.chunkSize + 1; z++) {
-                worldGenerationData.setChunk(new Chunk(worldGenerationData.world, x, z));
+                worldGenerationData.world.setChunk(new Chunk(worldGenerationData.world, x, z));
             }
         }
         progressionNotifierThread.onThreadProgressionChanged(totalProgression, 1, "Started generating biomes...");
@@ -48,7 +48,7 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
                 totalProgression += progressionStep;
                 progressionNotifierThread.onThreadProgressionChanged(totalProgression, 1, "Generated Biome: " + blockBiome.getBiomeType().getName() + " for X: " + x + " Y: " + y);
                 worldGenerationData.getBiomeMap()[x][y] = blockBiome;
-                worldGenerationData.setTileAtPos(blockBiome.getTile(), x, y);
+                worldGenerationData.world.setTileAtPos(blockBiome.getTile(), x, y);
             }
         }
         progressionNotifierThread.onThreadProgressionChanged(1F, 1, "Finished generating biomes...");

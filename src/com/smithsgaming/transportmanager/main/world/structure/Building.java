@@ -41,7 +41,7 @@ public class Building implements ISavable {
         this.parentTile.isParent = true;
         for (int z = 0; z < properties.getHeight(); z++) {
             for (int x = 0; x < properties.getWidth(); x++) {
-                TileEntity t = world.getCoreData().getTileEntityAtPos(xPos + x, zPos + z);
+                TileEntity t = world.getTileEntityAtPos(xPos + x, zPos + z);
                 if (t instanceof TileEntityBuilding) {
                     ((TileEntityBuilding) t).backgroundTile = backgroundTiles.get(x + z * properties.getWidth());
                     ((TileEntityBuilding) t).setParentTile(parentTile);
@@ -99,7 +99,7 @@ public class Building implements ISavable {
         this.xPos = tag.getInt("xPos");
         this.zPos = tag.getInt("zPos");
         this.properties = BuildingProperties.values()[tag.getInt("buildingProperties")];
-        this.parentTile = (TileEntityBuilding) world.getCoreData().getTileEntityAtPos(tag.getInt("parentTileX"), tag.getInt("parentTileZ"));
+        this.parentTile = (TileEntityBuilding) world.getTileEntityAtPos(tag.getInt("parentTileX"), tag.getInt("parentTileZ"));
     }
 
     @Override

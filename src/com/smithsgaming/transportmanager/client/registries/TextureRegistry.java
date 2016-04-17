@@ -83,7 +83,7 @@ public class TextureRegistry {
             GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, stitchedTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, pixelData);
 
             try {
-                File imageFile = new File("textures/stitched/" + stitchedTexture.getTextureName() + ".png");
+                File imageFile = new File("resource-test/textures/stitched/" + stitchedTexture.getTextureName() + ".png");
 
                 if (!imageFile.exists()) {
                     imageFile.getParentFile().mkdirs();

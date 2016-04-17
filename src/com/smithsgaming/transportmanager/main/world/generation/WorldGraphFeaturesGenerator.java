@@ -33,7 +33,7 @@ public class WorldGraphFeaturesGenerator implements IWorldGenFeature {
 
             try {
                 //ImageIO.write(worldGenerationData.getPregenImage(), "PNG", );
-                File imageFile = new File("./WorldGen/Images/WorldGenPreImage (" + dateFormat.format(date) + ").png");
+                File imageFile = new File("resource-test/worldgen/images/WorldGenPreImage (" + dateFormat.format(date) + ").png");
                 imageFile.mkdirs();
                 if (!imageFile.exists())
                     imageFile.createNewFile();

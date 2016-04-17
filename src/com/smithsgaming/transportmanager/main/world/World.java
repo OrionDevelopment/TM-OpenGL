@@ -1,6 +1,10 @@
 package com.smithsgaming.transportmanager.main.world;
 
+import com.smithsgaming.transportmanager.main.entity.Entity;
+import com.smithsgaming.transportmanager.main.tileentity.TileEntity;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.main.world.generation.*;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 
 import java.io.*;
 
@@ -33,9 +37,23 @@ public abstract class World {
         return type;
     }
 
-    public abstract void update();
-
     public enum WorldType implements Serializable {
         OVERGROUND, UNDERGROUND
     }
+
+    public abstract void update();
+
+    public abstract void addEntity(Entity entity);
+
+    public abstract Chunk getChunkAtPos(int chunkPosX, int chunkPosZ);
+
+    public abstract Tile getTileAtPos(int tileWorldPosX, int tileWorldPosZ);
+
+    public abstract TileEntity getTileEntityAtPos(int tileWorldPosX, int tileWorldPosZ);
+
+    public abstract void setChunk(Chunk chunk);
+
+    public abstract void setTileAtPos(Tile tile, int tileWorldPosX, int tileWorldPosZ);
+
+    public abstract void setTileEntityAtPos(TileEntity tileEntity, int tileWorldPosX, int tileWorldPosZ);
 }

@@ -74,7 +74,7 @@ public class TextureStitcher {
 
         if (TransportManagerClient.instance.getSettings().isShouldWriteTextureStichtedImagesToDisk()) {
             try {
-                File dataFile = new File("textures/stitched/last-stitch-data.txt");
+                File dataFile = new File("resource-test/textures/stitched/last-stitch-data.txt");
                 if (!dataFile.exists())
                     dataFile.getParentFile().mkdirs();
 
