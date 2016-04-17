@@ -27,6 +27,22 @@ public class AABox {
 
     }
 
+    public Vector3f getCorner () {
+        return corner;
+    }
+
+    public float getX () {
+        return x;
+    }
+
+    public float getY () {
+        return y;
+    }
+
+    public float getZ () {
+        return z;
+    }
+
     void setBox (Vector3f corner, float x, float y, float z) {
         this.corner = new Vector3f(corner);
 

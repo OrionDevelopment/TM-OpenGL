@@ -45,7 +45,7 @@ public class WorldRenderer implements IRenderer {
             return;
         }
 
-        OpenGLUtil.activateTextureInGPU(TextureRegistry.instance.getTextureForName("Stitched-0"));
+        //OpenGLUtil.activateTextureInGPU(TextureRegistry.instance.getTextureForName("Stitched-0"));
 
         for (int x = 0; x < worldClient.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < worldClient.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
@@ -55,13 +55,14 @@ public class WorldRenderer implements IRenderer {
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
+        //return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
+        return Camera.Player.getNishoFrustum().cubeInFrustum(chunk.getBoundingBox().getCorner().x, chunk.getBoundingBox().getCorner().y, chunk.getBoundingBox().getCorner().z, chunk.getBoundingBox().getCorner().x + chunk.getBoundingBox().getX(), chunk.getBoundingBox().getCorner().y + chunk.getBoundingBox().getY(), chunk.getBoundingBox().getCorner().z + chunk.getBoundingBox().getZ());
     }
 
     private void drawChunk (ChunkClient chunk) {
 
 
-        if (false && !isChunkInView(chunk)) {
+        if (!isChunkInView(chunk)) {
             if (rendererHashMap.containsKey(chunk)) {
                 ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
 

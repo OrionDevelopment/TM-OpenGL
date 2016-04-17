@@ -97,6 +97,6 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
 
     @Override
     public void render () {
-        OpenGLUtil.drawGeometryWithShader(Camera.Player, this, ShaderRegistry.Shaders.textured);
+        OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, this, texture, ShaderRegistry.Shaders.textured);
     }
 }

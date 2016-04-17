@@ -32,10 +32,9 @@ public class Camera {
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
     private Frustum activeFrustum;
+    private NishoFrustum nishoFrustum;
 
     public Camera () {
-        this.activeFrustum = new Frustum(this);
-
         this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
         this.projectionMatrix.store(projectionMatrixBuffer);
         this.projectionMatrixBuffer.flip();
@@ -44,13 +43,14 @@ public class Camera {
         this.viewMatrix.store(this.viewMatrixBuffer);
         this.viewMatrixBuffer.flip();
 
+        this.activeFrustum = new Frustum(this);
+        this.nishoFrustum = new NishoFrustum(this);
+
         setActiveColor(activeColor);
         renderingModelMatrix.scale(new Vector3f(2f / GuiScale.FWVGA.getHorizontalResolution(), -2f / GuiScale.FWVGA.getVerticalResolution(), 1f));
     }
 
     public Camera (float angle, Vector3f rotationAxis) {
-        this.activeFrustum = new Frustum(this);
-
         this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
         this.projectionMatrix.store(projectionMatrixBuffer);
         this.projectionMatrixBuffer.flip();
@@ -59,6 +59,9 @@ public class Camera {
         this.viewMatrix = new Matrix4f();
         this.viewMatrix.store(this.viewMatrixBuffer);
         this.viewMatrixBuffer.flip();
+
+        this.activeFrustum = new Frustum(this);
+        this.nishoFrustum = new NishoFrustum(this);
 
         rotateCamera(angle, rotationAxis);
     }
@@ -106,6 +109,7 @@ public class Camera {
         projectionMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
+        nishoFrustum.calculateFrustum();
     }
 
     /**
@@ -133,6 +137,7 @@ public class Camera {
         viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
+        nishoFrustum.calculateFrustum();
     }
 
     /**
@@ -188,6 +193,7 @@ public class Camera {
         viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
+        nishoFrustum.calculateFrustum();
 
         System.out.println(cameraPosition.x + "-" + cameraPosition.y + "-" + cameraPosition.getZ());
 
@@ -208,6 +214,7 @@ public class Camera {
         viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
+        nishoFrustum.calculateFrustum();
 
         return this;
     }
@@ -219,6 +226,10 @@ public class Camera {
      */
     public Frustum getActiveFrustum () {
         return activeFrustum;
+    }
+
+    public NishoFrustum getNishoFrustum () {
+        return nishoFrustum;
     }
 
     /**
