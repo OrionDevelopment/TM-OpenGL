@@ -55,8 +55,8 @@ public class WorldRenderer implements IRenderer {
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        //return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
-        return Camera.Player.getNishoFrustum().cubeInFrustum(chunk.getBoundingBox().getCorner().x, chunk.getBoundingBox().getCorner().y, chunk.getBoundingBox().getCorner().z, chunk.getBoundingBox().getCorner().x + chunk.getBoundingBox().getX(), chunk.getBoundingBox().getCorner().y + chunk.getBoundingBox().getY(), chunk.getBoundingBox().getCorner().z + chunk.getBoundingBox().getZ());
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
+        //return Camera.Player.getNishoFrustum().cubeInFrustum(chunk.getBoundingBox().getCorner().x, chunk.getBoundingBox().getCorner().y, chunk.getBoundingBox().getCorner().z, chunk.getBoundingBox().getCorner().x + chunk.getBoundingBox().getX(), chunk.getBoundingBox().getCorner().y + chunk.getBoundingBox().getY(), chunk.getBoundingBox().getCorner().z + chunk.getBoundingBox().getZ());
     }
 
     private void drawChunk (ChunkClient chunk) {
