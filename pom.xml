@@ -1,66 +1,129 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <name>Transport Manager - OpenGL</name>
+
     <groupId>com.smithsgaming.transportmanager</groupId>
+    <name>Transport Manager - OpenGL</name>
     <artifactId>TransportManager-OpenGL</artifactId>
     <version>0.0.1</version>
+    <inceptionYear>2016</inceptionYear>
+    <packaging>jar</packaging>
+
+    <developers>
+        <developer>
+            <id>Tim020</id>
+            <name>Tim Bradgate</name>
+            <email>unknown</email>
+            <url>www.smithsmodding.com</url>
+        </developer>
+        <developer>
+            <id>OrionDevelopemtn</id>
+            <name>Marc Hermans</name>
+            <email>oriondevelopment@outlook.com</email>
+            <url>www.smithsmodding.com</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>git@github.com:SmithsGaming/TM-OpenGL.git</connection>
+        <developerConnection>scm:git@github.com:SmithsGaming/TM-OpenGL.git</developerConnection>
+        <url>www.github.com/SmithsGaming/TM-OpenGL</url>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${mavencompiler.version}</version>
                 <configuration>
-                    <showDeprecation>false</showDeprecation>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>${mavennatives.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <!--suppress MavenModelInspection (this line is for IDEA)-->
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <lwjgl.version>3.0.0a</lwjgl.version>
+        <mavencompiler.version>2.5.1</mavencompiler.version>
+        <mavenjavadoc.version>2.10.1</mavenjavadoc.version>
+        <mavennatives.version>0.0.7</mavennatives.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netty.version>4.0.26.Final</netty.version>
+        <google.api.version>1.21.0</google.api.version>
+        <google.gson.version>2.6</google.gson.version>
+        <apache.logging.api.version>2.5</apache.logging.api.version>
+        <apache.logging.core.version>2.5</apache.logging.core.version>
+        <flow.version>1.0.0</flow.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
-            <version>1.21.0</version>
+            <version>${google.api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.6</version>
+            <version>${google.gson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.5</version>
+            <version>${apache.logging.api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.5</version>
+            <version>${apache.logging.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.lwjgl.lwjgl</groupId>
-            <artifactId>lwjgl_util</artifactId>
-            <version>2.9.3</version>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl</artifactId>
+            <version>${lwjgl.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.l33tlabs.twl</groupId>
-            <artifactId>pngdecoder</artifactId>
-            <version>1.0</version>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-platform</artifactId>
+            <classifier>natives-windows</classifier>
+            <version>${lwjgl.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha2</version>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-platform</artifactId>
+            <classifier>natives-linux</classifier>
+            <version>${lwjgl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-platform</artifactId>
+            <classifier>natives-osx</classifier>
+            <version>${lwjgl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.flowpowered</groupId>
             <artifactId>flow-noise</artifactId>
-            <version>1.0.0</version>
+            <version>${flow.version}</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+
 </project>
