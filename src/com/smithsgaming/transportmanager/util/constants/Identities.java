@@ -9,13 +9,23 @@ public enum Identities implements IValueContainingEnum {
     PLAYER("Player-"),
 
     ///Blocks
-    OCEAN("Tiles.NonBuildable.Ocean"),
-    LAKE("Tiles.NonBuildable.Lake"),
-    SCORCHED("Tiles.NonBuildable.Scorched"),
-    OCEAN("Tiles.NonBuildable.Ocean"),
-    OCEAN("Tiles.NonBuildable.Ocean"),
-    OCEAN("Tiles.NonBuildable.Ocean"),
-    OCEAN("Tiles.NonBuildable.Ocean"),;
+    OCEAN("tile.nonbuildable.Ocean"),
+    GRASS("tile.buildable.Grass"),
+    DRY_GRASS("tile.buildable.DryGrass"),
+    BEACH("tile.buildable.Beach"),
+    DESERT("tile.buildable.Desert"),
+    RIVER("tile.bridgable.River"),
+    LAKE("tile.nonbuildable.Lake"),
+    SNOW("tile.buildable.Snow"),
+    STONE_OVERGROUND("tile.buildable.StoneOverground"),
+    STONE_UNDERGROUND("tile.buildable.StoneUnderground"),
+    ICE("tile.buildable.Ice"),
+    ICE_BUSH_BROWN("tile.buildable.IceBushBrown"),
+    ICE_BUSH_YELLOW("tile.buildable.IceBushYellow"),
+    SCORCHED("tile.nonbuildable.Scorched"),
+
+    //Buildings
+    BUILDING("tile.nonbuildable.Building");
 
     private final String value;
 
