@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.server;
 
 import com.smithsgaming.transportmanager.common.*;
 import com.smithsgaming.transportmanager.common.init.*;
+import com.smithsgaming.transportmanager.server.init.*;
 import com.smithsgaming.transportmanager.util.common.*;
 import org.apache.logging.log4j.*;
 
@@ -27,6 +28,7 @@ public class ServerGame implements IGame, Runnable {
     @Override
     public void initializeInitHandler (InitializationHandler handler) {
         handler.registerInitController(new CoreLoggingInitController());
+        handler.registerInitController(new ServerTileRegistrationInitController());
     }
 
     @Override
