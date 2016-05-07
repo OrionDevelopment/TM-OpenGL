@@ -11,7 +11,7 @@ public interface IWorldLayer {
 
     ITile getTileForPosition (WorldCoordinate worldCoordinate);
 
-    ITileIdentity getTileIdentity (WorldCoordinate worldCoordinate);
+    ITileEntity getTileIdentity (WorldCoordinate worldCoordinate);
 
     void setTileForPosition (ITile tile, WorldCoordinate worldCoordinate);
 

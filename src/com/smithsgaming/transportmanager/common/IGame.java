@@ -1,14 +1,14 @@
 package com.smithsgaming.transportmanager.common;
 
-import com.smithsgaming.transportmanager.common.init.InitializationHandler;
-import com.smithsgaming.transportmanager.util.common.Side;
-import org.apache.logging.log4j.Logger;
+import com.smithsgaming.transportmanager.common.init.*;
+import com.smithsgaming.transportmanager.util.common.*;
+import org.apache.logging.log4j.*;
 
 
 /**
  * @Author Marc (Created on: 05.05.2016)
  */
-public interface IGame {
+public interface IGame extends Runnable {
 
     Side getSide ();
 

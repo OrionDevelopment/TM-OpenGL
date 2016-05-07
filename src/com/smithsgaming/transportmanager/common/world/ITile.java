@@ -6,7 +6,7 @@ import com.smithsgaming.transportmanager.util.common.*;
 /**
  * @Author Marc (Created on: 24.04.2016)
  */
-public interface ITile extends IInstancedWorldObject {
+public interface ITile extends IIdentifyableWorldObject {
     /**
      * Method to check if the player can build over this Tile with the given Tile or not
      *

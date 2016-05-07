@@ -15,7 +15,7 @@ public class ServerWorldLayer implements IWorldLayer {
     ServerWorld world;
 
     HashMap<WorldCoordinate, ITile> tileHashMap;
-    HashMap<WorldCoordinate, ITileIdentity> tileIdentityHashMap;
+    HashMap<WorldCoordinate, ITileEntity> tileIdentityHashMap;
 
     ArrayList<EntityInstance> entityInstances;
 
@@ -39,7 +39,7 @@ public class ServerWorldLayer implements IWorldLayer {
     }
 
     @Override
-    public ITileIdentity getTileIdentity (WorldCoordinate worldCoordinate) {
+    public ITileEntity getTileIdentity (WorldCoordinate worldCoordinate) {
         return tileIdentityHashMap.get(worldCoordinate);
     }
 

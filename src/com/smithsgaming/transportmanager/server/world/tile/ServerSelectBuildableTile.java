@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.server.world;
+package com.smithsgaming.transportmanager.server.world.tile;
 
 import com.smithsgaming.transportmanager.common.player.*;
 import com.smithsgaming.transportmanager.common.world.*;

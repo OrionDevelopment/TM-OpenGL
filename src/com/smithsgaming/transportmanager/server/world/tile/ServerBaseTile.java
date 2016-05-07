@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.server.world;
+package com.smithsgaming.transportmanager.server.world.tile;
 
 import com.smithsgaming.transportmanager.common.player.*;
 import com.smithsgaming.transportmanager.common.world.*;
@@ -7,10 +7,10 @@ import com.smithsgaming.transportmanager.util.common.*;
 /**
  * @Author Marc (Created on: 05.05.2016)
  */
-public class ServerAbstractTile implements ITile {
+public class ServerBaseTile implements ITile {
     String identity;
 
-    public ServerAbstractTile (String identity) {
+    public ServerBaseTile (String identity) {
         this.identity = identity;
     }
 

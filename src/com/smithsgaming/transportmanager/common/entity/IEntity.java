@@ -7,7 +7,7 @@ import com.smithsgaming.transportmanager.util.data.*;
 /**
  * @Author Marc (Created on: 24.04.2016)
  */
-public interface IEntity extends IInstancedWorldObject {
+public interface IEntity extends IIdentifyableWorldObject {
 
     /**
      * Called when the Entity collides with an object in the world.
