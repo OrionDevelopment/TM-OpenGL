@@ -77,6 +77,10 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:3.0.0a" level="project" />
+    <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-platform:natives-windows:3.0.0a" level="project" />
+    <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-platform:natives-linux:3.0.0a" level="project" />
+    <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-platform:natives-osx:3.0.0a" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.21.0" level="project" />
