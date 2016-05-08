@@ -1,22 +1,22 @@
-package com.smithsgaming.transportmanager.server;
+package com.smithsgaming.transportmanager.client;
 
+import com.smithsgaming.transportmanager.client.init.*;
 import com.smithsgaming.transportmanager.common.*;
 import com.smithsgaming.transportmanager.common.init.*;
-import com.smithsgaming.transportmanager.server.init.*;
 import com.smithsgaming.transportmanager.util.common.*;
 import org.apache.logging.log4j.*;
 
 /**
- * @Author Marc (Created on: 05.05.2016)
+ * @Author Marc (Created on: 07.05.2016)
  */
-public class ServerGame implements IGame, Runnable {
+public class ClientGame implements IGame {
 
     String[] programStartupArgs;
     Logger logger;
     InitializationHandler initializationHandler;
     boolean initialized;
 
-    public ServerGame (String[] programStartupArgs) {
+    public ClientGame (String[] programStartupArgs) {
         this.programStartupArgs = programStartupArgs;
     }
 
@@ -27,7 +27,7 @@ public class ServerGame implements IGame, Runnable {
 
     @Override
     public Side getSide () {
-        return Side.SERVER;
+        return Side.CLIENT;
     }
 
     @Override
@@ -38,7 +38,10 @@ public class ServerGame implements IGame, Runnable {
     @Override
     public void initializeInitHandler (InitializationHandler handler) {
         handler.registerInitController(new CoreLoggingInitController());
-        handler.registerInitController(new ServerTileRegistrationInitController());
+        handler.registerInitController(new LWJGLSetupInitController());
+        handler.registerInitController(new FrameworkSetupInitController());
+
+        handler.registerInitController(new ClientTileRegistrationInitController());
     }
 
     @Override

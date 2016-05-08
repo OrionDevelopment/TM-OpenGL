@@ -10,6 +10,8 @@ import org.apache.logging.log4j.*;
  */
 public interface IGame extends Runnable {
 
+    String[] getProgramStartupArgs ();
+
     Side getSide ();
 
     boolean isInitialized ();

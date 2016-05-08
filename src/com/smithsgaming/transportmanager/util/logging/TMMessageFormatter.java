@@ -45,7 +45,15 @@ public class TMMessageFormatter extends AbstractStringLayout {
             builder.append(" - ");
         }
 
-        builder.append(logEvent.getMessage().getFormattedMessage() + "\n");
+        try {
+            builder.append(logEvent.getMessage().getFormattedMessage() + ( logEvent.getThrown() != null ? " : " + logEvent.getThrown().getMessage() : "" ) + "\n");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        if (logEvent.getThrown() != null) {
+            builder.append(logEvent.getThrownProxy().getExtendedStackTraceAsString());
+        }
 
         return builder.toString();
     }

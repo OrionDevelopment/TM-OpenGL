@@ -8,7 +8,7 @@ import com.smithsgaming.transportmanager.common.*;
 public class ServerMain {
 
     public static void main (String[] args) {
-        GameController.runningInstance = new ServerGame();
+        GameController.runningInstance = new ServerGame(args);
         GameController.runningInstance.run();
     }
 }
