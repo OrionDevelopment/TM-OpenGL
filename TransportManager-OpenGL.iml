@@ -75,6 +75,24 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.12" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-ext:1.7.12" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.cal10n:cal10n-api:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.picocontainer:picocontainer:2.14.3" level="project" />
+    <orderEntry type="library" name="Maven: com.badlogicgames.jlayer:jlayer:1.0.2-gdx" level="project" />
+    <orderEntry type="library" name="Maven: com.badlogicgames.gdx:gdx-bullet:1.9.2" level="project" />
+    <orderEntry type="library" name="Maven: com.badlogicgames.gdx:gdx:1.9.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.imageio:imageio-jpeg:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.imageio:imageio-core:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.imageio:imageio-metadata:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.common:common-lang:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.common:common-io:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.common:common-image:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.imageio:imageio-tga:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.twelvemonkeys.imageio:imageio-tiff:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jcraft:jorbis:0.0.17" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.21.0" level="project" />

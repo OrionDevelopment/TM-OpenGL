@@ -1,11 +1,14 @@
 package com.smithsgaming.transportmanager.common.init;
 
-import com.smithsgaming.transportmanager.common.*;
-import com.smithsgaming.transportmanager.exception.*;
-import com.smithsgaming.transportmanager.util.common.*;
-import org.apache.logging.log4j.*;
+import com.google.common.base.Stopwatch;
+import com.smithsgaming.transportmanager.common.IGame;
+import com.smithsgaming.transportmanager.exception.InitializationException;
+import com.smithsgaming.transportmanager.util.common.MethodHandlingResult;
+import com.smithsgaming.transportmanager.util.common.StringUtil;
+import org.apache.logging.log4j.Level;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Marc (Created on: 05.05.2016)
@@ -28,7 +31,30 @@ public class InitializationHandler {
     public void initializeGame () throws InitializationException {
         onInitStarting();
 
-        instance.getLogger().log(Level.INFO, "Starting Transportmanager - " + instance.getSide().name() + ".");
+        instance.getLogger().log(Level.INFO, "Starting Transportmanager.");
+        instance.getLogger().log(Level.INFO, "Initializing " + instance.getSide().name() + ".");
+
+        Stopwatch initTimer = Stopwatch.createStarted();
+        instance.getLogger().log(Level.INFO, "");
+        instance.getLogger().log(Level.INFO, "======================Pre-Init======================");
+        onPreInit();
+        instance.getLogger().log(Level.INFO, StringUtil.fillCentered("Finished Pre-Init after: " + initTimer.elapsed(TimeUnit.MILLISECONDS) + " Ms.", "=", 52));
+
+        initTimer = Stopwatch.createStarted();
+        instance.getLogger().log(Level.INFO, "");
+        instance.getLogger().log(Level.INFO, "========================Init========================");
+        onInit();
+        instance.getLogger().log(Level.INFO, StringUtil.fillCentered("Finished Pre-Init after: " + initTimer.elapsed(TimeUnit.MILLISECONDS) + " Ms.", "=", 52));
+
+        initTimer = Stopwatch.createStarted();
+        instance.getLogger().log(Level.INFO, "");
+        instance.getLogger().log(Level.INFO, "======================Post-Init=====================");
+        onPostInit();
+        instance.getLogger().log(Level.INFO, StringUtil.fillCentered("Finished Pre-Init after: " + initTimer.elapsed(TimeUnit.MILLISECONDS) + " Ms.", "=", 52));
+
+        onInitComplete();
+
+        instance.getLogger().log(Level.INFO, "Finished initializing " + instance.getSide().name() + ".");
     }
 
     private void onInitStarting () throws InitializationException {

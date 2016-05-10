@@ -1,8 +1,8 @@
 package com.smithsgaming.transportmanager.common.registries;
 
-import com.smithsgaming.transportmanager.common.world.*;
+import com.smithsgaming.transportmanager.common.world.ITileEntity;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author Marc (Created on: 07.05.2016)
@@ -15,6 +15,7 @@ public class TileEntityRegistry {
     }
 
     public void registerTile (ITileEntity tileIdentity) {
+
         mappedTiles.put(tileIdentity.getIdentity(), tileIdentity);
     }
 
