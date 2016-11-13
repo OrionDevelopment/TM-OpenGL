@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import org.lwjgl.util.vector.*;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -28,14 +30,14 @@ public class Frustum {
     }
 
     protected void updateFrustum () {
-        viewProjectionMatrix = Matrix4f.mul(activeCamera.getViewMatrix(), activeCamera.getProjectionMatrix(), null);
+        viewProjectionMatrix = activeCamera.getViewMatrix().mul(activeCamera.getProjectionMatrix(), new Matrix4f());
 
-        nearFrustumPlane.setCoefficients(viewProjectionMatrix.m20 + viewProjectionMatrix.m30, viewProjectionMatrix.m21 + viewProjectionMatrix.m31, viewProjectionMatrix.m22 + viewProjectionMatrix.m32, viewProjectionMatrix.m23 + viewProjectionMatrix.m33);
-        farFrustumPlane.setCoefficients(-viewProjectionMatrix.m20 + viewProjectionMatrix.m30, -viewProjectionMatrix.m21 + viewProjectionMatrix.m31, -viewProjectionMatrix.m22 + viewProjectionMatrix.m32, -viewProjectionMatrix.m23 + viewProjectionMatrix.m33);
-        bottomFrustumPlane.setCoefficients(viewProjectionMatrix.m10 + viewProjectionMatrix.m30, viewProjectionMatrix.m11 + viewProjectionMatrix.m31, viewProjectionMatrix.m12 + viewProjectionMatrix.m32, viewProjectionMatrix.m13 + viewProjectionMatrix.m33);
-        topFrustumPlane.setCoefficients(-viewProjectionMatrix.m10 + viewProjectionMatrix.m30, -viewProjectionMatrix.m11 + viewProjectionMatrix.m31, -viewProjectionMatrix.m12 + viewProjectionMatrix.m32, -viewProjectionMatrix.m13 + viewProjectionMatrix.m33);
-        leftFrustumPlane.setCoefficients(viewProjectionMatrix.m00 + viewProjectionMatrix.m30, viewProjectionMatrix.m01 + viewProjectionMatrix.m31, viewProjectionMatrix.m02 + viewProjectionMatrix.m32, viewProjectionMatrix.m03 + viewProjectionMatrix.m33);
-        rightFrustumPlane.setCoefficients(-viewProjectionMatrix.m00 + viewProjectionMatrix.m30, -viewProjectionMatrix.m01 + viewProjectionMatrix.m31, -viewProjectionMatrix.m02 + viewProjectionMatrix.m32, -viewProjectionMatrix.m03 + viewProjectionMatrix.m33);
+        nearFrustumPlane.setCoefficients(viewProjectionMatrix.m20() + viewProjectionMatrix.m30(), viewProjectionMatrix.m21() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m22() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m23() +  viewProjectionMatrix.m33());  
+        farFrustumPlane.setCoefficients(-viewProjectionMatrix.m20() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m21() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m22() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m23() +  viewProjectionMatrix.m33());  
+        bottomFrustumPlane.setCoefficients(viewProjectionMatrix.m10() + viewProjectionMatrix.m30(), viewProjectionMatrix.m11() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m12() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m13() +  viewProjectionMatrix.m33());  
+        topFrustumPlane.setCoefficients(-viewProjectionMatrix.m10() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m11() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m12() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m13() +  viewProjectionMatrix.m33());  
+        leftFrustumPlane.setCoefficients(viewProjectionMatrix.m00() + viewProjectionMatrix.m30(), viewProjectionMatrix.m01() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m02() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m03() +  viewProjectionMatrix.m33());  
+        rightFrustumPlane.setCoefficients(-viewProjectionMatrix.m00() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m01() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m02() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m03() +  viewProjectionMatrix.m33());  
     }
 
     public ViewType pointInFrustum (Vector3f p) {

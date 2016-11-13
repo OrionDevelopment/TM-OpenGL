@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import org.lwjgl.util.vector.*;
+import org.joml.Vector3f;
 
 /**
  * @Author Marc (Created on: 17.03.2016)

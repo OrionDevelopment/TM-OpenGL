@@ -13,6 +13,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.nio.*;
 import java.util.*;
@@ -58,16 +59,21 @@ public class Display implements Runnable, IEventController
         return -1;
     }
 
-    private void init () {
-        System.out.println("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("java.library.path")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
+    private void init () throws Exception {
+        OSUtil.setLWJGLLibsForOS();
+
+        System.out.println("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("org.lwjgl.librarypath")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
 
         try {
             glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint());
 
             debugMessageKHRCallback = new GLDebugMessageCallback() {
                 @Override
-                public void invoke (int source, int type, int id, int severity, int length, long message, long userParam) {
-                    System.out.println(GLDebugMessageCallback.getMessage(length, message));
+                public void invoke(int source, int type, int id, int severity, int length, long message, long userParam) {
+                    System.err.println("###########################################");
+                    System.err.println("GLERROR: " + type + "/" + id);
+                    System.err.println(GLDebugMessageCallback.getMessage(length, message));
+                    System.err.println("###########################################");
                 }
             };
 

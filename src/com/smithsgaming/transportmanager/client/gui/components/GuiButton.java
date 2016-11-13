@@ -7,9 +7,10 @@ import com.smithsgaming.transportmanager.client.gui.input.IMouseInputComponent;
 import com.smithsgaming.transportmanager.util.ActionProcessingResult;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.vector.Vector3f;
+
+import java.awt.*;
 
 /**
  * @Author Marc (Created on: 31.03.2016)
@@ -35,7 +36,7 @@ public class GuiButton extends GuiComponent implements IMouseInputComponent {
         this.area = area;
         this.centerAlign = centerAlign;
 
-        this.componentOuterBackground = new GuiFlatArea(parent, new GuiPlaneI(area), (Color) Color.DKGREY);
+        this.componentOuterBackground = new GuiFlatArea(parent, new GuiPlaneI(area), (Color) Color.DARK_GRAY);
         this.componentInnerBackground = new GuiFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(65, 65, 65));
         this.componentInnerBackgroundHovered = new GuiFlatArea(parent, new GuiPlaneI(area.getShrinkedVariant(5)), new Color(75, 75, 75));
 

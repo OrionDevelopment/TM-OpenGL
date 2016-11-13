@@ -6,9 +6,9 @@ import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.textures.*;
+import org.joml.Matrix4f;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
 
 import java.io.*;
 import java.nio.*;
@@ -60,7 +60,7 @@ public class OpenGLUtil {
         int status = GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS);
         if (status == GL11.GL_FALSE) {
 
-            String error = GL20.glGetShaderInfoLog(shader);
+            String error = GL20.glGetShaderInfoLog(shader, 150);
 
             String ShaderTypeString = null;
             switch (shaderType) {
@@ -106,7 +106,7 @@ public class OpenGLUtil {
         GL20.glLinkProgram(program);
         GL20.glValidateProgram(program);
 
-        String log = GL20.glGetProgramInfoLog(program);
+        String log = GL20.glGetProgramInfoLog(program, 150);
 
         if (!log.equals("")) {
             System.err.println("Warning OpenGL log was not empty:");
@@ -190,7 +190,7 @@ public class OpenGLUtil {
         // Upload the texture data and generate mip maps (for scaling)
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, texture.getInternalFormat(), texture.getPixelWidth(), texture.getPixelHeight(), 0,
                 texture.getFormat(), GL11.GL_UNSIGNED_BYTE, texture.getData());
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        //GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // Setup the ST coordinate system
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
@@ -199,8 +199,8 @@ public class OpenGLUtil {
         // Setup what to do when the texture has to be scaled
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
                 GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
-                GL11.GL_NEAREST_MIPMAP_NEAREST);
+        //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+                //GL11.GL_NEAREST_MIPMAP_LINEAR);
 
         texture.setOpenGLTextureId(texId);
         texture.setBoundTextureUnit(GL13.GL_TEXTURE0);
@@ -355,7 +355,7 @@ public class OpenGLUtil {
     public static void setModelMatrix (Matrix4f modelMatrix) {
         OpenGLUtil.modelMatrix = modelMatrix;
 
-        modelMatrix.store(modelMatrixBuffer);
+        modelMatrix.get(modelMatrixBuffer);
         modelMatrixBuffer.flip();
     }
 

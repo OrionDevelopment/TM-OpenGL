@@ -1,12 +1,14 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.util.GraphicUtil;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.*;
-import org.lwjgl.util.*;
-import org.lwjgl.util.vector.*;
 
+import java.awt.*;
 import java.nio.*;
 import java.util.*;
 
@@ -16,7 +18,7 @@ import java.util.*;
 public class Camera {
 
     public static final Camera Gui = new Camera();
-    public static final Camera Player = new Camera(MathUtil.toRadiant(-90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, 99f, 0));
+    public static final Camera Player = new Camera(MathUtil.toRadiant(-90), new Vector3f(1, 0, 0)).moveCamera(new Vector3f(0, 10f, 0));
     private Stack<Matrix4f> modelMatrixStack = new Stack<>();
     private Matrix4f renderingModelMatrix = new Matrix4f();
     private Matrix4f currentActingMatrix = new Matrix4f();
@@ -35,13 +37,13 @@ public class Camera {
     private NishoFrustum nishoFrustum;
 
     public Camera () {
-        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 100f);
-        this.projectionMatrix.store(projectionMatrixBuffer);
-        this.projectionMatrixBuffer.flip();
+        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreateOrthogonalFieldOfView(0f, 100f);
+        this.projectionMatrix.get(projectionMatrixBuffer);
+        //this.projectionMatrixBuffer.flip();
 
         this.viewMatrix = new Matrix4f();
-        this.viewMatrix.store(this.viewMatrixBuffer);
-        this.viewMatrixBuffer.flip();
+        this.viewMatrix.get(this.viewMatrixBuffer);
+        //this.viewMatrixBuffer.flip();
 
         this.activeFrustum = new Frustum(this);
         this.nishoFrustum = new NishoFrustum(this);
@@ -52,13 +54,13 @@ public class Camera {
 
     public Camera (float angle, Vector3f rotationAxis) {
         this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
-        this.projectionMatrix.store(projectionMatrixBuffer);
-        this.projectionMatrixBuffer.flip();
+        this.projectionMatrix.get(projectionMatrixBuffer);
+        //this.projectionMatrixBuffer.flip();
 
 
         this.viewMatrix = new Matrix4f();
-        this.viewMatrix.store(this.viewMatrixBuffer);
-        this.viewMatrixBuffer.flip();
+        this.viewMatrix.get(this.viewMatrixBuffer);
+        //this.viewMatrixBuffer.flip();
 
         this.activeFrustum = new Frustum(this);
         this.nishoFrustum = new NishoFrustum(this);
@@ -105,8 +107,8 @@ public class Camera {
         this.projectionMatrix = projectionMatrix;
 
         projectionMatrixBuffer.clear();
-        projectionMatrix.store(projectionMatrixBuffer);
-        projectionMatrixBuffer.flip();
+        projectionMatrix.get(projectionMatrixBuffer);
+        //projectionMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
         nishoFrustum.calculateFrustum();
@@ -133,8 +135,8 @@ public class Camera {
         this.viewMatrix = viewMatrix;
 
         viewMatrixBuffer.clear();
-        viewMatrix.store(viewMatrixBuffer);
-        viewMatrixBuffer.flip();
+        viewMatrix.get(viewMatrixBuffer);
+        //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
         nishoFrustum.calculateFrustum();
@@ -172,8 +174,8 @@ public class Camera {
 
         if (updateModelMatrixBuffer) {
             renderingModelMatrixBuffer.clear();
-            renderingModelMatrix.store(renderingModelMatrixBuffer);
-            renderingModelMatrixBuffer.flip();
+            renderingModelMatrix.get(renderingModelMatrixBuffer);
+            //renderingModelMatrixBuffer.flip();
         }
 
         return renderingModelMatrixBuffer;
@@ -186,16 +188,16 @@ public class Camera {
      */
     public Camera moveCamera (Vector3f moveDelta) {
         viewMatrix.translate(moveDelta);
-        cameraPosition.translate(moveDelta.getX(), moveDelta.getY(), moveDelta.getZ());
+        cameraPosition.add(moveDelta);
 
         viewMatrixBuffer.clear();
-        viewMatrix.store(viewMatrixBuffer);
-        viewMatrixBuffer.flip();
+        viewMatrix.get(viewMatrixBuffer);
+        //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
         nishoFrustum.calculateFrustum();
 
-        System.out.println(cameraPosition.x + "-" + cameraPosition.y + "-" + cameraPosition.getZ());
+        System.out.println(cameraPosition.x + "-" + cameraPosition.y + "-" + cameraPosition.z);
 
         return this;
     }
@@ -210,8 +212,8 @@ public class Camera {
         viewMatrix.rotate(angle, axis);
 
         viewMatrixBuffer.clear();
-        viewMatrix.store(viewMatrixBuffer);
-        viewMatrixBuffer.flip();
+        viewMatrix.get(viewMatrixBuffer);
+        //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
         nishoFrustum.calculateFrustum();
@@ -278,7 +280,7 @@ public class Camera {
      * @return True if the point is in the ViewDistance, false when not.
      */
     public boolean isPointInViewDistance (Vector3f point) {
-        return Vector3f.sub(point, cameraPosition, new Vector3f()).lengthSquared() <= ( Math.pow(viewDistanceInChunks * Chunk.chunkSize, 2) );
+        return point.sub(cameraPosition, new Vector3f()).lengthSquared() <= ( Math.pow(viewDistanceInChunks * Chunk.chunkSize, 2) );
     }
 
     /**
@@ -303,7 +305,7 @@ public class Camera {
     public void pushMatrix () {
         modelMatrixStack.push(new Matrix4f(renderingModelMatrix));
 
-        Matrix4f.mul(currentActingMatrix, renderingModelMatrix, renderingModelMatrix);
+        currentActingMatrix.mul(renderingModelMatrix, renderingModelMatrix);
         currentActingMatrix = new Matrix4f();
 
         isActingMatrixLive = true;
@@ -335,7 +337,7 @@ public class Camera {
      * @param modelTranslation The translation to perform.
      */
     public void translateModel (Vector3f modelTranslation) {
-        currentActingMatrix.translate(new Vector3f(modelTranslation.getX() / (TransportManagerClient.instance.getSettings().getCurrentScale().getHorizontalResolution() / 2), modelTranslation.getY() / (TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution() / 2), modelTranslation.getZ()));
+        currentActingMatrix.translate(new Vector3f(modelTranslation.x() / (TransportManagerClient.instance.getSettings().getCurrentScale().getHorizontalResolution() / 2), modelTranslation.y() / (TransportManagerClient.instance.getSettings().getCurrentScale().getVerticalResolution() / 2), modelTranslation.z()));
         isActingMatrixLive = false;
     }
 

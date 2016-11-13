@@ -37,7 +37,7 @@ public class WorldRenderer implements IRenderer {
 
         if (false) {
             if (testGeometry == null) {
-                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(1, -1)), TextureRegistry.Textures.Tiles.grass.getArea());
+                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(100, -100)), TextureRegistry.Textures.Tiles.grass.getArea());
                 OpenGLUtil.loadGeometryIntoGPU(testGeometry);
             }
             OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, testGeometry, TextureRegistry.Textures.Tiles.grass, ShaderRegistry.Shaders.textured);
@@ -45,7 +45,7 @@ public class WorldRenderer implements IRenderer {
             return;
         }
 
-        //OpenGLUtil.activateTextureInGPU(TextureRegistry.instance.getTextureForName("Stitched-0"));
+        OpenGLUtil.activateTextureInGPU(TextureRegistry.instance.getTextureForName("Stitched-0"));
 
         for (int x = 0; x < worldClient.getCoreData().getWorldWidth() / Chunk.chunkSize + 1; x++) {
             for (int z = 0; z < worldClient.getCoreData().getWorldHeight() / Chunk.chunkSize + 1; z++) {
@@ -62,7 +62,7 @@ public class WorldRenderer implements IRenderer {
     private void drawChunk (ChunkClient chunk) {
 
 
-        if (!isChunkInView(chunk)) {
+        if (!isChunkInView(chunk) && false) {
             if (rendererHashMap.containsKey(chunk)) {
                 ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
 

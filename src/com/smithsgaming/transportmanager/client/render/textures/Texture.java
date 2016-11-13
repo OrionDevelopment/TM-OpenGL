@@ -1,8 +1,8 @@
 package com.smithsgaming.transportmanager.client.render.textures;
 
 import com.smithsgaming.transportmanager.util.math.graphical.*;
+import org.joml.Vector2f;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
 
 import java.nio.*;
 

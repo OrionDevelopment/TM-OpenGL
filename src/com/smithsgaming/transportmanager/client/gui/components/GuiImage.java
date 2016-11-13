@@ -8,8 +8,8 @@ import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.ResourceUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 

@@ -2,8 +2,7 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import org.lwjgl.util.*;
-
+import java.awt.*;
 import java.nio.*;
 
 /**

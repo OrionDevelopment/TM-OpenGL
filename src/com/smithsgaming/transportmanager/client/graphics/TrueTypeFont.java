@@ -6,8 +6,8 @@ import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.math.*;
 import com.smithsgaming.transportmanager.util.math.graphical.*;
 import javafx.util.*;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
 
 import javax.imageio.*;
 import java.awt.*;

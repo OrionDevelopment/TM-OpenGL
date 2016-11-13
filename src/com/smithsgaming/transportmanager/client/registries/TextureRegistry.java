@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.registries;
 
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -180,8 +181,14 @@ public class TextureRegistry {
         }
 
         public static void unLoad() {
+            if (Courier == null)
+                return;
+
             Courier.destroy();
             TimesNewRoman.destroy();
+
+            Courier = null;
+            TimesNewRoman = null;
         }
     }
 }

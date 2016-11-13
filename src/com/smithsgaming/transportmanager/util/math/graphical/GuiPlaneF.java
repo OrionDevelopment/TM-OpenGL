@@ -2,7 +2,7 @@ package com.smithsgaming.transportmanager.util.math.graphical;
 
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.input.*;
-import org.lwjgl.util.vector.*;
+import org.joml.Vector2f;
 
 /**
  * @Author Marc (Created on: 25.03.2016)
@@ -77,7 +77,7 @@ public class GuiPlaneF {
     }
 
     public GuiPlaneF getMovedVariant (Vector2f diff) {
-        return new GuiPlaneF(Vector2f.add(topLeftCoordinate, diff, new Vector2f()), Vector2f.add(lowerRightCoordinate, diff, new Vector2f()));
+        return new GuiPlaneF(topLeftCoordinate.add(diff.x, diff.y, new Vector2f()), lowerRightCoordinate.add(diff.x, diff.y, new Vector2f()));
     }
 
     /**

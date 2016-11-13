@@ -44,8 +44,8 @@ public class NishoFrustum {
         this._modl.clear();
         this._clip.clear();
 
-        camera.getProjectionMatrix().store(this._proj);
-        camera.getViewMatrix().store(this._modl);
+        camera.getProjectionMatrix().get(this._proj);
+        camera.getViewMatrix().get(this._modl);
 
         this._proj.flip().limit(16);
         this._proj.get(this.proj);

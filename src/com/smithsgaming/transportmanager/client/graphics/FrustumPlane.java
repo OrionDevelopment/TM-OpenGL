@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import org.lwjgl.util.vector.*;
+import org.joml.Vector3f;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -30,22 +30,22 @@ class FrustumPlane {
         Vector3f aux1 = new Vector3f();
         Vector3f aux2 = new Vector3f();
 
-        Vector3f.sub(v1, v2, aux1);
-        Vector3f.sub(v3, v2, aux2);
+        v1.sub(v2, aux1);
+        v3.sub(v2, aux2);
 
-        Vector3f.cross(aux2, aux1, normal);
+        aux2.cross(aux1, normal);
 
-        normal.normalise();
+        normal.normalize();
         point = new Vector3f(v2);
 
-        d = -Vector3f.dot(normal, point);
+        d = -normal.dot(point);
     }
 
     void setNormalAndPoint (Vector3f normal, Vector3f point) {
         this.normal = new Vector3f(normal);
-        this.normal.normalise();
+        this.normal.normalize();
 
-        d = -Vector3f.dot(normal, point);
+        d = -normal.dot(point);
     }
 
     void setCoefficients (float a, float b, float c, float d) {
@@ -56,7 +56,7 @@ class FrustumPlane {
     }
 
     float distance (Vector3f p) {
-        return ( d + Vector3f.dot(normal, p) );
+        return ( d + normal.dot(p) );
     }
 
 }

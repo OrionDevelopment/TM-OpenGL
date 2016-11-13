@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.util.*;
-import org.lwjgl.util.vector.*;
+import org.joml.Vector3f;
 
 /**
  * @Author Marc (Created on: 11.04.2016)

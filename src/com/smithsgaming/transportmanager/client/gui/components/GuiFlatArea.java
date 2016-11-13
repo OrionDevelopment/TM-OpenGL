@@ -6,8 +6,9 @@ import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
+
+import java.awt.*;
 
 /**
  * @Author Marc (Created on: 27.03.2016)

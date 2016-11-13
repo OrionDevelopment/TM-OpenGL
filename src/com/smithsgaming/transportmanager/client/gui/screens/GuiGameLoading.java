@@ -8,7 +8,8 @@ import com.smithsgaming.transportmanager.client.gui.components.GuiText;
 import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.Color;
+
+import java.awt.*;
 
 /**
  * @Author Marc (Created on: 25.03.200.25f6)

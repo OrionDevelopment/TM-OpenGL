@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
-import org.lwjgl.util.vector.*;
+import org.joml.Vector3f;
 
 /**
  * @Author Marc (Created on: 15.03.2016)
@@ -26,7 +26,7 @@ public class ChunkClient extends Chunk {
     }
 
     public Vector3f getChunkCenterForCamera(Camera camera) {
-        return new Vector3f(getWorld().getCoreData().getWorldWidth() / -2f + chunkX * Chunk.chunkSize + Chunk.chunkSize / 2, camera.getCameraPosition().getY(), getWorld().getCoreData().getWorldHeight() / 2f - chunkZ * Chunk.chunkSize - Chunk.chunkSize / 2);
+        return new Vector3f(getWorld().getCoreData().getWorldWidth() / -2f + chunkX * Chunk.chunkSize + Chunk.chunkSize / 2, camera.getCameraPosition().y(), getWorld().getCoreData().getWorldHeight() / 2f - chunkZ * Chunk.chunkSize - Chunk.chunkSize / 2);
     }
 
     private void onTileUpdated(Tile oldTile, Tile newTile){

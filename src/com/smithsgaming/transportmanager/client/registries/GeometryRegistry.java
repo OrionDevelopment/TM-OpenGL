@@ -4,8 +4,8 @@ import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.math.graphical.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.*;
 
+import java.awt.*;
 import java.nio.*;
 import java.util.*;
 

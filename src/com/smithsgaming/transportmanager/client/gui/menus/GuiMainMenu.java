@@ -10,7 +10,8 @@ import com.smithsgaming.transportmanager.client.gui.input.IButtonListener;
 import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
-import org.lwjgl.util.Color;
+
+import java.awt.*;
 
 /**
  * Created by marcf on 4/3/2016.
