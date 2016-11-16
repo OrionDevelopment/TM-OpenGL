@@ -3,16 +3,20 @@
 package com.smithsgaming.transportmanager.network.client;
 
 import com.smithsgaming.transportmanager.network.message.*;
+import com.smithsgaming.transportmanager.util.Definitions;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.nio.*;
 import io.netty.channel.socket.nio.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by marcf on 3/13/2016.
  */
 public class TMNetworkingClient implements Runnable {
 
+    public static final Logger clientNetworkLogger = LogManager.getLogger(Definitions.Loggers.NETWORKCLIENT);
     private static Channel activeComChannel;
     private String host;
     private int hostPort;
@@ -65,7 +69,7 @@ public class TMNetworkingClient implements Runnable {
 
             b.connect(host, hostPort).syncUninterruptibly();
         } catch (Exception e) {
-            e.printStackTrace();
+            clientNetworkLogger.error(e);
             nioGroup.shutdownGracefully();
         }
     }

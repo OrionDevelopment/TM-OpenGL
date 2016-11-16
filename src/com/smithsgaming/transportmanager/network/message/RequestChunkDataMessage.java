@@ -23,7 +23,7 @@ public class RequestChunkDataMessage extends TMNetworkingMessage {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived (Channel channel, Side side, MessageContext context) {
         if (side == Side.SERVER) {
             if (type == World.WorldType.OVERGROUND) {
                 return new ChunkDataMessage(WorldManager.instance.getOvergroundWorld().getChunkAtPos(x, y));

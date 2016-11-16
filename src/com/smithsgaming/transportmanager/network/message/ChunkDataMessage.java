@@ -8,6 +8,7 @@ import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.saveable.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
+import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 import javafx.util.*;
@@ -36,15 +37,15 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
-        System.out.println("Received data package on side: " + side + " for chunk: " + x + "-" + z + " for world type:" + type);
-
+    public TMNetworkingMessage onReceived (Channel channel, Side side, MessageContext context) {
         if (side == Side.CLIENT) {
+            context.getLogger().trace("Received data package on side: " + side + " for chunk: " + x + "-" + z + " for world type:" + type);
+
             Stopwatch stopwatch = Stopwatch.createStarted();
 
             WorldSaveHandler.instance.setChunkInWorldClient(WorldClientManager.instance.getWorld(type), new ChunkClient(chunk));
 
-            System.out.println("   ==> Finished loading in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
+            context.getLogger().trace("   ==> Finished loading in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
             stopwatch.reset();
             stopwatch.start();
 
@@ -58,13 +59,13 @@ public class ChunkDataMessage extends TMNetworkingMessage implements Serializabl
                     return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue(), World.WorldType.OVERGROUND);
                 }
 
-                System.out.println("   ==> Finished WorldServer download!");
+                context.getLogger().trace("   ==> Finished WorldServer download!");
                 TransportManagerClient.instance.registerEvent(new EventClientWorldLoaded());
 
                 return null;
             }
 
-            System.out.println("   ==> Retrieved new CoordPair in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
+            context.getLogger().trace("   ==> Retrieved new CoordPair in: " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " ms.");
 
             return new RequestChunkDataMessage(nextChunkPair.getKey(), nextChunkPair.getValue(), type);
         }

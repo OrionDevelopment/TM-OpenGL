@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.client.render.world.chunk;
 
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
@@ -14,7 +16,7 @@ import java.util.*;
 public class ChunkRenderer implements IRenderer {
 
     private ChunkClient chunkClient;
-    private HashMap<Tile, ChunkTileGeometry> geometryHashMap = new HashMap<>();
+    private ChunkTileGeometry chunkGeometry;
 
     public ChunkRenderer (ChunkClient chunkClient) {
         this.chunkClient = chunkClient;
@@ -25,29 +27,17 @@ public class ChunkRenderer implements IRenderer {
     public void onRebuild () {
         onDestroyed();
 
-        for (Tile tile : TileRegistry.instance.getTiles()) {
-            if (tile == null)
-                continue;
+        chunkGeometry = new ChunkTileGeometry(chunkClient);
 
-            if (!tile.shouldUseDefaultRenderer())
-                continue;
-
-            ChunkTileGeometry geometry = new ChunkTileGeometry(chunkClient, tile);
-            if (geometry.getVertexCount() > 0)
-                geometryHashMap.put(tile, geometry);
-
-        }
-
-        geometryHashMap.values().forEach(OpenGLUtil::loadGeometryIntoGPU);
+        OpenGLUtil.loadGeometryIntoGPU(chunkGeometry);
     }
 
     public void onDestroyed () {
-        geometryHashMap.values().forEach(OpenGLUtil::deleteGeometry);
-        geometryHashMap.clear();
+        if (chunkGeometry != null) OpenGLUtil.deleteGeometry(chunkGeometry);
     }
 
     @Override
     public void render () {
-        geometryHashMap.values().forEach(ChunkTileGeometry::render);
+        chunkGeometry.render();
     }
 }

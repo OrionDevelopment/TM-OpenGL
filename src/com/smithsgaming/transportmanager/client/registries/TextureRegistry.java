@@ -148,7 +148,7 @@ public class TextureRegistry {
             Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
 
             TransportManagerClient.clientLogger.debug("Starting Texturestitching.");
-            TextureRegistry.instance.initializeTextureStitching(0);
+            Stitched.Tiles = TextureRegistry.instance.initializeTextureStitching(0);
             TransportManagerClient.clientLogger.debug("Finished Texturestitching.");
             TransportManagerClient.clientLogger.info("Finished loading Textures.");
 
@@ -172,6 +172,10 @@ public class TextureRegistry {
             public static Texture ice_bush_brown;
             public static Texture scorched;
             public static Texture lake;
+        }
+
+        public static class Stitched {
+            public static Texture Tiles;
         }
     }
 

@@ -20,6 +20,6 @@ public class TMNetworkingServerInitializer extends ChannelInitializer<SocketChan
         channelPipeline.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())));
         channelPipeline.addLast(new TMNetworkingServerHandler());
 
-        System.out.println("Server channel pipeline initialized.");
+        TMNetworkingServer.serverNetworkLogger.trace("Server channel pipeline initialized.");
     }
 }

@@ -16,6 +16,7 @@
 <Logger name="TM-Render" level="trace"/>
 <Logger name="TM-Network-Client" level="error"/>
 <Logger name="TM-Network-Server" level="error"/>
+<Logger name="io.netty.handler.logging.LoggingHandler" level="warn" />
 
 <Root level="info">
 <AppenderRef ref="STDOUT"/>

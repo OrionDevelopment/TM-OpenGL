@@ -1,5 +1,8 @@
 package com.smithsgaming.transportmanager.util;
 
+import com.smithsgaming.transportmanager.util.netty.LOG4J2NettyFactory;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.Log4JLoggerFactory;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
 
@@ -29,6 +32,8 @@ public class OSUtil {
 
             ConfigurationSource source = new ConfigurationSource(new FileInputStream(logConfigurationFile), logConfigurationFile);
             Configurator.initialize(null, source);
+
+            InternalLoggerFactory.setDefaultFactory(new LOG4J2NettyFactory());
         } catch(Exception ex){
             System.err.println("Failed to load LOG4J2! Setup invalid!");
             System.err.print(ex);

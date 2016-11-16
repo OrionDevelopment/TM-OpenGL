@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.main.TransportManager;
+import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
 import com.smithsgaming.transportmanager.util.GraphicUtil;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -34,7 +36,6 @@ public class Camera {
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
     private Frustum activeFrustum;
-    private NishoFrustum nishoFrustum;
 
     public Camera () {
         this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreateOrthogonalFieldOfView(0f, 100f);
@@ -46,7 +47,6 @@ public class Camera {
         //this.viewMatrixBuffer.flip();
 
         this.activeFrustum = new Frustum(this);
-        this.nishoFrustum = new NishoFrustum(this);
 
         setActiveColor(activeColor);
         renderingModelMatrix.scale(new Vector3f(2f / GuiScale.FWVGA.getHorizontalResolution(), -2f / GuiScale.FWVGA.getVerticalResolution(), 1f));
@@ -63,7 +63,6 @@ public class Camera {
         //this.viewMatrixBuffer.flip();
 
         this.activeFrustum = new Frustum(this);
-        this.nishoFrustum = new NishoFrustum(this);
 
         rotateCamera(angle, rotationAxis);
     }
@@ -111,7 +110,6 @@ public class Camera {
         //projectionMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
-        nishoFrustum.calculateFrustum();
     }
 
     /**
@@ -139,7 +137,6 @@ public class Camera {
         //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
-        nishoFrustum.calculateFrustum();
     }
 
     /**
@@ -195,9 +192,8 @@ public class Camera {
         //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
-        nishoFrustum.calculateFrustum();
 
-        System.out.println(cameraPosition.x + "-" + cameraPosition.y + "-" + cameraPosition.z);
+        TransportManagerClient.clientLogger.trace("New Cameraposition:" + cameraPosition.toString());
 
         return this;
     }
@@ -216,7 +212,6 @@ public class Camera {
         //viewMatrixBuffer.flip();
 
         activeFrustum.updateFrustum();
-        nishoFrustum.calculateFrustum();
 
         return this;
     }
@@ -228,10 +223,6 @@ public class Camera {
      */
     public Frustum getActiveFrustum () {
         return activeFrustum;
-    }
-
-    public NishoFrustum getNishoFrustum () {
-        return nishoFrustum;
     }
 
     /**

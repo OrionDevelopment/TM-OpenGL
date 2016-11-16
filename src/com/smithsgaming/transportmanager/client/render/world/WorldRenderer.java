@@ -37,7 +37,7 @@ public class WorldRenderer implements IRenderer {
 
         if (false) {
             if (testGeometry == null) {
-                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(100, -100)), TextureRegistry.Textures.Tiles.grass.getArea());
+                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(1, -1)), TextureRegistry.Textures.Tiles.grass.getArea());
                 OpenGLUtil.loadGeometryIntoGPU(testGeometry);
             }
             OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, testGeometry, TextureRegistry.Textures.Tiles.grass, ShaderRegistry.Shaders.textured);
@@ -55,18 +55,17 @@ public class WorldRenderer implements IRenderer {
     }
 
     private boolean isChunkInView (ChunkClient chunk) {
-        //return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0; //&& Camera.Player.isPointInViewDistance(chunk.getChunkCenterForCamera(Camera.Player));
-        return Camera.Player.getNishoFrustum().cubeInFrustum(chunk.getBoundingBox().getCorner().x, chunk.getBoundingBox().getCorner().y, chunk.getBoundingBox().getCorner().z, chunk.getBoundingBox().getCorner().x + chunk.getBoundingBox().getX(), chunk.getBoundingBox().getCorner().y + chunk.getBoundingBox().getY(), chunk.getBoundingBox().getCorner().z + chunk.getBoundingBox().getZ());
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0;
     }
 
     private void drawChunk (ChunkClient chunk) {
 
 
-        if (!isChunkInView(chunk) && false) {
+        if (!isChunkInView(chunk)) {
             if (rendererHashMap.containsKey(chunk)) {
                 ChunkRenderer oldGeometry = rendererHashMap.remove(chunk);
 
-                System.out.println("Destroying geometry ChunkCache " + chunk.getChunkX() + "-" + chunk.getChunkZ());
+                Display.displayLogger.debug("Destroying geometry ChunkCache " + chunk.getChunkX() + "-" + chunk.getChunkZ());
 
                 if (oldGeometry != null) {
                     oldGeometry.onDestroyed();
@@ -79,7 +78,7 @@ public class WorldRenderer implements IRenderer {
         if (!rendererHashMap.containsKey(chunk)) {
             Stopwatch stopwatch = Stopwatch.createStarted();
             rendererHashMap.put(chunk, new ChunkRenderer(chunk));
-            System.out.println("Finished generating ChunkCache " + chunk.getChunkX() + "-" + chunk.getChunkZ() + " in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " Ms.");
+            Display.displayLogger.debug("Finished generating ChunkCache " + chunk.getChunkX() + "-" + chunk.getChunkZ() + " in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + " Ms.");
             stopwatch.stop();
         }
 

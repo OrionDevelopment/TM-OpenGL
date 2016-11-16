@@ -27,9 +27,11 @@ public class AABox {
 
     }
 
-    public Vector3f getCorner () {
+    public Vector3f getMinCorner() {
         return corner;
     }
+
+    public Vector3f getMaxCorner() { return corner.add(getX(), getY(), getZ(), new Vector3f()); }
 
     public float getX () {
         return x;
@@ -67,40 +69,4 @@ public class AABox {
 
 
     }
-
-
-    Vector3f getVertexP (Vector3f normal) {
-
-        Vector3f res = new Vector3f(corner);
-
-        if (normal.x > 0)
-            res.x += x;
-
-        if (normal.y > 0)
-            res.y += y;
-
-        if (normal.z > 0)
-            res.z += z;
-
-        return ( res );
-    }
-
-
-    Vector3f getVertexN (Vector3f normal) {
-
-        Vector3f res = new Vector3f(corner);
-
-        if (normal.x < 0)
-            res.x += x;
-
-        if (normal.y < 0)
-            res.y += y;
-
-        if (normal.z < 0)
-            res.z += z;
-
-        return ( res );
-    }
-
-
 }

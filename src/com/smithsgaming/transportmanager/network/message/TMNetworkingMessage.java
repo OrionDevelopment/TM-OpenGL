@@ -12,5 +12,5 @@ import java.io.*;
  */
 public abstract class TMNetworkingMessage implements Serializable {
 
-    public abstract TMNetworkingMessage onReceived (Channel channel, Side side);
+    public abstract TMNetworkingMessage onReceived (Channel channel, Side side, MessageContext context);
 }

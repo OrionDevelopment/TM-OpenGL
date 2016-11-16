@@ -22,7 +22,7 @@ public class WorldCoreDataMessage extends TMNetworkingMessage {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
+    public TMNetworkingMessage onReceived (Channel channel, Side side, MessageContext context) {
         if (side == Side.CLIENT) {
             WorldClientManager.instance.initializeWorld(coreData);
             Pair<Integer, Integer> nextChunkPair;

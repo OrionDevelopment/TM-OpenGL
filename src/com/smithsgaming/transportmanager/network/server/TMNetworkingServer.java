@@ -3,12 +3,15 @@
 package com.smithsgaming.transportmanager.network.server;
 
 import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
+import com.smithsgaming.transportmanager.util.Definitions;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.local.*;
 import io.netty.channel.nio.*;
 import io.netty.channel.socket.nio.*;
 import io.netty.handler.logging.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class TMNetworkingServer implements Runnable {
 
-
+    public static final Logger serverNetworkLogger = LogManager.getLogger(Definitions.Loggers.NETWORKSERVER);
     private static CopyOnWriteArrayList<Channel> activeChannels = new CopyOnWriteArrayList<>();
 
     private int hostPort;
@@ -65,7 +68,7 @@ public class TMNetworkingServer implements Runnable {
 
             b.localAddress(LocalAddress.ANY).bind(hostPort).syncUninterruptibly();
         } catch (Exception e) {
-            e.printStackTrace();
+            serverNetworkLogger.error(e);
             bossGroup.shutdownGracefully();
         }
     }

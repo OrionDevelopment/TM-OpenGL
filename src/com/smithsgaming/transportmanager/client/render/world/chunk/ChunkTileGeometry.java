@@ -22,21 +22,13 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
 
     public static int VertexCount = 0;
     private ChunkClient chunkClient;
-    private Tile tile;
-    private Texture texture;
     private int[] verticesIndecis;
     private int resetIndex;
 
-    public ChunkTileGeometry (ChunkClient chunkClient, Tile tile) {
+    public ChunkTileGeometry (ChunkClient chunkClient) {
         super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0]);
 
         this.chunkClient = chunkClient;
-        this.tile = tile;
-
-        this.texture = TextureRegistry.instance.getTextureForName(tile.getIdentity());
-
-        if (this.texture == null)
-            System.out.println("Empty texture for: " + tile.getIdentity());
 
         buildGeometry();
     }
@@ -46,13 +38,18 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
 
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
-                if (chunkClient.getTileAtPos(x, z) != null && chunkClient.getTileAtPos(x, z).equals(tile)) {
-                    Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
-                    Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
+                if (chunkClient.getTileAtPos(x, z) != null) {
+                    Tile tile = chunkClient.getTileAtPos(x,z);
+                    Texture tileTexture = TextureRegistry.instance.getTextureForName(tile.getIdentity());
 
-                    GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), texture.getArea());
+                    if (tileTexture != null && tileTexture.getOpenGLTextureId() == TextureRegistry.Textures.Stitched.Tiles.getOpenGLTextureId()) {
+                        Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
+                        Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
 
-                    Collections.addAll(texturedVertices, positionGeometry.getVertices());
+                        GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), tileTexture.getArea());
+
+                        Collections.addAll(texturedVertices, positionGeometry.getVertices());
+                    }
                 }
             }
         }

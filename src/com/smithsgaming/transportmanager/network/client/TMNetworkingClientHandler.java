@@ -5,6 +5,7 @@ package com.smithsgaming.transportmanager.network.client;
 
 import com.smithsgaming.transportmanager.main.player.*;
 import com.smithsgaming.transportmanager.network.message.*;
+import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
 import com.smithsgaming.transportmanager.util.*;
 import io.netty.channel.*;
 
@@ -15,8 +16,8 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
 
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, TMNetworkingMessage tmNetworkingMessage) throws Exception {
-        System.out.println("[Client] Networking: Handling: " + tmNetworkingMessage.toString());
-        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), Side.CLIENT);
+        TMNetworkingClient.clientNetworkLogger.info("Networking: Handling: " + tmNetworkingMessage.toString());
+        TMNetworkingMessage returnMessage = tmNetworkingMessage.onReceived(channelHandlerContext.channel(), Side.CLIENT, new MessageContext(TMNetworkingClient.clientNetworkLogger));
 
         if (returnMessage != null) {
             channelHandlerContext.write(returnMessage);
@@ -27,15 +28,19 @@ public class TMNetworkingClientHandler extends SimpleChannelInboundHandler<TMNet
     public void channelActive(ChannelHandlerContext ctx) {
         TMNetworkingClient.setActiveComChannel(ctx.channel());
         ctx.writeAndFlush(new ConnectClient(GamePlayer.current));
+
+        TMNetworkingClient.clientNetworkLogger.trace("Channel activation Completed: " + ctx.name() + ". Flushed Contents");
     }
 
     @Override
     public void channelReadComplete (ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
+
+        TMNetworkingClient.clientNetworkLogger.trace("Channel read Completed: " + ctx.name() + ". Flushed Contents");
     }
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        TMNetworkingClient.clientNetworkLogger.error(cause);
         ctx.close();
     }
 }

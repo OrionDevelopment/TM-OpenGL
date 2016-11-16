@@ -9,76 +9,84 @@ import org.joml.Vector3f;
  */
 public class Frustum {
     private Camera activeCamera;
-    private FrustumPlane topFrustumPlane = new FrustumPlane();
-    private FrustumPlane bottomFrustumPlane = new FrustumPlane();
-    private FrustumPlane farFrustumPlane = new FrustumPlane();
-    private FrustumPlane nearFrustumPlane = new FrustumPlane();
-    private FrustumPlane leftFrustumPlane = new FrustumPlane();
-    private FrustumPlane rightFrustumPlane = new FrustumPlane();
-    private FrustumPlane[] planes = new FrustumPlane[6];
+
+    private FrustumPlanes planes;
+
     private Matrix4f viewProjectionMatrix = new Matrix4f();
 
     protected Frustum (Camera activeCamera) {
         this.activeCamera = activeCamera;
 
-        planes[0] = topFrustumPlane;
-        planes[1] = bottomFrustumPlane;
-        planes[2] = leftFrustumPlane;
-        planes[3] = rightFrustumPlane;
-        planes[4] = nearFrustumPlane;
-        planes[5] = farFrustumPlane;
+        this.planes = new FrustumPlanes();
     }
 
     protected void updateFrustum () {
-        viewProjectionMatrix = activeCamera.getViewMatrix().mul(activeCamera.getProjectionMatrix(), new Matrix4f());
+        viewProjectionMatrix = activeCamera.getProjectionMatrix().mul(activeCamera.getViewMatrix(), new Matrix4f());
+        extractPlanes(planes);
+    }
 
-        nearFrustumPlane.setCoefficients(viewProjectionMatrix.m20() + viewProjectionMatrix.m30(), viewProjectionMatrix.m21() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m22() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m23() +  viewProjectionMatrix.m33());  
-        farFrustumPlane.setCoefficients(-viewProjectionMatrix.m20() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m21() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m22() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m23() +  viewProjectionMatrix.m33());  
-        bottomFrustumPlane.setCoefficients(viewProjectionMatrix.m10() + viewProjectionMatrix.m30(), viewProjectionMatrix.m11() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m12() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m13() +  viewProjectionMatrix.m33());  
-        topFrustumPlane.setCoefficients(-viewProjectionMatrix.m10() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m11() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m12() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m13() +  viewProjectionMatrix.m33());  
-        leftFrustumPlane.setCoefficients(viewProjectionMatrix.m00() + viewProjectionMatrix.m30(), viewProjectionMatrix.m01() +  viewProjectionMatrix.m31(), viewProjectionMatrix.m02() +  viewProjectionMatrix.m32(), viewProjectionMatrix.m03() +  viewProjectionMatrix.m33());  
-        rightFrustumPlane.setCoefficients(-viewProjectionMatrix.m00() + viewProjectionMatrix.m30(), -viewProjectionMatrix.m01() +  viewProjectionMatrix.m31(), -viewProjectionMatrix.m02() +  viewProjectionMatrix.m32(), -viewProjectionMatrix.m03() +  viewProjectionMatrix.m33());  
+    // Conversion Operations
+    public void extractPlanes(FrustumPlanes clipPlanes) {
+
+        // Near Plane (row 2 + row 3)
+        clipPlanes.npX = viewProjectionMatrix.m02() + viewProjectionMatrix.m03();
+        clipPlanes.npY = viewProjectionMatrix.m12() + viewProjectionMatrix.m13();
+        clipPlanes.npZ = viewProjectionMatrix.m22() + viewProjectionMatrix.m23();
+        clipPlanes.npW = viewProjectionMatrix.m32() + viewProjectionMatrix.m33();
+
+        // Far Plane (row 3 - row 2)
+        clipPlanes.fpX = viewProjectionMatrix.m03() - viewProjectionMatrix.m02();
+        clipPlanes.fpY = viewProjectionMatrix.m13() - viewProjectionMatrix.m12();
+        clipPlanes.fpZ = viewProjectionMatrix.m23() - viewProjectionMatrix.m22();
+        clipPlanes.fpW = viewProjectionMatrix.m33() - viewProjectionMatrix.m32();
+
+        // Left Plane (row 0 + row 3)
+        clipPlanes.lpX = viewProjectionMatrix.m00() + viewProjectionMatrix.m03();
+        clipPlanes.lpY = viewProjectionMatrix.m10() + viewProjectionMatrix.m13();
+        clipPlanes.lpZ = viewProjectionMatrix.m20() + viewProjectionMatrix.m23();
+        clipPlanes.lpW = viewProjectionMatrix.m30() + viewProjectionMatrix.m33();
+
+        // Right Plane (row 3 - row 0)
+        clipPlanes.rpX = viewProjectionMatrix.m03() - viewProjectionMatrix.m00();
+        clipPlanes.rpY = viewProjectionMatrix.m13() - viewProjectionMatrix.m10();
+        clipPlanes.rpZ = viewProjectionMatrix.m23() - viewProjectionMatrix.m20();
+        clipPlanes.rpW = viewProjectionMatrix.m33() - viewProjectionMatrix.m30();
+
+        // Bottom Plane (row 1 + row 3)
+        clipPlanes.bpX = viewProjectionMatrix.m01() + viewProjectionMatrix.m03();
+        clipPlanes.bpY = viewProjectionMatrix.m11() + viewProjectionMatrix.m13();
+        clipPlanes.bpZ = viewProjectionMatrix.m21() + viewProjectionMatrix.m23();
+        clipPlanes.bpW = viewProjectionMatrix.m31() + viewProjectionMatrix.m33();
+
+        // Top Plane (row 3 - row 1)
+        clipPlanes.tpX = viewProjectionMatrix.m03() - viewProjectionMatrix.m01();
+        clipPlanes.tpY = viewProjectionMatrix.m13() - viewProjectionMatrix.m11();
+        clipPlanes.tpZ = viewProjectionMatrix.m23() - viewProjectionMatrix.m21();
+        clipPlanes.tpW = viewProjectionMatrix.m33() - viewProjectionMatrix.m31();
+
+        clipPlanes.normalize();
     }
 
     public ViewType pointInFrustum (Vector3f p) {
-        ViewType result = ViewType.INSIDE;
-        for (int i = 0; i < 6; i++) {
+        if (planes.planePointEquation(p, 0f)) return ViewType.INSIDE;
 
-            if (planes[i].distance(p) < 0)
-                return ViewType.OUTSIDE;
-        }
-        return result;
+        return ViewType.OUTSIDE;
     }
 
     public ViewType sphereInFrustum (Vector3f p, float radius) {
-        ViewType result = ViewType.INSIDE;
-        float distance;
+        if (planes.planePointEquation(p, radius)) return ViewType.INSIDE;
 
-        for (int i = 0; i < 6; i++) {
-            distance = planes[i].distance(p);
-            if (distance < -radius)
-                return ViewType.OUTSIDE;
-            else if (distance < radius)
-                result = ViewType.INTERSECT;
-        }
-        return result;
+        return ViewType.OUTSIDE;
     }
 
     public ViewType boxInFrustum (AABox b) {
-        ViewType result = ViewType.INSIDE;
-        for (int i = 0; i < 6; i++) {
-            if (planes[i].distance(b.getVertexP(planes[i].normal)) < 0)
-                return ViewType.OUTSIDE;
-            else if (planes[i].distance(b.getVertexN(planes[i].normal)) < 0)
-                result = ViewType.INTERSECT;
-        }
-        return result;
-    }
+        if (planes.planeAABBEquation(b.getMinCorner(), b.getMaxCorner())) return ViewType.INSIDE;
 
+        return ViewType.OUTSIDE;
+    }
 
     public enum ViewType {
         OUTSIDE,
-        INSIDE,
-        INTERSECT
+        INSIDE
     }
 }

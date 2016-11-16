@@ -24,8 +24,8 @@ public class OperationProcessedMessage extends TMNetworkingMessage {
     }
 
     @Override
-    public TMNetworkingMessage onReceived (Channel channel, Side side) {
-        System.out.println("Operation " + result + ": " + side + " - " + operation);
+    public TMNetworkingMessage onReceived (Channel channel, Side side, MessageContext context) {
+        context.getLogger().trace("Operation " + result + ": " + side + " - " + operation);
 
         if (operation == Operation.PLAYERCONNECTED)
             TransportManagerClient.instance.registerEvent(new EventClientConnected());

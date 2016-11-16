@@ -42,7 +42,7 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
                     blockBiome = BiomeManager.instance.getBiomeForId(0);
                 }
                 if (blockBiome == null) {
-                    TransportManager.serverLogger.info("The block at position (X: " + x + " Y: " + y + ") has no biome with associated - Color: " + colorData + "!");
+                    TransportManager.serverLogger.warn("The block at position (X: " + x + " Y: " + y + ") has no biome with associated - Color: " + colorData + "!");
                     continue;
                 }
                 totalProgression += progressionStep;

@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.main.player.GamePlayer;
 import com.smithsgaming.transportmanager.main.player.PlayerManager;
+import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
 import com.smithsgaming.transportmanager.util.Side;
 import io.netty.channel.Channel;
 
@@ -20,10 +21,10 @@ public class ConnectClient extends TMNetworkingMessage {
     }
 
     @Override
-    public TMNetworkingMessage onReceived(Channel channel, Side side) {
+    public TMNetworkingMessage onReceived(Channel channel, Side side, MessageContext context) {
         connectingPlayer = new GamePlayer(connectingPlayer.getDisplayName(), channel);
         PlayerManager.instance.onPlayerConnected(connectingPlayer);
-        System.out.println("[Server] PLAYER: " + connectingPlayer.getDisplayName() + " connected!");
+        context.getLogger().trace("Player: " + connectingPlayer.getDisplayName() + " connected!");
 
         return new OperationProcessedMessage(OperationProcessedMessage.Operation.PLAYERCONNECTED);
     }
