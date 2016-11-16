@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class TransportManagerClient implements Runnable, IEventController {
 
-    public static final Logger clientLogger = LogManager.getLogger();
+    public static final Logger clientLogger = LogManager.getLogger(Definitions.Loggers.CLIENT);
     public static TransportManagerClient instance = new TransportManagerClient();
     private static Thread clientNetworkThread;
     private static Thread displayThread;
@@ -68,13 +68,14 @@ public class TransportManagerClient implements Runnable, IEventController {
         MouseInputHandler.instance.registerScrollInputHandler(inputHandler);
         KeyboardInputHandler.instance.registerKeyInputHandler(inputHandler);
 
-        clientLogger.info("Client thread loaded!");
+        clientLogger.info("Client initialization completed. Starting network!");
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
 
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
         double delta = 0;
 
+        clientLogger.info("Client network initialization complete. Starting main Client loop!");
         while (TransportManager.isRunning) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -118,10 +119,17 @@ public class TransportManagerClient implements Runnable, IEventController {
     private void updateClient() {
     }
 
-    public void loadGraphics() {
-        TextureRegistry.Textures.init();
+    public void preLoadGraphics() {
+        clientLogger.info("Start preloading Graphics.");
         TextureRegistry.Fonts.init();
+        clientLogger.info("Finished preloading Graphics");
+    }
+
+    public void loadGraphics() {
+        clientLogger.info("Start loading Graphics.");
+        TextureRegistry.Textures.init();
         ShaderRegistry.Shaders.init();
+        clientLogger.info("Finished loading Graphics");
     }
 
     public void unLoadGraphics() {

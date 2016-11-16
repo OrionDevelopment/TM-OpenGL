@@ -190,7 +190,7 @@ public class OpenGLUtil {
         // Upload the texture data and generate mip maps (for scaling)
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, texture.getInternalFormat(), texture.getPixelWidth(), texture.getPixelHeight(), 0,
                 texture.getFormat(), GL11.GL_UNSIGNED_BYTE, texture.getData());
-        //GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // Setup the ST coordinate system
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
@@ -199,8 +199,8 @@ public class OpenGLUtil {
         // Setup what to do when the texture has to be scaled
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
                 GL11.GL_NEAREST);
-        //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
-                //GL11.GL_NEAREST_MIPMAP_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+                GL11.GL_NEAREST_MIPMAP_LINEAR);
 
         texture.setOpenGLTextureId(texId);
         texture.setBoundTextureUnit(GL13.GL_TEXTURE0);
@@ -221,6 +221,8 @@ public class OpenGLUtil {
         GL13.glActiveTexture(masterTexture.getBoundTextureUnit());
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, masterTexture.getOpenGLTextureId());
         glTexSubImage2D(GL_TEXTURE_2D, 0, subTexture.getOriginX(), subTexture.getOriginY(), subTexture.getPixelWidth(), subTexture.getPixelHeight(), masterTexture.getFormat(), GL11.GL_UNSIGNED_BYTE, subTexture.getData());
+
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         checkGlState("Subtexture loading. Master: " + masterTexture.getTextureName() + " - Sub: " + subTexture.getTextureName());
     }
@@ -396,7 +398,7 @@ public class OpenGLUtil {
         int errorValue = GL11.glGetError();
 
         if (errorValue != GL11.GL_NO_ERROR) {
-            System.err.println("ERROR - " + snapshotMoment + ": " + errorValue);
+            Display.displayLogger.error("ERROR - " + snapshotMoment + ": " + errorValue);
         }
     }
 }

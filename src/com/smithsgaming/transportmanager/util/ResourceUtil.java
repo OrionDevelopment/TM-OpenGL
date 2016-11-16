@@ -1,7 +1,9 @@
 
 package com.smithsgaming.transportmanager.util;
 
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
+import com.smithsgaming.transportmanager.main.TransportManager;
 import de.matthiasmann.twl.utils.PNGDecoder;
 
 import java.io.File;
@@ -48,6 +50,8 @@ public class ResourceUtil {
     }
 
     public static Texture loadStitchablePNGTexture (String fileName) {
+        TransportManagerClient.clientLogger.debug("Loading stitchable Texture:" + fileName);
+
         ByteBuffer buf = loadPNGBuffer(fileName);
         int width = getPNGWidth(fileName);
         int height = getPNGHeight(fileName);
@@ -56,6 +60,7 @@ public class ResourceUtil {
     }
 
     public static Texture loadPNGTexture (String fileName) {
+        TransportManagerClient.clientLogger.debug("Loading non stitchable Texture:" + fileName);
         ByteBuffer buf = loadPNGBuffer(fileName);
         int width = getPNGWidth(fileName);
         int height = getPNGHeight(fileName);
@@ -64,6 +69,7 @@ public class ResourceUtil {
     }
 
     private static ByteBuffer loadPNGBuffer (String fileName) {
+        TransportManagerClient.clientLogger.trace("Loading ByteBuffer for Texture:" + fileName);
         ByteBuffer buf = null;
         
         try {

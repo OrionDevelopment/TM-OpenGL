@@ -128,8 +128,8 @@ public class TextureRegistry {
 
     public static class Textures {
         public static void init() {
-            SkyBox.skyBoxOcean = ResourceUtil.loadStitchablePNGTexture("/textures/tiles/world/deepWater_0.png");
-            SkyBox.skyBoxOcean.setRequiringTextureStitching(false);
+            TransportManagerClient.clientLogger.info("Loading Textures.");
+            SkyBox.skyBoxOcean = ResourceUtil.loadPNGTexture("/textures/tiles/world/deepWater_0.png");
 
             TextureRegistry.instance.loadTexture(SkyBox.skyBoxOcean);
 
@@ -147,7 +147,11 @@ public class TextureRegistry {
             Tiles.ice_bush_brown = StandardTileTexture.loadTexture(TileNames.ICE_BUSH_BROWN, "/textures/tiles/world/ice_1.png");
             Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
 
+            TransportManagerClient.clientLogger.debug("Starting Texturestitching.");
             TextureRegistry.instance.initializeTextureStitching(0);
+            TransportManagerClient.clientLogger.debug("Finished Texturestitching.");
+            TransportManagerClient.clientLogger.info("Finished loading Textures.");
+
         }
 
         public static class SkyBox {
@@ -176,8 +180,12 @@ public class TextureRegistry {
         public static TrueTypeFont TimesNewRoman;
 
         public static void init() {
+            TransportManagerClient.clientLogger.info("Loading Fonts.");
+
             Courier = new TrueTypeFont(new Font("Courier", java.awt.Font.PLAIN, 25), false);
             TimesNewRoman = new TrueTypeFont(new Font("Times New Roman", java.awt.Font.PLAIN, 25), true);
+
+            TransportManagerClient.clientLogger.info("Finished loading Fonts.");
         }
 
         public static void unLoad() {

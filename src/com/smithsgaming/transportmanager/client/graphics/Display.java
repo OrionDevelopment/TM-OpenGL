@@ -9,6 +9,8 @@ import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -29,6 +31,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Display implements Runnable, IEventController
 {
+    public static final Logger displayLogger = LogManager.getLogger(Definitions.Loggers.DISPLAY);
     private static int max_texture_size = -1;
     private int resolutionHorizontal = 1240;
     private int resolutionVertical = 720;
@@ -62,7 +65,7 @@ public class Display implements Runnable, IEventController
     private void init () throws Exception {
         OSUtil.setLWJGLLibsForOS();
 
-        System.out.println("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("org.lwjgl.librarypath")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
+        displayLogger.info("Initializing UI System, LWJGL natives directory set to: " + new File(System.getProperty("org.lwjgl.librarypath")).getAbsolutePath() + " with LWJGL Library: " + Library.JNI_LIBRARY_NAME);
 
         try {
             glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint());
@@ -70,14 +73,14 @@ public class Display implements Runnable, IEventController
             debugMessageKHRCallback = new GLDebugMessageCallback() {
                 @Override
                 public void invoke(int source, int type, int id, int severity, int length, long message, long userParam) {
-                    System.err.println("###########################################");
-                    System.err.println("GLERROR: " + type + "/" + id);
-                    System.err.println(GLDebugMessageCallback.getMessage(length, message));
-                    System.err.println("###########################################");
+                    displayLogger.error("###########################################");
+                    displayLogger.error("GLERROR: " + type + "/" + id);
+                    displayLogger.error(GLDebugMessageCallback.getMessage(length, message));
+                    displayLogger.error("###########################################");
                 }
             };
 
-            if (glfwInit() != GL11.GL_TRUE) throw new IllegalStateException("Unable to initialize GLFW");
+            if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
 
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
@@ -139,7 +142,7 @@ public class Display implements Runnable, IEventController
     }
 
     private void runRender () {
-        while (glfwWindowShouldClose(window) == GLFW_FALSE) {
+        while (!glfwWindowShouldClose(window)) {
             if (resized) {
                 GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
                 OpenGLUtil.setAspectRatio(( (float) sizeHorizontal / (float) sizeVertical ));
@@ -211,14 +214,16 @@ public class Display implements Runnable, IEventController
         try {
             init();
 
-            TransportManagerClient.instance.loadGraphics();
+            TransportManagerClient.instance.preLoadGraphics();
 
             RenderHandler.getGuiController().openGui(new GuiGameLoading());
+
+            TransportManagerClient.instance.loadGraphics();
 
             Thread delayedLoadingScreenThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    TransportManagerClient.clientLogger.info("Starting loading screen wait");
+                    displayLogger.info("Starting loading screen wait");
 
                     try {
                         Thread.sleep(10000);
@@ -226,12 +231,13 @@ public class Display implements Runnable, IEventController
                         e.printStackTrace();
                     }
 
-                    TransportManagerClient.clientLogger.info("Going to main menu");
+                    displayLogger.info("Going to main menu");
 
                     TransportManagerClient.getDisplay().registerEvent(new EventClientGuiClose());
                     TransportManagerClient.getDisplay().registerEvent(new EventClientGuiOpen(new GuiMainMenu()));
                 }
             });
+
             delayedLoadingScreenThread.start();
 
             runRender();
@@ -243,7 +249,7 @@ public class Display implements Runnable, IEventController
             TransportManagerClient.instance.unLoadGraphics();
 
             glfwTerminate();
-            errorCallback.release();
+            errorCallback.free();
 
             TransportManager.isRunning = false;
         }

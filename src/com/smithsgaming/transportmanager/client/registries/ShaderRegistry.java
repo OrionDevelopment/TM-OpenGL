@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.client.registries;
 
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.util.*;
 
 import java.io.*;
@@ -120,10 +121,12 @@ public class ShaderRegistry {
         }
 
         public static void init () {
+            TransportManagerClient.clientLogger.info("Loading Shaders.");
             ShaderRegistry.instance.registerNewShader(colored);
             ShaderRegistry.instance.registerNewShader(textured);
             ShaderRegistry.instance.registerNewShader(guiColored);
             ShaderRegistry.instance.registerNewShader(guiTextured);
+            TransportManagerClient.clientLogger.info("Finished loading Shaders.");
         }
     }
 

@@ -4,6 +4,8 @@ package com.smithsgaming.transportmanager.main;
 import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.main.core.WorldManager;
 import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
+import com.smithsgaming.transportmanager.util.Definitions;
+import com.smithsgaming.transportmanager.util.OSUtil;
 import com.smithsgaming.transportmanager.util.Side;
 import com.smithsgaming.transportmanager.util.event.IEventController;
 import com.smithsgaming.transportmanager.util.event.TMEvent;
@@ -21,7 +23,7 @@ import java.util.Queue;
  */
 public class TransportManager implements Runnable, IEventController {
 
-    public static final Logger serverLogger = LogManager.getLogger();
+    public static final Logger serverLogger = LogManager.getLogger(Definitions.Loggers.SERVER);
     public static final TransportManager instance = new TransportManager();
 
     public static boolean isRunning = true;

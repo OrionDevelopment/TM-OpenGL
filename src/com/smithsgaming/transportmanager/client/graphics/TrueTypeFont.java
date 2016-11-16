@@ -1,5 +1,6 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -31,7 +32,7 @@ public class TrueTypeFont {
     private FontMetrics fontMetrics;
 
     public TrueTypeFont (Font font, boolean antiAlias, char[] additionalChars) {
-        System.out.println("[Client] Loading font: " + font.getFontName());
+        TransportManagerClient.clientLogger.debug("Loading font: " + font.getFamily());
         this.font = font;
         this.fontSize = font.getSize() + 3;
         this.antiAlias = antiAlias;

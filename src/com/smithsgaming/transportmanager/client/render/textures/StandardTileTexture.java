@@ -15,6 +15,6 @@ public class StandardTileTexture extends Texture {
     }
 
     public static Texture loadTexture (String tileIdentity, String texturePath) {
-        return TextureRegistry.instance.loadTexture(new StandardTileTexture(ResourceUtil.loadPNGTexture(texturePath), tileIdentity));
+        return TextureRegistry.instance.loadTexture(new StandardTileTexture(ResourceUtil.loadStitchablePNGTexture(texturePath), tileIdentity));
     }
 }

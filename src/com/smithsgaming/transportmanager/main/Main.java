@@ -1,6 +1,7 @@
 package com.smithsgaming.transportmanager.main;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.util.OSUtil;
 
 /**
  * Main class for the TransportManager game, responsible for starting and running an instance of the TransportManager
@@ -16,6 +17,8 @@ public class Main {
     static Thread serverThread;
 
     public static void main(String[] args) {
+        OSUtil.initializeLOG4J2();
+
         server = TransportManager.instance;
 
         serverThread = new Thread(server, "TM-OpenGL - Server");

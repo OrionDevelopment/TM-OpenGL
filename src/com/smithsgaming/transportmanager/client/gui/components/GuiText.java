@@ -1,8 +1,10 @@
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.graphics.TrueTypeFont;
 import com.smithsgaming.transportmanager.client.gui.GuiComponent;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 
