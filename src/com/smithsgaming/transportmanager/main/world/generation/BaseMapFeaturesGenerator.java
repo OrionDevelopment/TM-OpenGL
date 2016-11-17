@@ -6,6 +6,7 @@ import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.concurrent.*;
 
+import java.awt.*;
 import java.awt.image.*;
 
 /**
@@ -31,16 +32,12 @@ public class BaseMapFeaturesGenerator implements IWorldGenFeature {
         for (int x = 0; x < worldGenerationData.getWorldWidth(); x++) {
             for (int y = 0; y < worldGenerationData.getWorldHeight(); y++) {
                 int colorData = biomeData.getRGB(x, y);
-                BaseBiome blockBiome = null;
-                for (BaseBiome biome : BiomeManager.instance.getBiomeMappings().values()) {
-                    if (biome.getBiomeType().getGenerationColor().getRGB() == colorData) {
-                        blockBiome = biome;
-                        break;
-                    }
-                }
+                BaseBiome blockBiome = BiomeManager.instance.getBaseBiomeForGenerationColor(new Color(colorData));
+
                 if (colorData == 0) {
                     blockBiome = BiomeManager.instance.getBiomeForId(0);
                 }
+
                 if (blockBiome == null) {
                     TransportManager.serverLogger.warn("The block at position (X: " + x + " Y: " + y + ") has no biome with associated - Color: " + colorData + "!");
                     continue;

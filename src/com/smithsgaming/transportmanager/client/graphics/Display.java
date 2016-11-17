@@ -80,7 +80,7 @@ public class Display implements Runnable, IEventController
                 }
             };
 
-            if (glfwInit() != GL11.GL_TRUE) throw new IllegalStateException("Unable to initialize GLFW");
+            if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
 
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, GL11.GL_FALSE);
@@ -142,7 +142,7 @@ public class Display implements Runnable, IEventController
     }
 
     private void runRender () {
-        while (glfwWindowShouldClose(window) != GL11.GL_TRUE) {
+        while (!glfwWindowShouldClose(window)) {
             if (resized) {
                 GL11.glViewport(0, 0, sizeHorizontal, sizeVertical);
                 OpenGLUtil.setAspectRatio(( (float) sizeHorizontal / (float) sizeVertical ));
@@ -249,7 +249,7 @@ public class Display implements Runnable, IEventController
             TransportManagerClient.instance.unLoadGraphics();
 
             glfwTerminate();
-            errorCallback.release();
+            errorCallback.free();
 
             TransportManager.isRunning = false;
         }

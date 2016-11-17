@@ -23,7 +23,7 @@ public class TransportManagerWorldGraph extends VoronoiGraph {
 
     @Override
     protected Enum getBiome (Center center) {
-        return BiomeManager.instance.getBaseBiomedForCenter(center);
+        return BiomeManager.instance.getBaseBiomeForCenter(center);
     }
 
     @Override

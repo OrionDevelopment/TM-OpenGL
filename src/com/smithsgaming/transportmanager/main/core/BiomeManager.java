@@ -4,6 +4,7 @@ import com.hoten.delaunay.voronoi.*;
 import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -265,6 +266,7 @@ public class BiomeManager {
     }
 
     private HashMap<Integer, BaseBiome> biomeMappings = new HashMap<>();
+    private HashMap<Color, BaseBiome> colorMappings = new HashMap<>();
 
     private BiomeManager () {
     }
@@ -273,7 +275,11 @@ public class BiomeManager {
         if (biomeMappings.containsKey(id))
             throw new IllegalArgumentException("The given ID for the Biome: " + biome.getBiomeType().getName() + " is already in use!");
 
+        if (colorMappings.containsKey(biome.getBiomeType().getGenerationColor()))
+            throw new IllegalArgumentException("The given Color for the Biome: " + biome.getBiomeType().getName() + "is already in use!");
+
         biomeMappings.put(id, biome);
+        colorMappings.put(biome.getBiomeType().getGenerationColor(), biome);
     }
 
     public BaseBiome getBiomeForId (int id) {
@@ -295,12 +301,16 @@ public class BiomeManager {
         return -1;
     }
 
-    public Biome getBaseBiomedForCenter (Center center) {
+    public Biome getBaseBiomeForCenter(Center center) {
         for (Map.Entry<Integer, BaseBiome> entry : biomeMappings.entrySet()) {
             if (entry.getValue().isGenerationCenterValidForBiome(center))
                 return entry.getValue().getBiomeType();
         }
         throw new IllegalStateException("The Generator produced a Area that has no valid Biome!");
+    }
+
+    public BaseBiome getBaseBiomeForGenerationColor(Color color) {
+        return colorMappings.get(color);
     }
 
 }
