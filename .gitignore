@@ -14,6 +14,3 @@ hs_err_pid*
 target/
 
 # idea
-.idea/
-TM-OpenGL.iml
-resource-test/

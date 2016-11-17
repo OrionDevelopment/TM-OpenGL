@@ -11,7 +11,7 @@ public class WorldGenManager {
 
     public static WorldGenManager instance = new WorldGenManager();
 
-    private long seed = System.currentTimeMillis();
+    private long seed =  0; //System.currentTimeMillis();
     private GameLevel level = GameLevel.SMALL;
 
     private WorldGenManager () {
@@ -47,10 +47,6 @@ public class WorldGenManager {
 
             onThreadProgressionChanged(0F, 0, "");
             WorldGraphFeaturesGenerator.instance.generate(data, this);
-            onThreadProgressionChanged(0.5F, 0, "");
-
-            //FIXME: Why is the Features Generator ran twice??
-            // WorldGraphFeaturesGenerator.instance.generate(data, this);
             onThreadProgressionChanged(1F, 0, "");
 
             worldGenerationData = data;
@@ -78,8 +74,8 @@ public class WorldGenManager {
             onThreadProgressionChanged(0.125F, 0, "");
             HeightMapFeaturesGenerator.instance.generate(overgroundData, this);
             onThreadProgressionChanged(0.25F, 0, "");
+            NoisyBiomeEdgeGenerator.instance.generate(overgroundData, this);
             BaseMapFeaturesGenerator.instance.generate(overgroundData, this);
-            CrossBiomeMapFeaturesGenerator.instance.generate(overgroundData, this);
             onThreadProgressionChanged(0.375F, 0, "");
             WorldGenerationData undergroundData = new WorldGenerationData(seed, level.getWorldWidth(), level.getWorldHeight(), 0, level.getMaxTileHeight());
             undergroundWorld = new WorldServer(undergroundData, World.WorldType.UNDERGROUND);
@@ -89,8 +85,8 @@ public class WorldGenManager {
             onThreadProgressionChanged(0.675F, 0, "");
             HeightMapFeaturesGenerator.instance.generate(undergroundData, this);
             onThreadProgressionChanged(0.8F, 0, "");
+            NoisyBiomeEdgeGenerator.instance.generate(undergroundData, this);
             BaseMapFeaturesGenerator.instance.generate(undergroundData, this);
-            CrossBiomeMapFeaturesGenerator.instance.generate(undergroundData, this);
             onThreadProgressionChanged(1F, 0, "");
             worldGenerationDataOverground = overgroundData;
             worldGenerationDataUnderground = undergroundData;

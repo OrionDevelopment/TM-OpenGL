@@ -27,6 +27,10 @@ public abstract class Tile implements Serializable {
         return true;
     }
 
+    public boolean shouldBeUsedInWorldGenNoise() {
+        return true;
+    }
+
     @Override
     public boolean equals (Object obj) {
         if (obj instanceof Tile) {

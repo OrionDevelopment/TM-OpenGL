@@ -1,16 +1,12 @@
 package com.smithsgaming.transportmanager.main.world.generation;
 
+import com.hoten.delaunay.voronoi.Corner;
 import com.hoten.delaunay.voronoi.nodename.as3delaunay.*;
-import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.event.EventClientChunkChangePost;
-import com.smithsgaming.transportmanager.client.event.EventClientChunkChangePre;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.biome.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.tileentity.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
-import com.smithsgaming.transportmanager.network.message.ClientEventProcessMessage;
-import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import javafx.util.Pair;
 
 import java.awt.image.*;
 import java.io.*;
@@ -32,6 +28,7 @@ public class WorldGenerationData implements Serializable {
 
     private transient Voronoi voronoiGenerator;
     private transient TransportManagerWorldGraph worldGraph;
+    private transient HashMap<Pair<Corner, Corner>, ArrayList<Vector2i>> noisyEdgeMap;
     private transient BufferedImage pregenImage;
 
     private transient int[][] heightMap;
@@ -43,6 +40,7 @@ public class WorldGenerationData implements Serializable {
 
         this.generationRandom = new Random(worldSeed);
         this.voronoiGenerator = new Voronoi((worldWidth / 20) * (worldHeight / 20), worldWidth, worldHeight, this.getGenerationRandom(), null);
+        this.noisyEdgeMap = new HashMap<>();
 
         this.WORLD_WIDTH = worldWidth;
         this.WORLD_HEIGHT = worldHeight;
@@ -84,11 +82,6 @@ public class WorldGenerationData implements Serializable {
 
     public void setPregenImage(BufferedImage pregenImage) {
         this.pregenImage = pregenImage;
-    }
-
-    public void loadFromDisk() {
-        worldGraph = new TransportManagerWorldGraph(this.getVoronoiGenerator(), 2, this.getGenerationRandom());
-        this.pregenImage = worldGraph.createMap();
     }
 
     public int getWaterHeight() {
@@ -143,5 +136,9 @@ public class WorldGenerationData implements Serializable {
 
     public Voronoi getVoronoiGenerator() {
         return voronoiGenerator;
+    }
+
+    public HashMap<Pair<Corner, Corner>, ArrayList<Vector2i>> getNoisyEdgeMap() {
+        return noisyEdgeMap;
     }
 }

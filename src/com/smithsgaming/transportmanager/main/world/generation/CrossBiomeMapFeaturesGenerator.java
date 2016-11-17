@@ -22,8 +22,8 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
 
     public static final CrossBiomeMapFeaturesGenerator instance = new CrossBiomeMapFeaturesGenerator();
 
-    private final int MAXTILEDISTANCE = 2;
-    private final int MAXNOISE = 25;
+    private final float MAXTILEDISTANCE = 3.5f;
+    private final int MAXNOISE = 1;
 
     @Override
     public void generate(WorldGenerationData worldGenerationData, ProgressionNotifierThread runningThread) {
@@ -34,6 +34,10 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
         runningThread.onThreadProgressionChanged(totalProgression, 1, "Started modifying Biomeborders...");
         for (int x = 0; x < worldGenerationData.getWorldWidth(); x++) {
             for (int y = 0; y < worldGenerationData.getWorldHeight(); y++) {
+                Tile tile = worldGenerationData.world.getTileAtPos(x,y);
+                if (tile == null || !tile.shouldBeUsedInWorldGenNoise())
+                    continue;
+
                 BaseBiome biome = worldGenerationData.getBiomeAtPos(x, y);
 
                 //Data Setup
@@ -44,9 +48,6 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
                 //Find the closest edges
                 List<Edge> closestEdges = WorldGenUtil.getClosestEdgeToPoint(polygon, point, MAXTILEDISTANCE);
                 if (closestEdges.isEmpty()) continue;
-
-                //Not all border tiles should be modified
-                if (worldGenerationData.getGenerationRandom().nextInt(MAXNOISE) > 0) continue;
 
                 //Chose the edge to cross and retrieve the crossed polygon
                 Edge crossEdge = closestEdges.get(worldGenerationData.getGenerationRandom().nextInt(closestEdges.size()));
@@ -60,11 +61,12 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
                     continue;
                 }
 
+                //Not all border tiles should be modified
+                if (worldGenerationData.getGenerationRandom().nextInt(MAXNOISE) > 0) continue;
+
                 BaseBiome crossBiome = BiomeManager.instance.getBaseBiomeForGenerationColor(BiomeManager.instance.getBaseBiomeForCenter(crossPolygon).getGenerationColor());
                 if (crossBiome == null) continue;
                 if (crossBiome == biome) continue;
-
-                //if (worldGenerationData.getGenerationRandom().nextInt(MAXNOISE) > 0) continue;
 
                 Tile replacedTile = crossBiome.getTile();
 

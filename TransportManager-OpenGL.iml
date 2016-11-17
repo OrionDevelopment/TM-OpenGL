@@ -64,8 +64,8 @@
     <orderEntry type="library" name="Maven: org.l33tlabs.twl:pngdecoder:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:5.0.0.Alpha2" level="project" />
     <orderEntry type="library" name="Maven: com.flowpowered:flow-noise:1.0.0" level="project" />
-    <orderEntry type="library" name="Java-NBT" level="project" />
-    <orderEntry type="library" name="Java-Delauney" level="project" />
+    <orderEntry type="library" name="Java-NBT 1.1" level="project" />
     <orderEntry type="library" name="PaulsCode" level="project" />
+    <orderEntry type="library" name="Java-Delauney" level="project" />
   </component>
 </module>

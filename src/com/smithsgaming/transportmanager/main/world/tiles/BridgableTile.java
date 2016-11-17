@@ -15,4 +15,9 @@ public class BridgableTile extends Tile {
     public boolean canBeOverridenBy (World world, int tileWorldPosX, int tileWorldPosZ, Tile newTile) {
         return false;
     }
+
+    @Override
+    public boolean shouldBeUsedInWorldGenNoise() {
+        return false;
+    }
 }

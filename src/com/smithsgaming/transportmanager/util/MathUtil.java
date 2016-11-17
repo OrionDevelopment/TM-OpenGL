@@ -3,8 +3,10 @@
 package com.smithsgaming.transportmanager.util;
 
 
+import com.hoten.delaunay.geom.Point;
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.graphics.GuiAspectRatio;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
 import org.joml.Matrix4f;
 
 /**
@@ -92,5 +94,14 @@ public class MathUtil
         i = i | i >> 8;
         i = i | i >> 16;
         return i + 1;
+    }
+
+    public static Point interpolateCoordinate(Point p1, Point p2, float factor) {
+        int xDelta = (int) (p2.x - p1.x);
+
+        int x = (int) (p1.x + (xDelta * factor));
+        int y = (int) (p1.y + ((x - p1.x)*((p2.y - p1.y) / (p2.x - p1.x))));
+
+        return new Point(x, y);
     }
 }

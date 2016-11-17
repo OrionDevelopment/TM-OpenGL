@@ -20,7 +20,7 @@ public class WorldGraphFeaturesGenerator implements IWorldGenFeature {
     @Override
     public void generate (WorldGenerationData worldGenerationData, ProgressionNotifierThread progressionNotifierThread) {
         progressionNotifierThread.onThreadProgressionChanged(0F, 1, "Generating world graph...");
-        TransportManagerWorldGraph worldGraph = new TransportManagerWorldGraph(worldGenerationData.getVoronoiGenerator(), 2, worldGenerationData.getGenerationRandom());
+        TransportManagerWorldGraph worldGraph = new TransportManagerWorldGraph(worldGenerationData.getVoronoiGenerator(), 2, worldGenerationData);
         progressionNotifierThread.onThreadProgressionChanged(0.5F, 1, "Generating biome separations...");
         worldGenerationData.setTransportManagerWorldGraph(worldGraph);
         worldGenerationData.setPregenImage(worldGraph.createMap());
