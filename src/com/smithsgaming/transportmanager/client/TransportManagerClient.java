@@ -31,6 +31,7 @@ public class TransportManagerClient implements Runnable, IEventController {
     private static Display display;
     private static int targetUPS = 60;
     private static long lastFrame;
+    private static long startTime;
 
     private Queue<TMEvent> eventQueue = new ArrayDeque<>();
     private ClientSettings settings = ClientSettings.loadSettings();
@@ -49,6 +50,10 @@ public class TransportManagerClient implements Runnable, IEventController {
      */
     public static long getTime () {
         return System.nanoTime() / 1000000;
+    }
+
+    public static long getStartTime() {
+        return startTime;
     }
 
     public static int getDelta () {
@@ -72,6 +77,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         clientLogger.info("Client initialization completed. Starting network!");
         clientNetworkThread = new Thread(new TMNetworkingClient("127.0.0.1", 1000));
 
+        startTime = getTime();
         long lastTime = System.nanoTime();
         final double ns = 1000000000 / targetUPS;
         double delta = 0;

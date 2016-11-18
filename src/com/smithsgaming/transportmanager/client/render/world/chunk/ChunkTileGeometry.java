@@ -6,7 +6,7 @@ import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
-import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.client.render.core.textures.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.tiles.*;

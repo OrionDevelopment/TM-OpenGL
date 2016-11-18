@@ -3,7 +3,7 @@ package com.smithsgaming.transportmanager.client.registries;
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.graphics.Display;
-import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.client.render.core.textures.*;
 import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -65,10 +65,21 @@ public class TextureRegistry {
     public void generateBorderForTile(Tile tile) {
         if (!tile.createsBorders()) return;
 
-        for (TileDirection direction : TileDirection.values()) {
+        Texture original = getTextureForName(tile.getIdentity());
+        int borderWidth = original.getPixelWidth() / 4;
+        int borderHeight = original.getPixelHeight() / 4;
 
-        }
+        borderTextures.put(new Pair<>(tile, TileDirection.TOPLEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.TOP), getTextureForName(tile.getIdentity()).clip(0,0, original.getPixelWidth(), borderHeight, TileDirection.TOP.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.TOPRIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, borderHeight, TileDirection.TOPRIGHT.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.RIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, original.getPixelHeight(), TileDirection.RIGHT.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOMRIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth, original.getPixelHeight() - borderHeight, borderWidth, borderHeight, TileDirection.BOTTOMRIGHT.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOM), getTextureForName(tile.getIdentity()).clip(0,original.getPixelHeight() - borderHeight, original.getPixelWidth(), borderHeight, TileDirection.BOTTOM.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOMLEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
+        borderTextures.put(new Pair<>(tile, TileDirection.LEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
+
     }
+
 
     public Texture initializeTextureStitching(int textureStitchingId) {
         ArrayList<Texture> texturesToCombine = namedBufferedTextured.values().stream().filter(texture -> texture.getTextureStitchId() == textureStitchingId && texture.isRequiringTextureStitching() && !texture.isStitched()).collect(Collectors.toCollection(ArrayList::new));

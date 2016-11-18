@@ -2,7 +2,7 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.google.common.collect.*;
 import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.client.render.core.textures.*;
 import com.smithsgaming.transportmanager.util.math.MathUtil;
 
 import java.io.*;

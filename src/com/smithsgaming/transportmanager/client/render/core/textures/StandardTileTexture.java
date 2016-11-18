@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.client.render.textures;
+package com.smithsgaming.transportmanager.client.render.core.textures;
 
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.util.*;
@@ -16,5 +16,12 @@ public class StandardTileTexture extends Texture {
 
     public static Texture loadTexture (String tileIdentity, String texturePath) {
         return TextureRegistry.instance.loadTexture(new StandardTileTexture(ResourceUtil.loadStitchablePNGTexture(texturePath), tileIdentity));
+    }
+
+    @Override
+    public Texture clip(int minX, int minY, int maxX, int maxY, boolean[][] noiseMap, String textureAppendix) {
+        Texture clipped = super.clip(minX, minY, maxX, maxY, noiseMap, textureAppendix);
+
+        return new StandardTileTexture(clipped, clipped.getTextureName());
     }
 }

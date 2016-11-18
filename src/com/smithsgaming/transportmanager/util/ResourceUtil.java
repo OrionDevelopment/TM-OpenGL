@@ -2,8 +2,7 @@
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.render.textures.Texture;
-import com.smithsgaming.transportmanager.main.TransportManager;
+import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import de.matthiasmann.twl.utils.PNGDecoder;
 
 import java.io.File;
@@ -129,5 +128,46 @@ public class ResourceUtil {
 
         return height;
     }
-    
+
+    public static int[] convertByteArrayToIntArray(byte[] data) {
+        if ((data.length % 4) != 0) throw new IllegalArgumentException("The given Data is no pixel data");
+        int[] pixels = new int[data.length / 4];
+
+        for (int i = 0; i < pixels.length; i++) {
+            int red = data[i*4];
+            int green = data[i*4 + 1];
+            int blue = data[i*4 + 2];
+            int alpha = data[i*4 + 3];
+
+            pixels[i] = (red << 24) | (green << 16) | (blue << 8) | alpha;
+        }
+
+        return pixels;
+    }
+
+    public static byte[] convertIntArrayToByteArray(int[] pixels) {
+        byte[] data = new byte[pixels.length * 4];
+
+        for (int i = 0; i < pixels.length; i++) {
+            data[i * 4] = (byte) (pixels[i] >> 24);
+            data[i * 4 + 1] = (byte) (pixels[i] >> 16);
+            data[i * 4 + 2] = (byte) (pixels[i] >> 8);
+            data[i * 4 + 3] = (byte) (pixels[i]);
+        }
+
+        return data;
+    }
+
+    public static ByteBuffer generateBufferFromData(byte[] data) {
+        return ByteBuffer.wrap(data);
+    }
+
+    public static ByteBuffer generateBufferFromPixels(int[] pixels) {
+        return generateBufferFromData(convertIntArrayToByteArray(pixels));
+    }
+
+    public static int[] generatePixelsFromByteBuffer(ByteBuffer buffer) {
+        return convertByteArrayToIntArray(buffer.array());
+    }
+
 }

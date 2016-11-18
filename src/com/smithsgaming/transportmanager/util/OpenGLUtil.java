@@ -6,7 +6,7 @@ import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.client.render.core.Shader;
-import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.client.render.core.textures.*;
 import org.joml.Matrix4f;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
