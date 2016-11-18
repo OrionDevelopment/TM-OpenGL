@@ -9,13 +9,13 @@ import com.smithsgaming.transportmanager.client.render.*;
 import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
-import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.nio.*;
 import java.util.*;

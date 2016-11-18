@@ -3,6 +3,8 @@ package com.smithsgaming.transportmanager.client.render.test;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.math.*;
 import com.smithsgaming.transportmanager.util.math.graphical.*;
@@ -28,12 +30,12 @@ public class ResetIndexedRenderer implements IRenderer {
         testGeometry.render();
     }
 
-    public static class Geometry extends GeometryRegistry.Geometry implements IRenderer {
+    public static class Geometry extends com.smithsgaming.transportmanager.client.render.core.Geometry implements IRenderer {
         private int[] verticesIndecis;
         private int resetIndex;
 
         public Geometry () {
-            super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0]);
+            super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0], VertexInformation.DEFAULT);
 
             buildGeometry();
         }
@@ -45,7 +47,7 @@ public class ResetIndexedRenderer implements IRenderer {
                 Vector2i topLeftQuadCorner = new Vector2i(0 + x, 0 + x);
                 Vector2i lowerRightQuadCorner = new Vector2i(1 + x, -1 + x);
 
-                GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), TextureRegistry.Textures.Tiles.grass.getArea());
+                com.smithsgaming.transportmanager.client.render.core.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), TextureRegistry.Textures.Tiles.grass.getArea());
 
                 Collections.addAll(texturedVertices, positionGeometry.getVertices());
             }

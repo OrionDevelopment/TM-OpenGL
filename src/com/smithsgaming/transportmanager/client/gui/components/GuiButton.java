@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.client.gui.input.IButtonListener;
 import com.smithsgaming.transportmanager.client.gui.input.IMouseInputComponent;
-import com.smithsgaming.transportmanager.util.ActionProcessingResult;
+import com.smithsgaming.transportmanager.util.network.ActionProcessingResult;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.joml.Vector3f;

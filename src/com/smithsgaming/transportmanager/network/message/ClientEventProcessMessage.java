@@ -2,7 +2,7 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.event.TMClientEvent;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.Channel;
 
 import java.io.Serializable;

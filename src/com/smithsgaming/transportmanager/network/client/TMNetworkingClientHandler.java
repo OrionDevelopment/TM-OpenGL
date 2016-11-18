@@ -5,8 +5,7 @@ package com.smithsgaming.transportmanager.network.client;
 
 import com.smithsgaming.transportmanager.main.player.*;
 import com.smithsgaming.transportmanager.network.message.*;
-import com.smithsgaming.transportmanager.network.server.TMNetworkingServer;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.*;
 
 /**

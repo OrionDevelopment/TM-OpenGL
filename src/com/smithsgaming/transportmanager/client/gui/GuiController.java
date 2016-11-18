@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.gui.input.IMouseInputComponent;
 import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
-import com.smithsgaming.transportmanager.util.ActionProcessingResult;
+import com.smithsgaming.transportmanager.util.network.ActionProcessingResult;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;

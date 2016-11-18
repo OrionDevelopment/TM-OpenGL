@@ -1,7 +1,7 @@
 package com.smithsgaming.transportmanager.client.event;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.Side;
 
 /**
  * Created by Tim on 01/04/2016.

@@ -4,7 +4,7 @@ package com.smithsgaming.transportmanager.network.server;
 
 import com.smithsgaming.transportmanager.network.message.MessageContext;
 import com.smithsgaming.transportmanager.network.message.TMNetworkingMessage;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

@@ -76,6 +76,7 @@ public class WorldGenManager {
             onThreadProgressionChanged(0.25F, 0, "");
             NoisyBiomeEdgeGenerator.instance.generate(overgroundData, this);
             BaseMapFeaturesGenerator.instance.generate(overgroundData, this);
+            CrossBiomeMapFeaturesGenerator.instance.generate(overgroundData, this);
             onThreadProgressionChanged(0.375F, 0, "");
             WorldGenerationData undergroundData = new WorldGenerationData(seed, level.getWorldWidth(), level.getWorldHeight(), 0, level.getMaxTileHeight());
             undergroundWorld = new WorldServer(undergroundData, World.WorldType.UNDERGROUND);

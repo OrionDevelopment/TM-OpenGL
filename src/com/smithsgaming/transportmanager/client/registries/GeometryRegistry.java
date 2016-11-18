@@ -1,5 +1,8 @@
 package com.smithsgaming.transportmanager.client.registries;
 
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.math.graphical.*;
 import org.lwjgl.*;
@@ -112,87 +115,13 @@ public class GeometryRegistry {
         }
     }
 
-    public static class Geometry {
-        protected GeometryType type;
-        protected TexturedVertex[] vertices;
-
-        int openGLVertaxArrayId;
-        int openGLVertexDataId;
-        int openGLVertexIndexID;
-
-        public Geometry (GeometryType type, TexturedVertex[] vertices) {
-            this.type = type;
-            this.vertices = vertices;
-        }
-
-        public TexturedVertex[] getVertices () {
-            return vertices;
-        }
-
-        public FloatBuffer getBufferData () {
-            FloatBuffer data = BufferUtils.createFloatBuffer(TexturedVertex.stride * vertices.length);
-            for (TexturedVertex vertex : vertices) {
-                data.put(vertex.getElements());
-            }
-
-            data.flip();
-
-            return data;
-        }
-
-        public GeometryType getType () {
-            return type;
-        }
-
-        public int getOpenGLVertaxArrayId () {
-            return openGLVertaxArrayId;
-        }
-
-        public void setOpenGLVertaxArrayId (int openGLVertaxArrayId) {
-            this.openGLVertaxArrayId = openGLVertaxArrayId;
-        }
-
-        public int getOpenGLVertexDataId () {
-            return openGLVertexDataId;
-        }
-
-        public void setOpenGLVertexDataId (int openGLVertexDataId) {
-            this.openGLVertexDataId = openGLVertexDataId;
-        }
-
-        public int getOpenGLVertexIndexID () {
-            return openGLVertexIndexID;
-        }
-
-        public void setOpenGLVertexIndexID (int openGLVertexIndexID) {
-            this.openGLVertexIndexID = openGLVertexIndexID;
-        }
-
-        public int getVertexCount() {
-
-            return getType().getVertexCount();
-        }
-
-        public boolean requiresResetting() {
-            return getType().requiresResetting();
-        }
-
-        public int getResetIndex() {
-            return getType().getResetIndex();
-        }
-
-        public IntBuffer getIndicesBuffer () {
-            return getType().getIndicesBuffer();
-        }
-    }
-
     public static class TriangleGeometry extends Geometry {
         private static final TexturedVertex top = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 1).setXYZ(0, 1, 1);
         private static final TexturedVertex left = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(0, 0, 1);
         private static final TexturedVertex right = new TexturedVertex().setRGB(1f, 1f, 1f).setST(1, 0).setXYZ(1, 0, 1);
 
         public TriangleGeometry () {
-            super(GeometryType.TRIANGLE, new TexturedVertex[]{top, right, left});
+            super(GeometryType.TRIANGLE, new TexturedVertex[]{top, right, left}, VertexInformation.DEFAULT);
         }
     }
 
@@ -203,11 +132,11 @@ public class GeometryRegistry {
         private static final TexturedVertex bottomLeft = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(-0.5f, -0.5f, -1);
 
         public QuadGeometry () {
-            super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight});
+            super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight}, VertexInformation.DEFAULT);
         }
 
         private QuadGeometry (TexturedVertex[] texturedVertices) {
-            super(GeometryType.QUAD, texturedVertices);
+            super(GeometryType.QUAD, texturedVertices, VertexInformation.DEFAULT);
         }
 
         public static Geometry constructFromPlaneForTexture (GuiPlaneI geometryPlane, GuiPlaneF texturePlane) {

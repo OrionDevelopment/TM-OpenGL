@@ -4,6 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.client.render.textures.Texture;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.ResourceUtil;
@@ -21,7 +22,7 @@ public class GuiImage extends GuiComponent {
     private GuiPlaneI area;
     private String resourcePath;
     private Texture textureToRender;
-    private GeometryRegistry.Geometry geometryToRender;
+    private Geometry geometryToRender;
 
     public GuiImage(GuiComponent parent, String resourcePath, GuiPlaneI area) {
         super(parent);

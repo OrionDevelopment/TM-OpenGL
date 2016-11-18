@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.util.event;
 
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 
 import java.io.*;
 

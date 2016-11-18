@@ -1,6 +1,6 @@
 
 
-package com.smithsgaming.transportmanager.util;
+package com.smithsgaming.transportmanager.util.math;
 
 
 import com.hoten.delaunay.geom.Point;
@@ -97,10 +97,10 @@ public class MathUtil
     }
 
     public static Point interpolateCoordinate(Point p1, Point p2, float factor) {
-        int xDelta = (int) (p2.x - p1.x);
+        double xDelta = (p2.x - p1.x);
 
-        int x = (int) (p1.x + (xDelta * factor));
-        int y = (int) (p1.y + ((x - p1.x)*((p2.y - p1.y) / (p2.x - p1.x))));
+        double x = (p1.x + (xDelta * factor));
+        double y = (p1.y + ((x - p1.x)*((p2.y - p1.y) / (p2.x - p1.x))));
 
         return new Point(x, y);
     }

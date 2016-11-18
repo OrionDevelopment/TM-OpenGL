@@ -3,7 +3,7 @@ package com.smithsgaming.transportmanager.network.message;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.generation.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.*;
 import javafx.util.*;
 

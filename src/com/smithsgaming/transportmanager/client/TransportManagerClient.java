@@ -8,6 +8,7 @@ import com.smithsgaming.transportmanager.main.*;
 import com.smithsgaming.transportmanager.network.client.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.event.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import org.apache.logging.log4j.*;
 
 import java.util.*;

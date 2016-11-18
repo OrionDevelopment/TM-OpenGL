@@ -4,6 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import org.joml.Vector3f;
@@ -16,7 +17,7 @@ import java.awt.*;
 public class GuiFlatArea extends GuiComponent {
     GuiPlaneI area;
     Color color;
-    private GeometryRegistry.Geometry geometryToRender;
+    private Geometry geometryToRender;
 
     public GuiFlatArea(GuiComponent parent, GuiPlaneI area, Color color) {
         super(parent);

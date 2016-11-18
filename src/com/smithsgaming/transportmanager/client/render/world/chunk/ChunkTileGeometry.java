@@ -3,6 +3,9 @@ package com.smithsgaming.transportmanager.client.render.world.chunk;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
@@ -18,7 +21,7 @@ import java.util.*;
 /**
  * @Author Marc (Created on: 04.04.2016)
  */
-public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRenderer {
+public class ChunkTileGeometry extends Geometry implements IRenderer {
 
     public static int VertexCount = 0;
     private ChunkClient chunkClient;
@@ -26,7 +29,7 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
     private int resetIndex;
 
     public ChunkTileGeometry (ChunkClient chunkClient) {
-        super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0]);
+        super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0], VertexInformation.DEFAULT);
 
         this.chunkClient = chunkClient;
 
@@ -46,7 +49,7 @@ public class ChunkTileGeometry extends GeometryRegistry.Geometry implements IRen
                         Vector2i topLeftQuadCorner = new Vector2i(chunkClient.getChunkX() * Chunk.chunkSize + x - ( chunkClient.getWorld().getCoreData().getWorldWidth() / 2 ), ( chunkClient.getWorld().getCoreData().getWorldHeight() / 2 ) - ( chunkClient.getChunkZ() * Chunk.chunkSize + z ));
                         Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
 
-                        GeometryRegistry.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), tileTexture.getArea());
+                        Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), tileTexture.getArea());
 
                         Collections.addAll(texturedVertices, positionGeometry.getVertices());
                     }

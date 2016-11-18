@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.render.RenderHandler;
 import com.smithsgaming.transportmanager.client.world.WorldClientManager;
 import com.smithsgaming.transportmanager.main.world.World;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.Side;
 
 /**
  * @Author Marc (Created on: 16.03.2016)

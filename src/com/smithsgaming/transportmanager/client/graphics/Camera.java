@@ -1,11 +1,10 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.main.TransportManager;
-import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
 import com.smithsgaming.transportmanager.util.GraphicUtil;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
@@ -38,7 +37,7 @@ public class Camera {
     private Frustum activeFrustum;
 
     public Camera () {
-        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreateOrthogonalFieldOfView(0f, 100f);
+        this.projectionMatrix = MathUtil.CreateOrthogonalFieldOfView(0f, 100f);
         this.projectionMatrix.get(projectionMatrixBuffer);
         //this.projectionMatrixBuffer.flip();
 
@@ -53,7 +52,7 @@ public class Camera {
     }
 
     public Camera (float angle, Vector3f rotationAxis) {
-        this.projectionMatrix = com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
+        this.projectionMatrix = MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
         this.projectionMatrix.get(projectionMatrixBuffer);
         //this.projectionMatrixBuffer.flip();
 
@@ -71,7 +70,7 @@ public class Camera {
      * Method to create a perspective View, should be used for WorldRendering.
      */
     private void createProjectionMatrix () {
-        setProjectionMatrix(com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f));
+        setProjectionMatrix(MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f));
     }
 
     /**
@@ -83,7 +82,7 @@ public class Camera {
     }
 
     public void updateProjectionMatrix () {
-        com.smithsgaming.transportmanager.util.MathUtil.CreatePerspectiveFieldOfView(com.smithsgaming.transportmanager.util.MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
+        MathUtil.CreatePerspectiveFieldOfView(MathUtil.toRadiant(OpenGLUtil.getFOV()), OpenGLUtil.getAspectRatio(), 0.1f, 550f);
     }
 
     /**

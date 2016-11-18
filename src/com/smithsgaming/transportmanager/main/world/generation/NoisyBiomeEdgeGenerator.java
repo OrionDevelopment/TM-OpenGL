@@ -3,12 +3,11 @@ package com.smithsgaming.transportmanager.main.world.generation;
 import com.hoten.delaunay.geom.Point;
 import com.hoten.delaunay.voronoi.Center;
 import com.hoten.delaunay.voronoi.Edge;
-import com.smithsgaming.transportmanager.util.MathUtil;
+import com.smithsgaming.transportmanager.util.math.MathUtil;
 import com.smithsgaming.transportmanager.util.concurrent.ProgressionNotifierThread;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 import javafx.util.Pair;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -78,8 +77,8 @@ public class NoisyBiomeEdgeGenerator implements IWorldGenFeature{
         float s = (worldGenerationData.getGenerationRandom().nextFloat() * (MAX_DIVISION - MIN_DIVISION)) + MIN_DIVISION;
         float t = (worldGenerationData.getGenerationRandom().nextFloat() * (MAX_DIVISION - MIN_DIVISION)) + MIN_DIVISION;
 
-        subDivideQuad(worldGenerationData, A, MathUtil.interpolateCoordinate(G, B, s), H, MathUtil.interpolateCoordinate(E,D,t), minLength, points);
+        subDivideQuad(worldGenerationData, A, G, H, E, minLength, points);
         points.add(new Vector2i((int) H.x, (int) H.y));
-        subDivideQuad(worldGenerationData, H, MathUtil.interpolateCoordinate(F, C, s), C, MathUtil.interpolateCoordinate(I,D,t), minLength, points);
+        subDivideQuad(worldGenerationData, H, F, C, I, minLength, points);
     }
 }

@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.event.util.ChunkChangeType;
 import com.smithsgaming.transportmanager.main.world.World;
 import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
 import com.smithsgaming.transportmanager.network.message.RequestChunkDataMessage;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.Side;
 
 import java.io.Serializable;
 

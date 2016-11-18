@@ -1,6 +1,8 @@
 package com.smithsgaming.transportmanager.client.registries;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.render.core.Shader;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.util.*;
 
 import java.io.*;
@@ -35,72 +37,6 @@ public class ShaderRegistry {
         openGLShaderMap.clear();
     }
 
-    public static class Shader {
-
-        private int shaderId = -1;
-
-        private String vertexShaderSourceCode;
-        private String fragmentShaderSourceCode;
-
-        private int projectionMatrixIndex;
-        private int viewMatrixIndex;
-        private int modelMatrixIndex;
-        private int colorIndex;
-
-        public Shader (String vertexShaderFileName, String fragmentShaderFileName) throws FileNotFoundException {
-            vertexShaderSourceCode = OpenGLUtil.loadShaderSourceCode(vertexShaderFileName);
-            fragmentShaderSourceCode = OpenGLUtil.loadShaderSourceCode(fragmentShaderFileName);
-        }
-
-        public int getShaderId () {
-            return shaderId;
-        }
-
-        public void setShaderId (int shaderId) {
-            this.shaderId = shaderId;
-        }
-
-        public String getVertexShaderSourceCode () {
-            return vertexShaderSourceCode;
-        }
-
-        public String getFragmentShaderSourceCode () {
-            return fragmentShaderSourceCode;
-        }
-
-        public int getProjectionMatrixIndex () {
-            return projectionMatrixIndex;
-        }
-
-        public void setProjectionMatrixIndex (int projectionMatrixIndex) {
-            this.projectionMatrixIndex = projectionMatrixIndex;
-        }
-
-        public int getViewMatrixIndex () {
-            return viewMatrixIndex;
-        }
-
-        public void setViewMatrixIndex (int viewMatrixIndex) {
-            this.viewMatrixIndex = viewMatrixIndex;
-        }
-
-        public int getModelMatrixIndex () {
-            return modelMatrixIndex;
-        }
-
-        public void setModelMatrixIndex (int modelMatrixIndex) {
-            this.modelMatrixIndex = modelMatrixIndex;
-        }
-
-        public int getColorIndex () {
-            return colorIndex;
-        }
-
-        public void setColorIndex (int colorIndex) {
-            this.colorIndex = colorIndex;
-        }
-    }
-
     public static class Shaders {
 
         public static Shader colored;
@@ -110,11 +46,11 @@ public class ShaderRegistry {
 
         static {
             try {
-                colored = new Shader("vertexShaderProjection", "fragmentShaderColor");
-                textured = new Shader("vertexShaderProjection", "fragmentShaderTextured");
+                colored = new Shader("vertexShaderProjection", "fragmentShaderColor", VertexInformation.DEFAULT);
+                textured = new Shader("vertexShaderProjection", "fragmentShaderTextured", VertexInformation.DEFAULT);
 
-                guiColored = new Shader("vertexShaderGui", "fragmentShaderColor");
-                guiTextured = new Shader("vertexShaderGui", "fragmentShaderTextured");
+                guiColored = new Shader("vertexShaderGui", "fragmentShaderColor", VertexInformation.DEFAULT);
+                guiTextured = new Shader("vertexShaderGui", "fragmentShaderTextured", VertexInformation.DEFAULT);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

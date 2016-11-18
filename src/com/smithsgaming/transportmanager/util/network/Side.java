@@ -1,4 +1,4 @@
-package com.smithsgaming.transportmanager.util;
+package com.smithsgaming.transportmanager.util.network;
 
 import java.io.*;
 

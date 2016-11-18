@@ -1,6 +1,6 @@
 package com.smithsgaming.transportmanager.client.gui.input;
 
-import com.smithsgaming.transportmanager.util.ActionProcessingResult;
+import com.smithsgaming.transportmanager.util.network.ActionProcessingResult;
 
 /**
  * Created by marcf on 4/3/2016.

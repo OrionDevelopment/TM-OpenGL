@@ -23,7 +23,8 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
     public static final CrossBiomeMapFeaturesGenerator instance = new CrossBiomeMapFeaturesGenerator();
 
     private final float MAXTILEDISTANCE = 3.5f;
-    private final int MAXNOISE = 1;
+    private final int MAXNOISE = 100;
+    private final int MINOISE = 41;
 
     @Override
     public void generate(WorldGenerationData worldGenerationData, ProgressionNotifierThread runningThread) {
@@ -62,7 +63,7 @@ public class CrossBiomeMapFeaturesGenerator implements IWorldGenFeature {
                 }
 
                 //Not all border tiles should be modified
-                if (worldGenerationData.getGenerationRandom().nextInt(MAXNOISE) > 0) continue;
+                if (worldGenerationData.getGenerationRandom().nextInt(MAXNOISE) > MINOISE) continue;
 
                 BaseBiome crossBiome = BiomeManager.instance.getBaseBiomeForGenerationColor(BiomeManager.instance.getBaseBiomeForCenter(crossPolygon).getGenerationColor());
                 if (crossBiome == null) continue;

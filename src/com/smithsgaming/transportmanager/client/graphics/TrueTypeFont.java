@@ -2,6 +2,9 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import com.smithsgaming.transportmanager.util.*;
 import com.smithsgaming.transportmanager.util.math.*;
@@ -291,9 +294,9 @@ public class TrueTypeFont {
         characterPairHashMap.clear();
     }
 
-    private static class CharGeometry extends GeometryRegistry.Geometry {
+    private static class CharGeometry extends Geometry {
         private CharGeometry (TexturedVertex[] charVertexes) {
-            super(GeometryRegistry.GeometryType.QUAD, charVertexes);
+            super(GeometryRegistry.GeometryType.QUAD, charVertexes, VertexInformation.DEFAULT);
         }
 
         public static CharGeometry getForChar (Texture charTexture, float mapHeight, float mapWidth) {

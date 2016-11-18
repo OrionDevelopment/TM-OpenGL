@@ -8,8 +8,7 @@ import com.smithsgaming.transportmanager.client.world.chunk.*;
 import com.smithsgaming.transportmanager.main.saveable.*;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.network.client.TMNetworkingClient;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.*;
 import javafx.util.*;
 

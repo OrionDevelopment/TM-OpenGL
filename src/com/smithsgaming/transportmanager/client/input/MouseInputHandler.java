@@ -2,7 +2,7 @@ package com.smithsgaming.transportmanager.client.input;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.graphics.GuiScale;
-import com.smithsgaming.transportmanager.util.ActionProcessingResult;
+import com.smithsgaming.transportmanager.util.network.ActionProcessingResult;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;

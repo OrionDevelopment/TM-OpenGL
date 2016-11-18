@@ -2,7 +2,7 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.main.world.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.*;
 
 /**

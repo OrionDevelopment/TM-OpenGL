@@ -4,8 +4,11 @@ import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.render.textures.*;
+import com.smithsgaming.transportmanager.main.core.TileRegistry;
 import com.smithsgaming.transportmanager.main.world.tiles.*;
 import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.world.TileDirection;
+import javafx.util.Pair;
 import org.lwjgl.opengl.*;
 
 import javax.imageio.*;
@@ -26,6 +29,7 @@ public class TextureRegistry {
     public HashMap<String, Texture> namedBufferedTextured = new HashMap<>();
     public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
     public HashMap<Integer, Texture> stitchedTextures = new HashMap<>();
+    public HashMap<Pair<Tile, TileDirection>, Texture> borderTextures = new HashMap<>();
 
     private TextureRegistry() {
     }
@@ -52,6 +56,18 @@ public class TextureRegistry {
 
     public Texture getTextureForOpenGLID(int id) {
         return bufferedTextures.get(id);
+    }
+
+    public void generateBorderTextures() {
+        TileRegistry.instance.getTiles().forEach(this::generateBorderForTile);
+    }
+
+    public void generateBorderForTile(Tile tile) {
+        if (!tile.createsBorders()) return;
+
+        for (TileDirection direction : TileDirection.values()) {
+
+        }
     }
 
     public Texture initializeTextureStitching(int textureStitchingId) {
@@ -118,6 +134,9 @@ public class TextureRegistry {
 
         return stitchedTexture;
     }
+
+
+
 
     public void unLoad() {
         bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);

@@ -2,8 +2,8 @@ package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.event.EventClientConnected;
-import com.smithsgaming.transportmanager.util.ActionProcessingResult;
-import com.smithsgaming.transportmanager.util.Side;
+import com.smithsgaming.transportmanager.util.network.ActionProcessingResult;
+import com.smithsgaming.transportmanager.util.network.Side;
 import io.netty.channel.Channel;
 
 /**

@@ -4,7 +4,8 @@ package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.Shader;
 import com.smithsgaming.transportmanager.client.render.textures.*;
 import org.joml.Matrix4f;
 import org.lwjgl.*;
@@ -90,18 +91,13 @@ public class OpenGLUtil {
      *
      * @return The GL ID of the OpenGL Graphical Pipeline programm.
      */
-    private static int linkShaders (ShaderRegistry.Shader shader, int[] shaders) {
+    private static int linkShaders (Shader shader, int[] shaders) {
         int program = GL20.glCreateProgram();
         for (int i = 0; i < shaders.length; i++) {
             GL20.glAttachShader(program, shaders[i]);
         }
 
-        // Position information will be attribute 0
-        GL20.glBindAttribLocation(program, 0, "in_Position");
-        // Color information will be attribute 1
-        GL20.glBindAttribLocation(program, 1, "in_Color");
-        // Textute information will be attribute 2
-        GL20.glBindAttribLocation(program, 2, "in_TextureCoord");
+        shader.getInformation().upLoadVertexAttributesForShader(program);
 
         GL20.glLinkProgram(program);
         GL20.glValidateProgram(program);
@@ -109,8 +105,8 @@ public class OpenGLUtil {
         String log = GL20.glGetProgramInfoLog(program, 150);
 
         if (!log.equals("")) {
-            System.err.println("Warning OpenGL log was not empty:");
-            System.err.println(log);
+            Display.displayLogger.error("Warning OpenGL log was not empty:");
+            Display.displayLogger.error(log);
         }
 
         // Get matrices uniform locations
@@ -128,7 +124,7 @@ public class OpenGLUtil {
         return program;
     }
 
-    public static void loadShaderProgramm (ShaderRegistry.Shader shader) {
+    public static void loadShaderProgramm (Shader shader) {
         if (shader.getShaderId() > -1)
             throw new IllegalArgumentException("Shader already loaded.");
 
@@ -146,7 +142,7 @@ public class OpenGLUtil {
      *
      * @param geometry The geometry to load into the GPU.
      */
-    public static void loadGeometryIntoGPU (GeometryRegistry.Geometry geometry) {
+    public static void loadGeometryIntoGPU (Geometry geometry) {
         int arrayBuffer = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(arrayBuffer);
 
@@ -154,15 +150,7 @@ public class OpenGLUtil {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, dataBuffer);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, geometry.getBufferData(), GL15.GL_STATIC_DRAW);
 
-        // Put the position coordinates in attribute list 0
-        GL20.glVertexAttribPointer(0, TexturedVertex.positionElementCount, GL11.GL_FLOAT,
-                false, TexturedVertex.stride, TexturedVertex.positionByteOffset);
-        // Put the color components in attribute list 1
-        GL20.glVertexAttribPointer(1, TexturedVertex.colorElementCount, GL11.GL_FLOAT,
-                false, TexturedVertex.stride, TexturedVertex.colorByteOffset);
-        // Put the texture coordinates in attribute list 2
-        GL20.glVertexAttribPointer(2, TexturedVertex.textureElementCount, GL11.GL_FLOAT,
-                false, TexturedVertex.stride, TexturedVertex.textureByteOffset);
+        geometry.getInformation().upLoadVertexAttributesForGeometry();
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
@@ -247,7 +235,7 @@ public class OpenGLUtil {
      * @param texture  The Texture to render the geometry with.
      * @param shader The OpenGL Shader ID to use.
      */
-    public static void drawGeometryWithShaderAndTexture (Camera camera, GeometryRegistry.Geometry geometry, Texture texture, ShaderRegistry.Shader shader) {
+    public static void drawGeometryWithShaderAndTexture (Camera camera, Geometry geometry, Texture texture, Shader shader) {
         if (geometry == null)
             return;
 
@@ -263,7 +251,7 @@ public class OpenGLUtil {
      * @param geometry The Geometry to render.
      * @param shader   The OpenGL Shader ID to use.
      */
-    public static void drawGeometryWithShader (Camera camera, GeometryRegistry.Geometry geometry, ShaderRegistry.Shader shader) {
+    public static void drawGeometryWithShader (Camera camera, Geometry geometry, Shader shader) {
         if (geometry == null)
             return;
 
@@ -276,9 +264,7 @@ public class OpenGLUtil {
 
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, geometry.getOpenGLVertexIndexID());
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        GL20.glEnableVertexAttribArray(2);
+        geometry.getInformation().enableVertexAttributesForRender();
 
         if (geometry.requiresResetting()) {
             GL11.glEnable(GL31.GL_PRIMITIVE_RESTART);
@@ -291,9 +277,7 @@ public class OpenGLUtil {
             GL11.glDisable(GL31.GL_PRIMITIVE_RESTART);
         }
 
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(2);
+        geometry.getInformation().disableVertexAttributesForRender();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
 
@@ -365,14 +349,12 @@ public class OpenGLUtil {
         GL11.glDeleteTextures(texture.getOpenGLTextureId());
     }
 
-    public static void deleteGeometry (GeometryRegistry.Geometry geometry) {
+    public static void deleteGeometry (Geometry geometry) {
         // Select the VAO
         GL30.glBindVertexArray(geometry.getOpenGLVertaxArrayId());
 
         // Disable the VBO index from the VAO attributes list
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(2);
+        geometry.getInformation().unLoadVertexAttributesForGeometry();
 
         // Delete the vertex VBO
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
@@ -388,7 +370,7 @@ public class OpenGLUtil {
 
     }
 
-    public static void deleteShader (ShaderRegistry.Shader shader) {
+    public static void deleteShader (Shader shader) {
         GL20.glUseProgram(0);
         GL20.glDeleteProgram(shader.getShaderId());
 

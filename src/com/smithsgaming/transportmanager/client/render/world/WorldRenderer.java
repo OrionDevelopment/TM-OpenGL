@@ -4,6 +4,7 @@ import com.google.common.base.*;
 import com.smithsgaming.transportmanager.client.graphics.*;
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.client.render.world.chunk.*;
 import com.smithsgaming.transportmanager.client.world.*;
 import com.smithsgaming.transportmanager.client.world.chunk.*;
@@ -25,7 +26,7 @@ public class WorldRenderer implements IRenderer {
     WorldClient worldClient;
     HashMap<ChunkClient, ChunkRenderer> rendererHashMap = new HashMap<>();
 
-    GeometryRegistry.Geometry testGeometry;
+    Geometry testGeometry;
 
     /**
      * Method called by the RenderManager to process the rendering for this renderer.

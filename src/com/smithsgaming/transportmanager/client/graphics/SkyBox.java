@@ -2,6 +2,9 @@ package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.registries.*;
 import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.util.*;
 
 /**
@@ -11,7 +14,7 @@ public class SkyBox implements IRenderer {
 
     private static final int SkyBoxSize = 2000;
 
-    private GeometryRegistry.Geometry oceanGeometry;
+    private Geometry oceanGeometry;
 
     public SkyBox () {
         TexturedVertex[] oceanGeometryVextexes = new TexturedVertex[4];
@@ -21,7 +24,7 @@ public class SkyBox implements IRenderer {
         oceanGeometryVextexes[3] = new TexturedVertex().setRGB(1f, 1f, 1f).setST(SkyBoxSize, 0).setXYZ(( SkyBoxSize / 2f ), 0f, -( SkyBoxSize / 2f ));
         oceanGeometryVextexes[1] = new TexturedVertex().setRGB(1f, 1f, 1f).setST(0, 0).setXYZ(-( SkyBoxSize / 2f ), 0f, -( SkyBoxSize / 2f ));
 
-        oceanGeometry = new GeometryRegistry.Geometry(GeometryRegistry.GeometryType.QUAD, oceanGeometryVextexes);
+        oceanGeometry = new Geometry(GeometryRegistry.GeometryType.QUAD, oceanGeometryVextexes, VertexInformation.DEFAULT);
 
         GeometryRegistry.instance.registerNewGeometry(oceanGeometry);
     }
