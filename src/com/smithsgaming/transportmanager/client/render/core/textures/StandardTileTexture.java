@@ -19,8 +19,8 @@ public class StandardTileTexture extends Texture {
     }
 
     @Override
-    public Texture clip(int minX, int minY, int maxX, int maxY, boolean[][] noiseMap, String textureAppendix) {
-        Texture clipped = super.clip(minX, minY, maxX, maxY, noiseMap, textureAppendix);
+    public Texture clip(int minX, int minY, int maxX, int maxY, String textureAppendix) {
+        Texture clipped = super.clip(minX, minY, maxX, maxY, textureAppendix);
 
         return new StandardTileTexture(clipped, clipped.getTextureName());
     }

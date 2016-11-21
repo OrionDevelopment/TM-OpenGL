@@ -25,9 +25,7 @@ public class Main {
         serverThread.start();
 
         client = TransportManagerClient.instance;
-
         clientThread = new Thread(client, "TM-OpenGL - Client");
         clientThread.start();
-
     }
 }

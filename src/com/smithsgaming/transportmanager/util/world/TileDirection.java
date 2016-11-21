@@ -25,22 +25,25 @@ public enum TileDirection {
 
     Vector2i offset;
 
-    private static HashMap<Vector2i, TileDirection> opositeResolver = null;
+    private static HashMap<TileDirection, TileDirection> opositeResolver = new HashMap<>();
 
+    static {
+        opositeResolver.put(TOPLEFT, BOTTOMRIGHT);
+        opositeResolver.put(TOP, BOTTOMRIGHT);
+        opositeResolver.put(TOPRIGHT, BOTTOMLEFT);
+        opositeResolver.put(RIGHT, LEFT);
+        opositeResolver.put(BOTTOMRIGHT, TOPLEFT);
+        opositeResolver.put(BOTTOM, TOP);
+        opositeResolver.put(BOTTOMLEFT, TOPRIGHT);
+        opositeResolver.put(LEFT, RIGHT);
+    }
 
     public Vector2i getOffset() {
         return new Vector2i(offset);
     }
 
     public TileDirection getOposite() {
-        if (opositeResolver == null) {
-            opositeResolver = new HashMap<>();
-            for (TileDirection direction : values()) {
-                opositeResolver.put(direction.getOffset().multiply(-1), direction);
-            }
-        }
-
-        return opositeResolver.get(getOffset());
+        return opositeResolver.get(this);
     }
 
     public Vector2i offset(Vector2i source) {

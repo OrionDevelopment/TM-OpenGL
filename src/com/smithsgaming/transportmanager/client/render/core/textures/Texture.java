@@ -214,7 +214,7 @@ public class Texture {
             }
         }
 
-        return new Texture(getTextureName() + textureAppendix, ResourceUtil.generateBufferFromPixels(pixelData), maxX - minX, maxY - minY);
+        return new Texture(getTextureName() + textureAppendix, ResourceUtil.generateBufferFromPixels(pixelData), getPixelWidth(), getPixelHeight());
     }
 
     private static void generateNoiseMap(int xsize, int ysize) {

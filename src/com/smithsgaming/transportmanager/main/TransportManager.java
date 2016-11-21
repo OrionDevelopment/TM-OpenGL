@@ -25,6 +25,7 @@ public class TransportManager implements Runnable, IEventController {
     public static final Logger serverLogger = LogManager.getLogger(Definitions.Loggers.SERVER);
     public static final TransportManager instance = new TransportManager();
 
+    public static Boolean isInitialized = false;
     public static boolean isRunning = true;
     static Thread serverNetworkThread;
     public static final int targetUPS = 60;
@@ -37,6 +38,13 @@ public class TransportManager implements Runnable, IEventController {
     @Override
     public void run() {
         TileRegistry.init();
+
+        //TODO: Implement a proper split between client and server with sideonly registries!
+        //TODO: Then remove this!
+        synchronized (isInitialized) {
+            isInitialized = true;
+        }
+
         WorldManager.instance.generateWorld();
 
         serverNetworkThread = new Thread(new TMNetworkingServer(1000));

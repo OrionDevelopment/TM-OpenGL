@@ -2,6 +2,7 @@
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import de.matthiasmann.twl.utils.PNGDecoder;
 
@@ -139,6 +140,10 @@ public class ResourceUtil {
             int blue = data[i*4 + 2];
             int alpha = data[i*4 + 3];
 
+            if (alpha < 0) {
+                alpha = 255;
+            }
+
             pixels[i] = (red << 24) | (green << 16) | (blue << 8) | alpha;
         }
 
@@ -159,7 +164,13 @@ public class ResourceUtil {
     }
 
     public static ByteBuffer generateBufferFromData(byte[] data) {
-        return ByteBuffer.wrap(data);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.put(data);
+        buffer.position(0);
+
+        buffer.flip();
+
+        return buffer;
     }
 
     public static ByteBuffer generateBufferFromPixels(int[] pixels) {
@@ -167,7 +178,15 @@ public class ResourceUtil {
     }
 
     public static int[] generatePixelsFromByteBuffer(ByteBuffer buffer) {
-        return convertByteArrayToIntArray(buffer.array());
+        if (buffer == null)
+            return new int[0];
+
+        int currentPosition = buffer.position();
+        byte[] array = new byte[buffer.remaining()];
+        buffer.get(array);
+        buffer.position(currentPosition);
+
+        return convertByteArrayToIntArray(array);
     }
 
 }

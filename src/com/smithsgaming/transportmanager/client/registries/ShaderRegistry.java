@@ -2,6 +2,7 @@ package com.smithsgaming.transportmanager.client.registries;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.render.core.Shader;
+import com.smithsgaming.transportmanager.client.render.core.TileVertexInformation;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import com.smithsgaming.transportmanager.util.*;
 
@@ -27,7 +28,7 @@ public class ShaderRegistry {
         return shader.getShaderId();
     }
 
-    public Shader getGeometryForOpenGLID (int openGLID) {
+    public Shader getShaderForOpenGLID (int openGLID) {
         return openGLShaderMap.get(openGLID);
     }
 
@@ -41,6 +42,7 @@ public class ShaderRegistry {
 
         public static Shader colored;
         public static Shader textured;
+        public static Shader tile;
         public static Shader guiColored;
         public static Shader guiTextured;
 
@@ -48,6 +50,8 @@ public class ShaderRegistry {
             try {
                 colored = new Shader("vertexShaderProjection", "fragmentShaderColor", VertexInformation.DEFAULT);
                 textured = new Shader("vertexShaderProjection", "fragmentShaderTextured", VertexInformation.DEFAULT);
+
+                tile = new Shader("vertexShaderDefaultWorldTile", "fragmentShaderDefaultWorldTile", TileVertexInformation.INSTANCE);
 
                 guiColored = new Shader("vertexShaderGui", "fragmentShaderColor", VertexInformation.DEFAULT);
                 guiTextured = new Shader("vertexShaderGui", "fragmentShaderTextured", VertexInformation.DEFAULT);
@@ -60,6 +64,7 @@ public class ShaderRegistry {
             TransportManagerClient.clientLogger.info("Loading Shaders.");
             ShaderRegistry.instance.registerNewShader(colored);
             ShaderRegistry.instance.registerNewShader(textured);
+            ShaderRegistry.instance.registerNewShader(tile);
             ShaderRegistry.instance.registerNewShader(guiColored);
             ShaderRegistry.instance.registerNewShader(guiTextured);
             TransportManagerClient.clientLogger.info("Finished loading Shaders.");

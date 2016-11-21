@@ -133,6 +133,16 @@ public class TransportManagerClient implements Runnable, IEventController {
     }
 
     public void loadGraphics() {
+        //TODO: Implement a proper split between client and server with sideonly registries!
+        //TODO: Then remove this!
+        while(!TransportManager.isInitialized) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         clientLogger.info("Start loading Graphics.");
         TextureRegistry.Textures.init();
         ShaderRegistry.Shaders.init();

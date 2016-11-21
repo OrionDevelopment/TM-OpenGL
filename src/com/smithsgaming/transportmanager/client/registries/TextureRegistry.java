@@ -29,7 +29,7 @@ public class TextureRegistry {
     public HashMap<String, Texture> namedBufferedTextured = new HashMap<>();
     public HashMap<Integer, Texture> bufferedTextures = new HashMap<>();
     public HashMap<Integer, Texture> stitchedTextures = new HashMap<>();
-    public HashMap<Pair<Tile, TileDirection>, Texture> borderTextures = new HashMap<>();
+    public HashMap<String, Texture> borderTextures = new HashMap<>();
 
     private TextureRegistry() {
     }
@@ -58,26 +58,39 @@ public class TextureRegistry {
         return bufferedTextures.get(id);
     }
 
+    public Texture getBorderTextureForTileAndDirection(Tile tile, TileDirection direction) {
+        if (!tile.createsBorders())
+            return getTextureForName(tile.getIdentity());
+
+        return borderTextures.get(tile.getIdentity() + "-" + direction.toString());
+    }
+
     public void generateBorderTextures() {
         TileRegistry.instance.getTiles().forEach(this::generateBorderForTile);
+
+        borderTextures.values().forEach(this::loadTexture);
     }
 
     public void generateBorderForTile(Tile tile) {
-        if (!tile.createsBorders()) return;
+        if (tile == null || !tile.createsBorders())
+            return;
 
         Texture original = getTextureForName(tile.getIdentity());
+
+        if (original == null)
+            return;
+
         int borderWidth = original.getPixelWidth() / 4;
         int borderHeight = original.getPixelHeight() / 4;
 
-        borderTextures.put(new Pair<>(tile, TileDirection.TOPLEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.TOP), getTextureForName(tile.getIdentity()).clip(0,0, original.getPixelWidth(), borderHeight, TileDirection.TOP.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.TOPRIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, borderHeight, TileDirection.TOPRIGHT.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.RIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, original.getPixelHeight(), TileDirection.RIGHT.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOMRIGHT), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth, original.getPixelHeight() - borderHeight, borderWidth, borderHeight, TileDirection.BOTTOMRIGHT.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOM), getTextureForName(tile.getIdentity()).clip(0,original.getPixelHeight() - borderHeight, original.getPixelWidth(), borderHeight, TileDirection.BOTTOM.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.BOTTOMLEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
-        borderTextures.put(new Pair<>(tile, TileDirection.LEFT), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
-
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.TOPLEFT.toString(), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, borderHeight, TileDirection.TOPLEFT.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.TOP.toString(), getTextureForName(tile.getIdentity()).clip(0,0, original.getPixelWidth(), borderHeight, TileDirection.TOP.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.TOPRIGHT.toString(), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, borderHeight, TileDirection.TOPRIGHT.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.RIGHT.toString(), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth,0, borderWidth, original.getPixelHeight(), TileDirection.RIGHT.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.BOTTOMRIGHT.toString(), getTextureForName(tile.getIdentity()).clip(original.getPixelWidth() - borderWidth, original.getPixelHeight() - borderHeight, borderWidth, borderHeight, TileDirection.BOTTOMRIGHT.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.BOTTOM.toString(), getTextureForName(tile.getIdentity()).clip(0,original.getPixelHeight() - borderHeight, original.getPixelWidth(), borderHeight, TileDirection.BOTTOM.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.BOTTOMLEFT.toString(), getTextureForName(tile.getIdentity()).clip(0,original.getPixelHeight() - borderHeight, borderWidth, borderHeight, TileDirection.BOTTOMLEFT.toString()));
+        borderTextures.put(tile.getIdentity() + "-" + TileDirection.LEFT.toString(), getTextureForName(tile.getIdentity()).clip(0,0, borderWidth, original.getPixelHeight(), TileDirection.LEFT.toString()));
     }
 
 
@@ -96,9 +109,11 @@ public class TextureRegistry {
         OpenGLUtil.loadTextureIntoGPU(stitchedTexture);
 
         for (Texture texture : texturesToCombine) {
+            Display.displayLogger.trace("Started uploading stitchtexture:" + texture.getTextureName() + " to stitchedtexture:" + stitchedTexture.getTextureName());
             OpenGLUtil.loadSubTextureRegionIntoGPU(stitchedTexture, texture);
             texture.setBoundTextureUnit(stitchedTexture.getBoundTextureUnit());
             texture.setOpenGLTextureId(stitchedTexture.getOpenGLTextureId());
+            Display.displayLogger.trace("Finished uploading stitchtexture:" + texture.getTextureName() + " to stitchedtexture:" + stitchedTexture.getTextureName());
         }
 
 
@@ -146,9 +161,6 @@ public class TextureRegistry {
         return stitchedTexture;
     }
 
-
-
-
     public void unLoad() {
         bufferedTextures.values().forEach(OpenGLUtil::destroyTexture);
 
@@ -176,6 +188,10 @@ public class TextureRegistry {
             Tiles.ice = StandardTileTexture.loadTexture(TileNames.ICE, "/textures/tiles/world/ice_0.png");
             Tiles.ice_bush_brown = StandardTileTexture.loadTexture(TileNames.ICE_BUSH_BROWN, "/textures/tiles/world/ice_1.png");
             Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
+
+            TransportManagerClient.clientLogger.debug("Starting border texture generation.");
+            TextureRegistry.instance.generateBorderTextures();
+            TransportManagerClient.clientLogger.debug("Finished border texture generation.");
 
             TransportManagerClient.clientLogger.debug("Starting Texturestitching.");
             Stitched.Tiles = TextureRegistry.instance.initializeTextureStitching(0);

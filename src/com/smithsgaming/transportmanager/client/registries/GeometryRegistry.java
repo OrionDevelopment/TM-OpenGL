@@ -135,7 +135,7 @@ public class GeometryRegistry {
             super(GeometryType.QUAD, new TexturedVertex[]{topLeft, bottomLeft, topRight, bottomRight}, VertexInformation.DEFAULT);
         }
 
-        private QuadGeometry (TexturedVertex[] texturedVertices) {
+        public QuadGeometry (TexturedVertex[] texturedVertices) {
             super(GeometryType.QUAD, texturedVertices, VertexInformation.DEFAULT);
         }
 

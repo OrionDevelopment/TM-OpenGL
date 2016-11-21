@@ -1,9 +1,15 @@
 package com.smithsgaming.transportmanager.client.render.core;
 
+import com.smithsgaming.transportmanager.util.world.TileDirection;
+
 /**
  * Created by marcf on 11/18/2016.
  */
 public class TileTexturedVertex extends TexturedVertex {
+
+    public TileTexturedVertex() {
+        setInformation(TileVertexInformation.INSTANCE);
+    }
 
     private float[] ost1 = new float[]{0f, 0f};
     private float[] ost2= new float[]{0f, 0f};
@@ -78,6 +84,35 @@ public class TileTexturedVertex extends TexturedVertex {
         this.ost8 = ost8;
     }
 
+    public void setOst(TileDirection direction, float... ost) {
+        switch (direction) {
+            case TOPLEFT:
+                setOst1(ost);
+                break;
+            case TOP:
+                setOst2(ost);                
+                break;
+            case TOPRIGHT:
+                setOst3(ost);
+                break;
+            case RIGHT:
+                setOst4(ost);
+                break;
+            case BOTTOMRIGHT:
+                setOst5(ost);
+                break;
+            case BOTTOM:
+                setOst6(ost);
+                break;
+            case BOTTOMLEFT:
+                setOst7(ost);
+                break;
+            case LEFT:
+                setOst8(ost);
+                break;
+        }
+    }
+    
     @Override
     public float[] getElements() {
         float[] additionalData = super.getElements();

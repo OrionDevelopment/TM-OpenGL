@@ -7,8 +7,10 @@ import org.lwjgl.opengl.GL20;
  * Created by marcf on 11/18/2016.
  */
 public class TileVertexInformation extends VertexInformation {
-    
-    public TileVertexInformation() {
+
+    public static final TileVertexInformation INSTANCE = new TileVertexInformation();
+
+    private TileVertexInformation() {
         super(4, 4, 4, 18);
     }
 
@@ -46,7 +48,7 @@ public class TileVertexInformation extends VertexInformation {
         //Uploading the overlay textures
         for (int i = 3; i < 11 ; i++){
             GL20.glVertexAttribPointer(i, 2, GL11.GL_FLOAT,
-                    false, getStride(), getTextureByteOffset() + ((i-3) * (2 * getElementBytes())));
+                    false, getStride(), getTextureByteOffset() + ((i-2) * (2 * getElementBytes())));
         }
     }
 
