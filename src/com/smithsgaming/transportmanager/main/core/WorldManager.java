@@ -5,6 +5,7 @@ import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.event.EventClientWorldSyncStart;
 import com.smithsgaming.transportmanager.main.world.*;
 import com.smithsgaming.transportmanager.main.world.generation.*;
+import com.smithsgaming.transportmanager.util.concurrent.IThreadProgressionListener;
 
 /**
  * Created by marcf on 3/13/2016.

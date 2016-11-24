@@ -2,7 +2,10 @@ package com.smithsgaming.transportmanager.main.world.generation;
 
 import com.smithsgaming.transportmanager.main.core.*;
 import com.smithsgaming.transportmanager.main.world.*;
+import com.smithsgaming.transportmanager.util.Definitions;
 import com.smithsgaming.transportmanager.util.concurrent.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by Tim on 29/03/2016.
@@ -10,6 +13,7 @@ import com.smithsgaming.transportmanager.util.concurrent.*;
 public class WorldGenManager {
 
     public static WorldGenManager instance = new WorldGenManager();
+    public static Logger worldGenLogger = LogManager.getLogger(Definitions.Loggers.WORLDGEN);
 
     private long seed =  0; //System.currentTimeMillis();
     private GameLevel level = GameLevel.SMALL;

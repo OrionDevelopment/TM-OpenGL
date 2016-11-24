@@ -59,6 +59,8 @@ public class ChunkTileGeometry extends Geometry implements IRenderer {
 
                         for(TileDirection direction : TileDirection.values()) {
                             Vector2i offsetPos =  direction.offset(worldPos);
+                            if (offsetPos.x < 0 || offsetPos.x > chunkClient.getWorld().getCoreData().getWorldWidth() || offsetPos.y < 0 || offsetPos.y > chunkClient.getWorld().getCoreData().getWorldHeight()) continue;
+
                             Tile offsetTile = chunkClient.getWorld().getTileAtPos(offsetPos.x, offsetPos.y);
 
                             if (offsetTile == null || offsetTile.equals(tile)) continue;

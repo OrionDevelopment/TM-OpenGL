@@ -14,6 +14,7 @@
 <Logger name="TM-Client" level="trace"/>
 <Logger name="TM-Server" level="trace"/>
 <Logger name="TM-Render" level="trace"/>
+<Logger name="TM-WorldGen" level="trace"/>
 <Logger name="TM-Network-Client" level="error"/>
 <Logger name="TM-Network-Server" level="error"/>
 <Logger name="io.netty.handler.logging.LoggingHandler" level="warn" />
