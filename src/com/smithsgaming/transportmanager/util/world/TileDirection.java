@@ -10,13 +10,13 @@ import java.util.HashMap;
 public enum TileDirection {
 
     TOPLEFT(new Vector2i(-1, -1)),
-    TOP(new Vector2i(0, -1)),
-    TOPRIGHT(new Vector2i(1, -1)),
-    RIGHT(new Vector2i(1, 0)),
+    TOP(new Vector2i(-1, 0)),
+    TOPRIGHT(new Vector2i(-1, 1)),
+    RIGHT(new Vector2i(0, 1)),
     BOTTOMRIGHT(new Vector2i(1,1)),
-    BOTTOM(new Vector2i(0,1)),
-    BOTTOMLEFT(new Vector2i(-1, 1)),
-    LEFT(new Vector2i(-1, 0));
+    BOTTOM(new Vector2i(1,0)),
+    BOTTOMLEFT(new Vector2i(1, -1)),
+    LEFT(new Vector2i(0, -1));
 
 
     TileDirection(Vector2i offset) {

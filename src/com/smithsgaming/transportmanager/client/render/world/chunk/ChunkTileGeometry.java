@@ -64,7 +64,7 @@ public class ChunkTileGeometry extends Geometry implements IRenderer {
                             if (offsetTile == null || offsetTile.equals(tile)) continue;
 
                             if (offsetTile.createsBorders()) {
-                                GuiPlaneF overlayTexturePlane = TextureRegistry.instance.getBorderTextureForTileAndDirection(offsetTile, direction.getOposite()).getArea();
+                                GuiPlaneF overlayTexturePlane = TextureRegistry.instance.getBorderTextureForTileAndDirection(offsetTile, direction).getArea();
 
                                 topLeft.setOst(direction, overlayTexturePlane.getTopLeftCoordinate().x, overlayTexturePlane.getTopLeftCoordinate().y);
                                 topRight.setOst(direction, overlayTexturePlane.getTopRightCoordinate().x, overlayTexturePlane.getTopRightCoordinate().y);
