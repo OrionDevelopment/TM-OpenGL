@@ -203,6 +203,7 @@ public class TextureRegistry {
             Tiles.ice = StandardTileTexture.loadTexture(TileNames.ICE, "/textures/tiles/world/ice_0.png");
             Tiles.ice_bush_brown = StandardTileTexture.loadTexture(TileNames.ICE_BUSH_BROWN, "/textures/tiles/world/ice_1.png");
             Tiles.scorched = StandardTileTexture.loadTexture(TileNames.SCORCHED, "/textures/tiles/world/scorchedStone.png");
+            Tiles.voidTexture = StandardTileTexture.loadTexture("Void", "/textures/tiles/void.png");
 
             TransportManagerClient.clientLogger.debug("Starting border texture generation.");
             TextureRegistry.instance.generateBorderTextures();
@@ -233,6 +234,7 @@ public class TextureRegistry {
             public static Texture ice_bush_brown;
             public static Texture scorched;
             public static Texture lake;
+            public static Texture voidTexture;
         }
 
         public static class Stitched {

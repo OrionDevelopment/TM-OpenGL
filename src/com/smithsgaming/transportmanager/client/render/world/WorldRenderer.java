@@ -13,8 +13,8 @@ import com.smithsgaming.transportmanager.client.world.WorldClient;
 import com.smithsgaming.transportmanager.client.world.chunk.ChunkClient;
 import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.math.Vector2i;
-import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneF;
+import org.joml.Vector2f;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +41,8 @@ public class WorldRenderer implements IRenderer {
 
         if (false) {
             if (testGeometry == null) {
-                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(new Vector2i(0, 0), new Vector2i(1, -1)), TextureRegistry.Textures.Tiles.grass.getArea());
+                testGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneF(new Vector2f(0, 0), new Vector2f(1, -1)),
+                  TextureRegistry.Textures.Tiles.grass.getArea());
                 OpenGLUtil.loadGeometryIntoGPU(testGeometry);
             }
             OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, testGeometry, TextureRegistry.Textures.Tiles.grass, ShaderRegistry.Shaders.textured);

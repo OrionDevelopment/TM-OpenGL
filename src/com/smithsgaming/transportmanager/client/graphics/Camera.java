@@ -225,7 +225,7 @@ public class Camera {
         viewMatrix.get(viewMatrixBuffer);
         //viewMatrixBuffer.flip();
 
-        //activeFrustum.updateFrustum();
+        activeFrustum.updateFrustum();
 
         TransportManagerClient.clientLogger.trace("New Cameraposition:" + cameraPosition.toString());
 

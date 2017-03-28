@@ -181,7 +181,7 @@ public class OpenGLUtil {
         geometry.setOpenGLVertexDataId(dataBuffer);
         geometry.setOpenGLVertexIndexID(indicesBuffer);
 
-        checkGlState("Load Geometry");
+        checkGlState("Load TestGeometry");
 
         geometry.onLoaded();
     }
@@ -247,9 +247,9 @@ public class OpenGLUtil {
     }
 
     /**
-     * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader and Texture.
+     * Method to render an already in the GPU stored piece of TestGeometry on screen with a specific Shader and Texture.
      *
-     * @param geometry The Geometry to render.
+     * @param geometry The TestGeometry to render.
      * @param texture  The Texture to render the geometry with.
      * @param shader The OpenGL Shader ID to use.
      */
@@ -264,9 +264,9 @@ public class OpenGLUtil {
     }
 
     /**
-     * Method to render an already in the GPU stored piece of Geometry on screen with a specific Shader.
+     * Method to render an already in the GPU stored piece of TestGeometry on screen with a specific Shader.
      *
-     * @param geometry The Geometry to render.
+     * @param geometry The TestGeometry to render.
      * @param shader   The OpenGL Shader ID to use.
      */
     public static void drawGeometryWithShader (Camera camera, Geometry geometry, Shader shader) {
@@ -301,7 +301,7 @@ public class OpenGLUtil {
 
         GL20.glUseProgram(0);
 
-        checkGlState("Render Geometry");
+        checkGlState("Render TestGeometry");
     }
 
     /**

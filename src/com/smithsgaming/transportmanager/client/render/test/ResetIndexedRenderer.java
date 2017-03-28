@@ -7,9 +7,10 @@ import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
-import com.smithsgaming.transportmanager.util.math.Vector2i;
-import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneF;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -21,24 +22,25 @@ import java.util.Collections;
  */
 public class ResetIndexedRenderer implements IRenderer {
 
-    private static Geometry testGeometry;
+    private static TestGeometry testGeometry;
 
     @Override
     public void render () {
         if (testGeometry == null) {
-            testGeometry = new Geometry();
+            testGeometry = new TestGeometry();
             OpenGLUtil.loadGeometryIntoGPU(testGeometry);
         }
 
         testGeometry.render();
     }
 
-    public static class Geometry extends com.smithsgaming.transportmanager.client.render.core.geometry.Geometry implements IRenderer
+    public static class TestGeometry extends Geometry implements IRenderer
     {
         private int[] verticesIndecis;
         private int resetIndex;
 
-        public Geometry () {
+        public TestGeometry()
+        {
             super(GeometryRegistry.GeometryType.QUAD, new TexturedVertex[0], VertexInformation.DEFAULT);
 
             buildGeometry();
@@ -47,13 +49,14 @@ public class ResetIndexedRenderer implements IRenderer {
         public void buildGeometry () {
             ArrayList<TexturedVertex> texturedVertices = new ArrayList<>();
 
-            for (int x = 0; x < 1000; x++) {
-                Vector2i topLeftQuadCorner = new Vector2i(0 + x, 0 + x);
-                Vector2i lowerRightQuadCorner = new Vector2i(1 + x, -1 + x);
+            for (int x = 0; x < 1; x++)
+            {
+                Vector2f topLeftQuadCorner = new Vector2f(-0.5f + x, -0.5f + x);
+                Vector2f lowerRightQuadCorner = new Vector2f(0.5f + x, 0.5f + x);
 
                 com.smithsgaming.transportmanager.client.render.core.geometry.Geometry positionGeometry =
-                  GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner),
-                    TextureRegistry.Textures.Tiles.grass.getArea());
+                  GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneF(topLeftQuadCorner, lowerRightQuadCorner),
+                    TextureRegistry.Textures.Tiles.voidTexture.getArea());
 
                 Collections.addAll(texturedVertices, positionGeometry.getVertices());
             }
@@ -99,7 +102,7 @@ public class ResetIndexedRenderer implements IRenderer {
 
         @Override
         public void render () {
-            OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, this, TextureRegistry.Textures.Tiles.grass, ShaderRegistry.Shaders.textured);
+            OpenGLUtil.drawGeometryWithShaderAndTexture(Camera.Player, this, TextureRegistry.Textures.Tiles.voidTexture, ShaderRegistry.Shaders.textured);
         }
 
     }
