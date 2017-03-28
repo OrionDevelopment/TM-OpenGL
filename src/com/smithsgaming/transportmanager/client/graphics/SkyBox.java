@@ -1,11 +1,13 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.*;
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
 
 /**
  * @Author Marc (Created on: 17.03.2016)

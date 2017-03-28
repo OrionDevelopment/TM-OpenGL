@@ -1,7 +1,7 @@
 package com.smithsgaming.transportmanager.client.render.core.textures;
 
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.util.ResourceUtil;
 
 /**
  * @Author Marc (Created on: 31.03.2016)
@@ -9,7 +9,7 @@ import com.smithsgaming.transportmanager.util.*;
 public class StandardTileTexture extends Texture {
 
     private StandardTileTexture (Texture source, String tileIdentity) {
-        super(tileIdentity, source.getData(), source.getPixelWidth(), source.getPixelHeight());
+        super(tileIdentity, source.getData(), source.getPixelWidth(), source.getPixelHeight(), false);
 
         setRequiringTextureStitching(true);
     }

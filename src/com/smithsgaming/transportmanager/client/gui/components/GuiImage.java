@@ -4,7 +4,7 @@ import com.smithsgaming.transportmanager.client.graphics.Camera;
 import com.smithsgaming.transportmanager.client.gui.GuiComponent;
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
 import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
 import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.ResourceUtil;

@@ -1,16 +1,17 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneF;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.nio.*;
-import java.util.*;
+import java.nio.IntBuffer;
+import java.util.HashMap;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -26,6 +27,16 @@ public class GeometryRegistry {
     private GeometryRegistry () {
     }
 
+    public static TriangleGeometry getDefaultTriangleGeometry()
+    {
+        return (TriangleGeometry) instance.getGeometryForOpenGLID(getDefaultTriangleGeometryOpenGLID());
+    }
+
+    public Geometry getGeometryForOpenGLID(int openGLID)
+    {
+        return openGLGeometryMap.get(openGLID);
+    }
+
     public static int getDefaultTriangleGeometryOpenGLID () {
         if (triangleOpenGLID != null)
             return triangleOpenGLID;
@@ -35,8 +46,17 @@ public class GeometryRegistry {
         return triangleOpenGLID;
     }
 
-    public static TriangleGeometry getDefaultTriangleGeometry () {
-        return (TriangleGeometry) instance.getGeometryForOpenGLID(getDefaultTriangleGeometryOpenGLID());
+    public int registerNewGeometry(Geometry geometry)
+    {
+        OpenGLUtil.loadGeometryIntoGPU(geometry);
+        openGLGeometryMap.put(geometry.getOpenGLVertaxArrayId(), geometry);
+
+        return geometry.getOpenGLVertaxArrayId();
+    }
+
+    public static QuadGeometry getDefaultQuadGeometry()
+    {
+        return (QuadGeometry) instance.getGeometryForOpenGLID(getDefaultQuadGeometryOpenGLID());
     }
 
     public static int getDefaultQuadGeometryOpenGLID () {
@@ -48,21 +68,6 @@ public class GeometryRegistry {
         return quadOpenGLID;
     }
 
-    public static QuadGeometry getDefaultQuadGeometry () {
-        return (QuadGeometry) instance.getGeometryForOpenGLID(getDefaultQuadGeometryOpenGLID());
-    }
-
-    public int registerNewGeometry (Geometry geometry) {
-        OpenGLUtil.loadGeometryIntoGPU(geometry);
-        openGLGeometryMap.put(geometry.getOpenGLVertaxArrayId(), geometry);
-
-        return geometry.getOpenGLVertaxArrayId();
-    }
-
-    public Geometry getGeometryForOpenGLID (int openGLID) {
-        return openGLGeometryMap.get(openGLID);
-    }
-
     public void unLoad () {
         openGLGeometryMap.values().forEach(OpenGLUtil::deleteGeometry);
 
@@ -71,7 +76,12 @@ public class GeometryRegistry {
 
     public enum GeometryType {
         TRIANGLE(3, GL11.GL_TRIANGLES, -1, 0, 1, 2),
-        QUAD(4, GL11.GL_TRIANGLE_STRIP, -1, 0, 1, 2, 3);
+        QUAD(4, GL11.GL_TRIANGLE_STRIP, -1, 0, 1, 2, 3),
+        BOX(8, GL11.GL_TRIANGLE_STRIP, 8,
+             0, 1, 2, 3, 8,
+             1, 3, 5, 7, 8,
+             4, 5, 6, 7, 8,
+             4, 7, 0, 1, 8);
 
         private int vertexCount;
         private int[] vertexOrder;

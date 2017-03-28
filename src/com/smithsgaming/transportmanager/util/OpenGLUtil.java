@@ -2,19 +2,21 @@
 
 package com.smithsgaming.transportmanager.util;
 
-import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.render.core.Shader;
-import com.smithsgaming.transportmanager.client.render.core.textures.*;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import org.joml.Matrix4f;
-import org.lwjgl.*;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
-import java.io.*;
-import java.nio.*;
+import java.io.FileNotFoundException;
+import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glTexSubImage2D;
 
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
@@ -22,6 +24,8 @@ import static org.lwjgl.opengl.GL11.*;
  * @Author Marc (Created on: 05.03.2016)
  */
 public class OpenGLUtil {
+
+    private static int occlusionQuerry = 0;
 
     private static float FOV = 60f;
     private static float aspectRatio = ((float) TransportManagerClient.getDisplay().getResolutionHorizontal() / (float)TransportManagerClient.getDisplay().getResolutionVertical());
@@ -44,6 +48,22 @@ public class OpenGLUtil {
      */
     public static String loadShaderSourceCode (String shaderName) throws FileNotFoundException {
         return ResourceUtil.getFileContents("shaders/" + shaderName + ".glsl");
+    }
+
+    public static void loadShaderProgramm(Shader shader)
+    {
+        if (shader.getShaderId() > -1)
+        {
+            throw new IllegalArgumentException("Shader already loaded.");
+        }
+
+        int[] shaders = new int[2];
+        shaders[0] = compileShader(GL20.GL_VERTEX_SHADER, shader.getVertexShaderSourceCode());
+        shaders[1] = compileShader(GL20.GL_FRAGMENT_SHADER, shader.getFragmentShaderSourceCode());
+
+        shader.setShaderId(linkShaders(shader, shaders));
+
+        checkGlState("Load Shader");
     }
 
     /**
@@ -124,17 +144,14 @@ public class OpenGLUtil {
         return program;
     }
 
-    public static void loadShaderProgramm (Shader shader) {
-        if (shader.getShaderId() > -1)
-            throw new IllegalArgumentException("Shader already loaded.");
+    public static void checkGlState(String snapshotMoment)
+    {
+        int errorValue = GL11.glGetError();
 
-        int[] shaders = new int[2];
-        shaders[0] = compileShader(GL20.GL_VERTEX_SHADER, shader.getVertexShaderSourceCode());
-        shaders[1] = compileShader(GL20.GL_FRAGMENT_SHADER, shader.getFragmentShaderSourceCode());
-
-        shader.setShaderId(linkShaders(shader, shaders));
-
-        checkGlState("Load Shader");
+        if (errorValue != GL11.GL_NO_ERROR)
+        {
+            Display.displayLogger.error("ERROR - " + snapshotMoment + ": " + errorValue);
+        }
     }
 
     /**
@@ -165,6 +182,8 @@ public class OpenGLUtil {
         geometry.setOpenGLVertexIndexID(indicesBuffer);
 
         checkGlState("Load Geometry");
+
+        geometry.onLoaded();
     }
 
     public static void loadTextureIntoGPU (Texture texture) {
@@ -181,8 +200,7 @@ public class OpenGLUtil {
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // Setup the ST coordinate system
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+        texture.setGlTextureOptions();
 
         // Setup what to do when the texture has to be scaled
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
@@ -271,7 +289,7 @@ public class OpenGLUtil {
             GL31.glPrimitiveRestartIndex(geometry.getResetIndex());
         }
 
-        GL11.glDrawElements(GL11.GL_TRIANGLE_STRIP, geometry.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(geometry.getType().getOpenGLRenderType(), geometry.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 
         if (geometry.requiresResetting()) {
             GL11.glDisable(GL31.GL_PRIMITIVE_RESTART);
@@ -286,6 +304,17 @@ public class OpenGLUtil {
         checkGlState("Render Geometry");
     }
 
+    /**
+     * Method to setup the queries used in this Util class.
+     * Is usually called automatically.
+     */
+    public static void setupQuerries()
+    {
+        if (occlusionQuerry == 0)
+        {
+            occlusionQuerry = GL15.glGenQueries();
+        }
+    }
 
     /**
      * Method to disable the currently used Shader.
@@ -368,19 +397,11 @@ public class OpenGLUtil {
         GL30.glBindVertexArray(0);
         GL30.glDeleteVertexArrays(geometry.getOpenGLVertaxArrayId());
 
+        geometry.onDestroyed();
     }
 
     public static void deleteShader (Shader shader) {
         GL20.glUseProgram(0);
         GL20.glDeleteProgram(shader.getShaderId());
-
-    }
-
-    public static void checkGlState (String snapshotMoment) {
-        int errorValue = GL11.glGetError();
-
-        if (errorValue != GL11.GL_NO_ERROR) {
-            Display.displayLogger.error("ERROR - " + snapshotMoment + ": " + errorValue);
-        }
     }
 }

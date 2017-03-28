@@ -1,21 +1,29 @@
 package com.smithsgaming.transportmanager.client.render.world.chunk;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.*;
-import com.smithsgaming.transportmanager.client.render.core.*;
-import com.smithsgaming.transportmanager.client.render.core.textures.*;
-import com.smithsgaming.transportmanager.client.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.*;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.TileTexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.TileVertexInformation;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
+import com.smithsgaming.transportmanager.client.world.chunk.ChunkClient;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneF;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import com.smithsgaming.transportmanager.util.world.TileDirection;
-import org.lwjgl.*;
+import org.lwjgl.BufferUtils;
 
-import java.nio.*;
-import java.util.*;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @Author Marc (Created on: 04.04.2016)
@@ -50,7 +58,7 @@ public class ChunkTileGeometry extends Geometry implements IRenderer {
                         Vector2i lowerRightQuadCorner = new Vector2i(topLeftQuadCorner.x + 1, topLeftQuadCorner.y - 1);
 
                         GuiPlaneI geometryPlane = new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner);
-                        GuiPlaneF texturePlane = tileTexture.getArea();
+                        GuiPlaneF texturePlane = tileTexture.getArea().getDeltaedVariant();
 
                         final TileTexturedVertex topLeft = (TileTexturedVertex) new TileTexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getTopLeftCoordinate().x), Math.abs(texturePlane.getTopLeftCoordinate().y)).setXYZ(geometryPlane.getTopLeftCoordinate().x, 0, geometryPlane.getTopLeftCoordinate().y);
                         final TileTexturedVertex topRight = (TileTexturedVertex) new TileTexturedVertex().setRGB(1f, 1f, 1f).setST(Math.abs(texturePlane.getTopRightCoordinate().x), Math.abs(texturePlane.getTopRightCoordinate().y)).setXYZ(geometryPlane.getTopRightCoordinate().x, 0, geometryPlane.getTopRightCoordinate().y);
@@ -98,6 +106,24 @@ public class ChunkTileGeometry extends Geometry implements IRenderer {
     }
 
     @Override
+    public int getVertexCount()
+    {
+        return verticesIndecis.length;
+    }
+
+    @Override
+    public boolean requiresResetting()
+    {
+        return true;
+    }
+
+    @Override
+    public int getResetIndex()
+    {
+        return resetIndex;
+    }
+
+    @Override
     public IntBuffer getIndicesBuffer () {
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(verticesIndecis.length);
         indicesBuffer.put(verticesIndecis);
@@ -107,27 +133,13 @@ public class ChunkTileGeometry extends Geometry implements IRenderer {
     }
 
     @Override
-    public int getResetIndex () {
-        return resetIndex;
-    }
-
-    @Override
-    public boolean requiresResetting () {
-        return true;
-    }
-
-    @Override
-    public int getVertexCount () {
-        return verticesIndecis.length;
+    public VertexInformation getInformation()
+    {
+        return TileVertexInformation.INSTANCE;
     }
 
     @Override
     public void render () {
         OpenGLUtil.drawGeometryWithShader(Camera.Player, this, ShaderRegistry.Shaders.tile);
-    }
-
-    @Override
-    public VertexInformation getInformation() {
-        return TileVertexInformation.INSTANCE;
     }
 }

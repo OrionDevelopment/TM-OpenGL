@@ -1,24 +1,30 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
-import com.smithsgaming.transportmanager.client.render.core.textures.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.*;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
-import javafx.util.*;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import javafx.util.Pair;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrueTypeFont {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
@@ -33,6 +39,11 @@ public class TrueTypeFont {
     private int textureHeight = 512;
     private Font font;
     private FontMetrics fontMetrics;
+
+    public TrueTypeFont(Font font, boolean antiAlias)
+    {
+        this(font, antiAlias, null);
+    }
 
     public TrueTypeFont (Font font, boolean antiAlias, char[] additionalChars) {
         TransportManagerClient.clientLogger.debug("Loading font: " + font.getFamily());
@@ -54,85 +65,6 @@ public class TrueTypeFont {
 
         if (fontHeight <= 0)
             fontHeight = 1;
-    }
-
-    public TrueTypeFont (Font font, boolean antiAlias) {
-        this(font, antiAlias, null);
-    }
-
-    public static boolean isSupported (String fontname) {
-        Font font[] = getFonts();
-        for (int i = font.length - 1; i >= 0; i--) {
-            if (font[i].getName().equalsIgnoreCase(fontname)) return true;
-        }
-        return false;
-    }
-
-    public static Font[] getFonts () {
-        return GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
-    }
-
-    public static byte[] intToByteArray (int value) {
-        return new byte[]{(byte) ( value >>> 24 ), (byte) ( value >>> 16 ), (byte) ( value >>> 8 ), (byte) value};
-    }
-
-    private void loadImage (BufferedImage bufferedImage) {
-        try {
-            short width = (short) bufferedImage.getWidth();
-            short height = (short) bufferedImage.getHeight();
-            int bpp = (byte) bufferedImage.getColorModel().getPixelSize();
-            ByteBuffer byteBuffer;
-            DataBuffer db = bufferedImage.getData().getDataBuffer();
-            if (db instanceof DataBufferInt) {
-                int intI[] = ( (DataBufferInt) ( bufferedImage.getData().getDataBuffer() ) ).getData();
-                byte newI[] = new byte[intI.length * 4];
-                for (int i = 0; i < intI.length; i++) {
-                    byte b[] = intToByteArray(intI[i]);
-                    int newIndex = i * 4;
-                    newI[newIndex] = b[1];
-                    newI[newIndex + 1] = b[2];
-                    newI[newIndex + 2] = b[3];
-                    newI[newIndex + 3] = b[0];
-                }
-                byteBuffer = ByteBuffer.allocateDirect(width * height * ( bpp / 8 )).order(ByteOrder.nativeOrder()).put(newI);
-            } else {
-                byteBuffer = ByteBuffer.allocateDirect(width * height * ( bpp / 8 )).order(ByteOrder.nativeOrder()).put(( (DataBufferByte) ( bufferedImage.getData().getDataBuffer() ) ).getData());
-            }
-            byteBuffer.flip();
-
-            fontTextureMap = new Texture(fontMetrics.getFont().getName() + "-Map", byteBuffer, width, height);
-            fontTextureMap.setInternalFormat(GL11.GL_RGBA8);
-
-            OpenGLUtil.loadTextureIntoGPU(fontTextureMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    private BufferedImage getFontImage (char ch) {
-        int charwidth = fontMetrics.charWidth(ch) + 8;
-        if (charwidth <= 0) {
-            charwidth = 7;
-        }
-        int charheight = fontMetrics.getHeight() + 3;
-        if (charheight <= 0) {
-            charheight = fontSize;
-        }
-
-        // Create another image holding the character we are creating
-        BufferedImage fontImage;
-        fontImage = new BufferedImage(charwidth, charheight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D gt = (Graphics2D) fontImage.getGraphics();
-        if (antiAlias == true) {
-            gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        gt.setFont(font);
-        gt.setColor(Color.WHITE);
-        int charx = 3;
-        int chary = 1;
-        gt.drawString(String.valueOf(ch), ( charx ), ( chary ) + fontMetrics.getAscent());
-        return fontImage;
     }
 
     private void createSet (char[] customCharsArray) {
@@ -199,8 +131,99 @@ public class TrueTypeFont {
         }
     }
 
-    public int getLineHeight () {
-        return fontHeight;
+    private BufferedImage getFontImage(char ch)
+    {
+        int charwidth = fontMetrics.charWidth(ch) + 8;
+        if (charwidth <= 0)
+        {
+            charwidth = 7;
+        }
+        int charheight = fontMetrics.getHeight() + 3;
+        if (charheight <= 0)
+        {
+            charheight = fontSize;
+        }
+
+        // Create another image holding the character we are creating
+        BufferedImage fontImage;
+        fontImage = new BufferedImage(charwidth, charheight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gt = (Graphics2D) fontImage.getGraphics();
+        if (antiAlias == true)
+        {
+            gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        gt.setFont(font);
+        gt.setColor(Color.WHITE);
+        int charx = 3;
+        int chary = 1;
+        gt.drawString(String.valueOf(ch), (charx), (chary) + fontMetrics.getAscent());
+        return fontImage;
+    }
+
+    private void loadImage(BufferedImage bufferedImage)
+    {
+        try
+        {
+            short width = (short) bufferedImage.getWidth();
+            short height = (short) bufferedImage.getHeight();
+            int bpp = (byte) bufferedImage.getColorModel().getPixelSize();
+            ByteBuffer byteBuffer;
+            DataBuffer db = bufferedImage.getData().getDataBuffer();
+            if (db instanceof DataBufferInt)
+            {
+                int intI[] = ((DataBufferInt) (bufferedImage.getData().getDataBuffer())).getData();
+                byte newI[] = new byte[intI.length * 4];
+                for (int i = 0; i < intI.length; i++)
+                {
+                    byte b[] = intToByteArray(intI[i]);
+                    int newIndex = i * 4;
+                    newI[newIndex] = b[1];
+                    newI[newIndex + 1] = b[2];
+                    newI[newIndex + 2] = b[3];
+                    newI[newIndex + 3] = b[0];
+                }
+                byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(newI);
+            }
+            else
+            {
+                byteBuffer =
+                  ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte) (bufferedImage.getData().getDataBuffer())).getData());
+            }
+            byteBuffer.flip();
+
+            fontTextureMap = new Texture(fontMetrics.getFont().getName() + "-Map", byteBuffer, width, height, false);
+            fontTextureMap.setInternalFormat(GL11.GL_RGBA8);
+
+            OpenGLUtil.loadTextureIntoGPU(fontTextureMap);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+    public static byte[] intToByteArray(int value)
+    {
+        return new byte[] {(byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value};
+    }
+
+    public static boolean isSupported(String fontname)
+    {
+        Font font[] = getFonts();
+        for (int i = font.length - 1; i >= 0; i--)
+        {
+            if (font[i].getName().equalsIgnoreCase(fontname))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Font[] getFonts()
+    {
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
     }
 
     public void drawString (Camera camera, float x, float y, String text) {
@@ -236,6 +259,26 @@ public class TrueTypeFont {
         }
     }
 
+    public GuiPlaneI getOccupiedAreaForText(String text)
+    {
+        String lines[] = text.split("\\r?\\n");
+        int width = 0, height = 0;
+
+        for (String line : lines)
+        {
+            GuiPlaneI lineArea = getOccupiedAreaForLine(line);
+
+            height += lineArea.getHeight();
+
+            if (width < lineArea.getWidth())
+            {
+                width = lineArea.getWidth();
+            }
+        }
+
+        return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
+    }
+
     private void drawStringLine (Camera camera, float x, float y, String line) {
         camera.pushMatrix();
         camera.translateModel(new Vector3f(x, y, 0));
@@ -260,22 +303,6 @@ public class TrueTypeFont {
         camera.popMatrix();
     }
 
-    public GuiPlaneI getOccupiedAreaForText(String text) {
-        String lines[] = text.split("\\r?\\n");
-        int width = 0, height = 0;
-
-        for (String line : lines) {
-            GuiPlaneI lineArea = getOccupiedAreaForLine(line);
-
-            height += lineArea.getHeight();
-
-            if (width < lineArea.getWidth())
-                width = lineArea.getWidth();
-        }
-
-        return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
-    }
-
     private GuiPlaneI getOccupiedAreaForLine(String line) {
         int width = 0, height = 0;
 
@@ -287,6 +314,11 @@ public class TrueTypeFont {
         }
 
         return new GuiPlaneI(new Vector2i(0, 0), new Vector2i(width, -height));
+    }
+
+    public int getLineHeight()
+    {
+        return fontHeight;
     }
 
     public void destroy () {
@@ -314,7 +346,7 @@ public class TrueTypeFont {
 
     private static class CharTexture extends Texture {
         private CharTexture (String textureName, ByteBuffer data, int width, int height, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
-            super(textureName, data, width, height, u, v, isStitched, requiringTextureStitching, textureStitchId);
+            super(textureName, data, width, height, false, u, v, isStitched, requiringTextureStitching, textureStitchId);
         }
 
         public static CharTexture getForChar (FontMetrics fontMetrics, char c, float stitchX, float stitchY) {

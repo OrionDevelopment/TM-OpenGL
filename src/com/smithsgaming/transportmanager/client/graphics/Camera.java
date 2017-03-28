@@ -1,17 +1,17 @@
 package com.smithsgaming.transportmanager.client.graphics;
 
-import com.smithsgaming.transportmanager.client.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
 import com.smithsgaming.transportmanager.util.GraphicUtil;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import com.smithsgaming.transportmanager.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.*;
+import org.lwjgl.BufferUtils;
 
 import java.awt.*;
-import java.nio.*;
-import java.util.*;
+import java.nio.FloatBuffer;
+import java.util.Stack;
 
 /**
  * @Author Marc (Created on: 17.03.2016)
@@ -35,6 +35,7 @@ public class Camera {
     private Color activeColor = (Color) Color.WHITE;
     private FloatBuffer activeColorBuffer = BufferUtils.createFloatBuffer(4);
     private Frustum activeFrustum;
+    private Boolean renderBoundingBoxData = false;
 
     public Camera () {
         this.projectionMatrix = MathUtil.CreateOrthogonalFieldOfView(0f, 100f);
@@ -64,6 +65,25 @@ public class Camera {
         this.activeFrustum = new Frustum(this);
 
         rotateCamera(angle, rotationAxis);
+    }
+
+    /**
+     * Method to rotate the camera.
+     *
+     * @param angle The angle to rotate the camera over.
+     * @param axis  A vector indicating the axis that should be rotated over.
+     */
+    public Camera rotateCamera(float angle, Vector3f axis)
+    {
+        viewMatrix.rotate(angle, axis);
+
+        viewMatrixBuffer.clear();
+        viewMatrix.get(viewMatrixBuffer);
+        //viewMatrixBuffer.flip();
+
+        activeFrustum.updateFrustum();
+
+        return this;
     }
 
     /**
@@ -178,6 +198,21 @@ public class Camera {
     }
 
     /**
+     * Method to push the current rendering matrix on the stack and absorb the acting matrix. Is automatically called
+     * when rendering. So if you make changes to the ModelMatrix before rendering you will need to call popmatrix at
+     * least once.
+     */
+    public void pushMatrix()
+    {
+        modelMatrixStack.push(new Matrix4f(renderingModelMatrix));
+
+        currentActingMatrix.mul(renderingModelMatrix, renderingModelMatrix);
+        currentActingMatrix = new Matrix4f();
+
+        isActingMatrixLive = true;
+    }
+
+    /**
      * Method to move the camera over a certain WorldCoordinate delta.
      *
      * @param moveDelta The distance to move the camera over.
@@ -190,27 +225,9 @@ public class Camera {
         viewMatrix.get(viewMatrixBuffer);
         //viewMatrixBuffer.flip();
 
-        activeFrustum.updateFrustum();
+        //activeFrustum.updateFrustum();
 
         TransportManagerClient.clientLogger.trace("New Cameraposition:" + cameraPosition.toString());
-
-        return this;
-    }
-
-    /**
-     * Method to rotate the camera.
-     *
-     * @param angle The angle to rotate the camera over.
-     * @param axis  A vector indicating the axis that should be rotated over.
-     */
-    public Camera rotateCamera (float angle, Vector3f axis) {
-        viewMatrix.rotate(angle, axis);
-
-        viewMatrixBuffer.clear();
-        viewMatrix.get(viewMatrixBuffer);
-        //viewMatrixBuffer.flip();
-
-        activeFrustum.updateFrustum();
 
         return this;
     }
@@ -288,17 +305,13 @@ public class Camera {
     }
 
     /**
-     * Method to push the current rendering matrix on the stack and absorb the acting matrix. Is automatically called
-     * when rendering. So if you make changes to the ModelMatrix before rendering you will need to call popmatrix at
-     * least once.
+     * Method to get the current amount of matrix's on the stack. Does not take the current in use matrix into account.
+     *
+     * @return The amount of matrix's on the stack.
      */
-    public void pushMatrix () {
-        modelMatrixStack.push(new Matrix4f(renderingModelMatrix));
-
-        currentActingMatrix.mul(renderingModelMatrix, renderingModelMatrix);
-        currentActingMatrix = new Matrix4f();
-
-        isActingMatrixLive = true;
+    public int getMatrixStackCount()
+    {
+        return modelMatrixStack.size();
     }
 
     /**
@@ -313,12 +326,14 @@ public class Camera {
     }
 
     /**
-     * Method to get the current amount of matrix's on the stack. Does not take the current in use matrix into account.
+     * Method to scale the current in use ModelMatrix.
      *
-     * @return The amount of matrix's on the stack.
+     * @param axisScaling A vector indicating the scaling.
      */
-    public int getMatrixStackCount () {
-        return modelMatrixStack.size();
+    public void scaleModel(Vector3f axisScaling)
+    {
+        currentActingMatrix.scale(axisScaling);
+        isActingMatrixLive = false;
     }
 
     /**
@@ -343,12 +358,21 @@ public class Camera {
     }
 
     /**
-     * Method to scale the current in use ModelMatrix.
-     *
-     * @param axisScaling A vector indicating the scaling.
+     * Indicates if the boundingbox data of occludable geometries should be rendered.
+     * @return True when the data is rendered, false when not.
      */
-    public void scaleModel (Vector3f axisScaling) {
-        currentActingMatrix.scale(axisScaling);
-        isActingMatrixLive = false;
+    public Boolean getRenderBoundingBoxData()
+    {
+        return renderBoundingBoxData;
+    }
+
+    /**
+     * Setter for the indication for the boundingboxdata rendering.
+     *
+     * @param renderBoundingBoxData True to render the bounding box data, false to not render them.
+     */
+    public void setRenderBoundingBoxData(Boolean renderBoundingBoxData)
+    {
+        this.renderBoundingBoxData = renderBoundingBoxData;
     }
 }

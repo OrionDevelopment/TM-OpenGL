@@ -1,6 +1,8 @@
-package com.smithsgaming.transportmanager.client.render.core;
+package com.smithsgaming.transportmanager.client.render.core.geometry;
 
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
+import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -39,8 +41,9 @@ public class Geometry {
         return data;
     }
 
-    public GeometryRegistry.GeometryType getType() {
-        return type;
+    public VertexInformation getInformation()
+    {
+        return information;
     }
 
     public int getOpenGLVertaxArrayId() {
@@ -72,6 +75,11 @@ public class Geometry {
         return getType().getVertexCount();
     }
 
+    public GeometryRegistry.GeometryType getType()
+    {
+        return type;
+    }
+
     public boolean requiresResetting() {
         return getType().requiresResetting();
     }
@@ -84,7 +92,7 @@ public class Geometry {
         return getType().getIndicesBuffer();
     }
 
-    public VertexInformation getInformation() {
-        return information;
-    }
+    public void onLoaded() {}
+
+    public void onDestroyed() {}
 }

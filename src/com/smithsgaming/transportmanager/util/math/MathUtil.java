@@ -2,11 +2,8 @@
 
 package com.smithsgaming.transportmanager.util.math;
 
-
 import com.hoten.delaunay.geom.Point;
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.graphics.GuiAspectRatio;
-import com.smithsgaming.transportmanager.util.math.Vector2i;
 import org.joml.Matrix4f;
 
 /**
@@ -14,6 +11,7 @@ import org.joml.Matrix4f;
  */
 public class MathUtil
 {
+    public static final double EPSILON = 1E-10;
 
     public static float coTangent(float angle)
     {

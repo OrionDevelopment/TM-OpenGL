@@ -1,20 +1,23 @@
 package com.smithsgaming.transportmanager.client.render.world;
 
-import com.google.common.base.*;
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.*;
-import com.smithsgaming.transportmanager.client.render.core.Geometry;
-import com.smithsgaming.transportmanager.client.render.world.chunk.*;
-import com.smithsgaming.transportmanager.client.world.*;
-import com.smithsgaming.transportmanager.client.world.chunk.*;
-import com.smithsgaming.transportmanager.main.world.chunk.*;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.*;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
+import com.google.common.base.Stopwatch;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.graphics.Display;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
+import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
+import com.smithsgaming.transportmanager.client.render.world.chunk.ChunkRenderer;
+import com.smithsgaming.transportmanager.client.world.WorldClient;
+import com.smithsgaming.transportmanager.client.world.chunk.ChunkClient;
+import com.smithsgaming.transportmanager.main.world.chunk.Chunk;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class used to render the world.
@@ -55,10 +58,6 @@ public class WorldRenderer implements IRenderer {
         }
     }
 
-    private boolean isChunkInView (ChunkClient chunk) {
-        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0;
-    }
-
     private void drawChunk (ChunkClient chunk) {
 
 
@@ -84,6 +83,11 @@ public class WorldRenderer implements IRenderer {
         }
 
         rendererHashMap.get(chunk).render();
+    }
+
+    private boolean isChunkInView(ChunkClient chunk)
+    {
+        return Camera.Player.getActiveFrustum().boxInFrustum(chunk.getBoundingBox()).ordinal() > 0;
     }
 
     public WorldClient getWorldClient () {

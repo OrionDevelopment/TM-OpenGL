@@ -3,12 +3,11 @@ package com.smithsgaming.transportmanager.client.render.core.textures;
 import com.flowpowered.noise.Noise;
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.util.ResourceUtil;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
-import com.sun.deploy.model.Resource;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneF;
 import org.joml.Vector2f;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
 
-import java.nio.*;
+import java.nio.ByteBuffer;
 
 /**
  * Created by Tim on 01/04/2016.
@@ -33,6 +32,8 @@ public class Texture {
     private boolean isStitched;
     private int textureStitchId;
 
+    private boolean requiredRepeating;
+
     private float u;
     private float v;
 
@@ -42,11 +43,23 @@ public class Texture {
     private int internalFormat = GL11.GL_RGBA;
     private int format = GL11.GL_RGBA;
 
-    public Texture(String textureName, ByteBuffer data, int pixelWidth, int pixelHeight) {
-        this(textureName, data, pixelWidth, pixelHeight, 0, 0, false, true, 0);
+    public Texture(String textureName, ByteBuffer data, int pixelWidth, int pixelHeight, boolean requiredRepeating)
+    {
+        this(textureName, data, pixelWidth, pixelHeight, requiredRepeating, 0, 0, false, true, 0);
     }
 
-    public Texture(String textureName, ByteBuffer data, int pixelWidth, int pixelHeight, float u, float v, boolean isStitched, boolean requiringTextureStitching, int textureStitchId) {
+    public Texture(
+                    String textureName,
+                    ByteBuffer data,
+                    int pixelWidth,
+                    int pixelHeight,
+                    boolean requiredRepeating,
+                    float u,
+                    float v,
+                    boolean isStitched,
+                    boolean requiringTextureStitching,
+                    int textureStitchId)
+    {
         this.textureName = textureName;
         this.isStitched = isStitched;
         this.requiringTextureStitching = requiringTextureStitching;
@@ -57,21 +70,12 @@ public class Texture {
         this.dataArray = ResourceUtil.generatePixelsFromByteBuffer(data);
         this.u = u;
         this.v = v;
+        this.requiredRepeating = requiredRepeating;
 
         if (noiseMap.length  < getPixelWidth() || noiseMap[0].length < getPixelHeight()) {
             generateNoiseMap(pixelWidth, pixelHeight);
         }
     }
-
-    public String getTextureName() {
-        return textureName;
-    }
-
-    public ByteBuffer getData() {
-        return data;
-    }
-
-    public int[] getDataArray() { return dataArray; }
 
     public int getPixelWidth() {
         return pixelWidth;
@@ -79,6 +83,34 @@ public class Texture {
 
     public int getPixelHeight() {
         return pixelHeight;
+    }
+
+    private static void generateNoiseMap(int xsize, int ysize)
+    {
+        noiseMap = new boolean[xsize][ysize];
+
+        for (int x = 0; x < xsize; x++)
+        {
+            for (int y = 0; y < ysize; y++)
+            {
+                noiseMap[x][y] = getNormalizedNoise(x, y) < 0.1F;
+            }
+        }
+    }
+
+    private static float getNormalizedNoise(int x, int y)
+    {
+        return getNoise(x, y);
+    }
+
+    private static float getNoise(int x, int y)
+    {
+        return (float) Noise.valueNoise3D(x, y, 0, (int) TransportManagerClient.getStartTime());
+    }
+
+    public ByteBuffer getData()
+    {
+        return data;
     }
 
     public int getOpenGLTextureId() {
@@ -97,22 +129,6 @@ public class Texture {
         this.boundTextureUnit = boundTextureUnit;
     }
 
-    public float getV() {
-        return v;
-    }
-
-    public void setV(float v) {
-        this.v = v;
-    }
-
-    public float getU() {
-        return u;
-    }
-
-    public void setU(float u) {
-        this.u = u;
-    }
-
     public int getOriginX () {
         return originX;
     }
@@ -127,6 +143,27 @@ public class Texture {
 
     public void setOriginY (int originY) {
         this.originY = originY;
+    }
+
+    public GuiPlaneF getArea()
+    {
+        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() + this.getHeight()));
+        //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
+    }
+
+    public float getU()
+    {
+        return u;
+    }
+
+    public float getV()
+    {
+        return v;
+    }
+
+    public void setV(float v)
+    {
+        this.v = v;
     }
 
     public float getWidth() {
@@ -145,9 +182,9 @@ public class Texture {
         this.height = height;
     }
 
-    public GuiPlaneF getArea() {
-        return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + this.getWidth(), this.getV() + this.getHeight()));
-        //return new GuiPlaneF(new Vector2f(this.getU(), this.getV()), new Vector2f(this.getU() + 1, this.getV() - 1));
+    public void setU(float u)
+    {
+        this.u = u;
     }
 
     public int getTextureStitchId() {
@@ -190,6 +227,16 @@ public class Texture {
         this.format = format;
     }
 
+    public boolean isRequiredRepeating()
+    {
+        return requiredRepeating;
+    }
+
+    public void setRequiredRepeating(boolean requiredRepeating)
+    {
+        this.requiredRepeating = requiredRepeating;
+    }
+
     /**
      * Method used to get a clip of this Texture. The Texture should return a new instance (preferably of
      * this own Type) that is clipped to the given Area and is interpolated with the noiseMap.
@@ -201,38 +248,52 @@ public class Texture {
      * @return A clipped variant of this Sprite (either it self when chain is true or new instance).
      */
     public Texture clip(int minX, int minY, int maxX, int maxY, String textureAppendix) {
-        int[] pixelData = new int[(int) (getPixelWidth() * getPixelHeight())];
+        int[] pixelData = new int[getPixelWidth() * getPixelHeight()];
 
         for (int x = 0; x < getPixelWidth(); x++) {
             for (int y = 0; y < getPixelHeight(); y++) {
                 int pixel = 0;
 
                 if (x >= minX && y >= minY && x <= maxX && y <= maxY && noiseMap[x][y])
-                    pixel = getDataArray()[(int) (x * getPixelWidth() + y)];
+                {
+                    pixel = getDataArray()[x * getPixelWidth() + y];
+                }
 
-                pixelData[(int) (x * getPixelHeight() + y)] = pixel;
+                pixelData[x * getPixelHeight() + y] = pixel;
             }
         }
 
-        return new Texture(getTextureName() + textureAppendix, ResourceUtil.generateBufferFromPixels(pixelData), getPixelWidth(), getPixelHeight());
+        return new Texture(getTextureName() + textureAppendix, ResourceUtil.generateBufferFromPixels(pixelData), getPixelWidth(), getPixelHeight(), requiredRepeating);
     }
 
-    private static void generateNoiseMap(int xsize, int ysize) {
-        noiseMap = new boolean[xsize][ysize];
+    public int[] getDataArray() { return dataArray; }
 
-        for (int x = 0; x < xsize; x++) {
-            for (int y = 0; y < ysize; y++) {
-                noiseMap[x][y] = getNormalizedNoise(x, y) < 0.1F;
-            }
+    public String getTextureName()
+    {
+        return textureName;
+    }
+
+    public void setGlTextureOptions()
+    {
+        if (requiredRepeating)
+        {
+            setGLTextureRepeat();
+        }
+        else
+        {
+            setGlTextureClamp();
         }
     }
 
-    private static float getNormalizedNoise(int x, int y) {
-        return getNoise(x, y);
+    private void setGLTextureRepeat()
+    {
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
     }
 
-    private static float getNoise(int x, int y) {
-        return (float) Noise.valueNoise3D(x, y, 0, (int) TransportManagerClient.getStartTime());
+    private void setGlTextureClamp()
+    {
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
     }
-
 }

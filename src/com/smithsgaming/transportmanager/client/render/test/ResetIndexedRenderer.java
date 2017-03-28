@@ -1,17 +1,20 @@
 package com.smithsgaming.transportmanager.client.render.test;
 
-import com.smithsgaming.transportmanager.client.graphics.*;
-import com.smithsgaming.transportmanager.client.registries.*;
-import com.smithsgaming.transportmanager.client.render.*;
+import com.smithsgaming.transportmanager.client.graphics.Camera;
+import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
+import com.smithsgaming.transportmanager.client.registries.ShaderRegistry;
+import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
+import com.smithsgaming.transportmanager.client.render.IRenderer;
 import com.smithsgaming.transportmanager.client.render.core.TexturedVertex;
 import com.smithsgaming.transportmanager.client.render.core.VertexInformation;
-import com.smithsgaming.transportmanager.util.*;
-import com.smithsgaming.transportmanager.util.math.*;
-import com.smithsgaming.transportmanager.util.math.graphical.*;
-import org.lwjgl.*;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.math.Vector2i;
+import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
+import org.lwjgl.BufferUtils;
 
-import java.nio.*;
-import java.util.*;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @Author Marc (Created on: 05.04.2016)
@@ -30,7 +33,8 @@ public class ResetIndexedRenderer implements IRenderer {
         testGeometry.render();
     }
 
-    public static class Geometry extends com.smithsgaming.transportmanager.client.render.core.Geometry implements IRenderer {
+    public static class Geometry extends com.smithsgaming.transportmanager.client.render.core.geometry.Geometry implements IRenderer
+    {
         private int[] verticesIndecis;
         private int resetIndex;
 
@@ -47,7 +51,9 @@ public class ResetIndexedRenderer implements IRenderer {
                 Vector2i topLeftQuadCorner = new Vector2i(0 + x, 0 + x);
                 Vector2i lowerRightQuadCorner = new Vector2i(1 + x, -1 + x);
 
-                com.smithsgaming.transportmanager.client.render.core.Geometry positionGeometry = GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner), TextureRegistry.Textures.Tiles.grass.getArea());
+                com.smithsgaming.transportmanager.client.render.core.geometry.Geometry positionGeometry =
+                  GeometryRegistry.QuadGeometry.constructFromPlaneForTextureOnZ(new GuiPlaneI(topLeftQuadCorner, lowerRightQuadCorner),
+                    TextureRegistry.Textures.Tiles.grass.getArea());
 
                 Collections.addAll(texturedVertices, positionGeometry.getVertices());
             }
@@ -65,27 +71,30 @@ public class ResetIndexedRenderer implements IRenderer {
         }
 
         @Override
+        public int getVertexCount()
+        {
+            return verticesIndecis.length;
+        }
+
+        @Override
+        public boolean requiresResetting()
+        {
+            return true;
+        }
+
+        @Override
+        public int getResetIndex()
+        {
+            return resetIndex;
+        }
+
+        @Override
         public IntBuffer getIndicesBuffer () {
             IntBuffer indicesBuffer = BufferUtils.createIntBuffer(verticesIndecis.length);
             indicesBuffer.put(verticesIndecis);
             indicesBuffer.flip();
 
             return indicesBuffer;
-        }
-
-        @Override
-        public int getResetIndex () {
-            return resetIndex;
-        }
-
-        @Override
-        public boolean requiresResetting () {
-            return true;
-        }
-
-        @Override
-        public int getVertexCount () {
-            return verticesIndecis.length;
         }
 
         @Override

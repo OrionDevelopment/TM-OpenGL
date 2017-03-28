@@ -20,26 +20,28 @@ public class TexturedVertex {
         return this;
     }
 
-    public TexturedVertex setRGB (float r, float g, float b) {
-        this.setRGBA(r, g, b, 1f);
-
-        return this;
-    }
-
-    public TexturedVertex setST (float s, float t) {
-        this.st = new float[]{s, t};
-
-        return this;
-    }
-
     public TexturedVertex setXYZW (float x, float y, float z, float w) {
         this.xyzw = new float[]{x, y, z, w};
 
         return this;
     }
 
+    public TexturedVertex setRGB(float r, float g, float b)
+    {
+        this.setRGBA(r, g, b, 1f);
+
+        return this;
+    }
+
     public TexturedVertex setRGBA (float r, float g, float b, float a) {
         this.rgba = new float[]{r, g, b, a};
+
+        return this;
+    }
+
+    public TexturedVertex setST(float s, float t)
+    {
+        this.st = new float[] {s, t};
 
         return this;
     }
@@ -66,6 +68,17 @@ public class TexturedVertex {
         return out;
     }
 
+    public VertexInformation getInformation()
+    {
+        return information;
+    }
+
+    public TexturedVertex setInformation(VertexInformation information)
+    {
+        this.information = information;
+        return this;
+    }
+
     public float[] getXYZW () {
         return new float[]{this.xyzw[0], this.xyzw[1], this.xyzw[2], this.xyzw[3]};
     }
@@ -86,13 +99,5 @@ public class TexturedVertex {
         return new float[]{this.st[0], this.st[1]};
     }
 
-
-    public VertexInformation getInformation() {
-        return information;
-    }
-
-    public void setInformation(VertexInformation information) {
-        this.information = information;
-    }
 
 }

@@ -1,24 +1,29 @@
 package com.smithsgaming.transportmanager.client.registries;
 
-import com.smithsgaming.transportmanager.client.*;
-import com.smithsgaming.transportmanager.client.graphics.*;
+import com.smithsgaming.transportmanager.client.TransportManagerClient;
 import com.smithsgaming.transportmanager.client.graphics.Display;
-import com.smithsgaming.transportmanager.client.render.core.textures.*;
+import com.smithsgaming.transportmanager.client.graphics.TextureStitcher;
+import com.smithsgaming.transportmanager.client.graphics.TrueTypeFont;
+import com.smithsgaming.transportmanager.client.render.core.textures.StandardTileTexture;
+import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import com.smithsgaming.transportmanager.main.core.TileRegistry;
-import com.smithsgaming.transportmanager.main.world.tiles.*;
-import com.smithsgaming.transportmanager.util.*;
+import com.smithsgaming.transportmanager.main.world.tiles.Tile;
+import com.smithsgaming.transportmanager.main.world.tiles.TileNames;
+import com.smithsgaming.transportmanager.util.OpenGLUtil;
+import com.smithsgaming.transportmanager.util.ResourceUtil;
 import com.smithsgaming.transportmanager.util.world.TileDirection;
-import javafx.util.Pair;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
-import javax.imageio.*;
-import javax.imageio.stream.*;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
 import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.nio.*;
-import java.util.*;
-import java.util.stream.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * @Author Marc (Created on: 06.03.2016)
@@ -50,10 +55,6 @@ public class TextureRegistry {
         return toLoad;
     }
 
-    public Texture getTextureForName(String name) {
-        return namedBufferedTextured.get(name);
-    }
-
     public Texture getTextureForOpenGLID(int id) {
         return bufferedTextures.get(id);
     }
@@ -63,6 +64,11 @@ public class TextureRegistry {
             return getTextureForName(tile.getIdentity());
 
         return borderTextures.get(tile.getIdentity() + "-" + direction.toString());
+    }
+
+    public Texture getTextureForName(String name)
+    {
+        return namedBufferedTextured.get(name);
     }
 
     public void generateBorderTextures() {
@@ -104,7 +110,16 @@ public class TextureRegistry {
 
         texturesToCombine = (ArrayList<Texture>) stitcher.getStitchSlots();
 
-        Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId, null, stitcher.getCurrentStitchedWidth(), stitcher.getCurrentStitchedHeight(), 0, 0, false, false, textureStitchingId);
+        Texture stitchedTexture = new Texture("Stitched-" + textureStitchingId,
+                                               null,
+                                               stitcher.getCurrentStitchedWidth(),
+                                               stitcher.getCurrentStitchedHeight(),
+                                               false,
+                                               0,
+                                               0,
+                                               false,
+                                               false,
+                                               textureStitchingId);
 
         OpenGLUtil.loadTextureIntoGPU(stitchedTexture);
 

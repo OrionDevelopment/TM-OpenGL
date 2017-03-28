@@ -67,12 +67,6 @@ public class Frustum {
         clipPlanes.normalize();
     }
 
-    public ViewType pointInFrustum (Vector3f p) {
-        if (planes.planePointEquation(p, 0f)) return ViewType.INSIDE;
-
-        return ViewType.OUTSIDE;
-    }
-
     public ViewType sphereInFrustum (Vector3f p, float radius) {
         if (planes.planePointEquation(p, radius)) return ViewType.INSIDE;
 
@@ -80,7 +74,25 @@ public class Frustum {
     }
 
     public ViewType boxInFrustum (AABox b) {
+        for (Vector3f point : b.getPoints())
+        {
+            if (pointInFrustum(point) == ViewType.INSIDE)
+            {
+                return ViewType.INSIDE;
+            }
+        }
+
         if (planes.planeAABBEquation(b.getMinCorner(), b.getMaxCorner())) return ViewType.INSIDE;
+
+        return ViewType.OUTSIDE;
+    }
+
+    public ViewType pointInFrustum(Vector3f p)
+    {
+        if (planes.planePointEquation(p, 0f))
+        {
+            return ViewType.INSIDE;
+        }
 
         return ViewType.OUTSIDE;
     }

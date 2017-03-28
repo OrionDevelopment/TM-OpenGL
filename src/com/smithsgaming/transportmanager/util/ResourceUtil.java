@@ -2,7 +2,6 @@
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
-import com.smithsgaming.transportmanager.client.graphics.Display;
 import com.smithsgaming.transportmanager.client.render.core.textures.Texture;
 import de.matthiasmann.twl.utils.PNGDecoder;
 
@@ -56,22 +55,13 @@ public class ResourceUtil {
         int width = getPNGWidth(fileName);
         int height = getPNGHeight(fileName);
 
-        return new Texture(fileName, buf, width, height);
-    }
-
-    public static Texture loadPNGTexture (String fileName) {
-        TransportManagerClient.clientLogger.debug("Loading non stitchable Texture:" + fileName);
-        ByteBuffer buf = loadPNGBuffer(fileName);
-        int width = getPNGWidth(fileName);
-        int height = getPNGHeight(fileName);
-
-        return new Texture(fileName, buf, width, height, 0, 0, false, false, -1);
+        return new Texture(fileName, buf, width, height, false);
     }
 
     private static ByteBuffer loadPNGBuffer (String fileName) {
         TransportManagerClient.clientLogger.trace("Loading ByteBuffer for Texture:" + fileName);
         ByteBuffer buf = null;
-        
+
         try {
             // Open the PNG file as an InputStream
             InputStream in = ResourceUtil.class.getResourceAsStream(fileName);
@@ -130,24 +120,30 @@ public class ResourceUtil {
         return height;
     }
 
-    public static int[] convertByteArrayToIntArray(byte[] data) {
-        if ((data.length % 4) != 0) throw new IllegalArgumentException("The given Data is no pixel data");
-        int[] pixels = new int[data.length / 4];
+    public static Texture loadPNGTexture(String fileName)
+    {
+        TransportManagerClient.clientLogger.debug("Loading non stitchable Texture:" + fileName);
+        ByteBuffer buf = loadPNGBuffer(fileName);
+        int width = getPNGWidth(fileName);
+        int height = getPNGHeight(fileName);
 
-        for (int i = 0; i < pixels.length; i++) {
-            int red = data[i*4];
-            int green = data[i*4 + 1];
-            int blue = data[i*4 + 2];
-            int alpha = data[i*4 + 3];
+        return new Texture(fileName, buf, width, height, true, 0, 0, false, false, -1);
+    }
 
-            if (alpha < 0) {
-                alpha = 255;
-            }
+    public static ByteBuffer generateBufferFromPixels(int[] pixels)
+    {
+        return generateBufferFromData(convertIntArrayToByteArray(pixels));
+    }
 
-            pixels[i] = (red << 24) | (green << 16) | (blue << 8) | alpha;
-        }
+    public static ByteBuffer generateBufferFromData(byte[] data)
+    {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.put(data);
+        buffer.position(0);
 
-        return pixels;
+        buffer.flip();
+
+        return buffer;
     }
 
     public static byte[] convertIntArrayToByteArray(int[] pixels) {
@@ -163,20 +159,6 @@ public class ResourceUtil {
         return data;
     }
 
-    public static ByteBuffer generateBufferFromData(byte[] data) {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
-        buffer.put(data);
-        buffer.position(0);
-
-        buffer.flip();
-
-        return buffer;
-    }
-
-    public static ByteBuffer generateBufferFromPixels(int[] pixels) {
-        return generateBufferFromData(convertIntArrayToByteArray(pixels));
-    }
-
     public static int[] generatePixelsFromByteBuffer(ByteBuffer buffer) {
         if (buffer == null)
             return new int[0];
@@ -187,6 +169,32 @@ public class ResourceUtil {
         buffer.position(currentPosition);
 
         return convertByteArrayToIntArray(array);
+    }
+
+    public static int[] convertByteArrayToIntArray(byte[] data)
+    {
+        if ((data.length % 4) != 0)
+        {
+            throw new IllegalArgumentException("The given Data is no pixel data");
+        }
+        int[] pixels = new int[data.length / 4];
+
+        for (int i = 0; i < pixels.length; i++)
+        {
+            int red = data[i * 4];
+            int green = data[i * 4 + 1];
+            int blue = data[i * 4 + 2];
+            int alpha = data[i * 4 + 3];
+
+            if (alpha < 0)
+            {
+                alpha = 255;
+            }
+
+            pixels[i] = (red << 24) | (green << 16) | (blue << 8) | alpha;
+        }
+
+        return pixels;
     }
 
 }
