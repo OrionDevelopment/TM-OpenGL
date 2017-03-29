@@ -1,8 +1,0 @@
-{
-  "width": 32,
-  "height": 32,
-  "textures": {
-    "/textures/tiles/world/shallowWater_0.png": 25,
-    "/textures/tiles/world/shallowWater_1.png": 25
-  }
-}

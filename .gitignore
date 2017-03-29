@@ -13,4 +13,7 @@ hs_err_pid*
 # maven
 target/
 
-# idea
+# Project
+resource-test
+.idea
+
