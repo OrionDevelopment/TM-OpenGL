@@ -1,6 +1,11 @@
+/*
+ * Copyright (c)  2015-2017, SmithsGaming Inc.
+ */
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
 
 group = 'com.smithsgaming.transportmanager'
 version = '0.0.1'
@@ -17,6 +22,11 @@ tasks.withType(JavaCompile) {
 repositories {
 
      maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+checkstyle {
+    configFile = file("config/checkstyle/checkstyle.xml")
+    toolVersion = '7.6.1'
 }
 
 sourceSets {

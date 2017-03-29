@@ -1,3 +1,11 @@
+/*
+ * Copyright (c)  2015-2017, SmithsGaming Inc.
+ */
+
+/*
+ * Copyright (c)  2015-2017, SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.main;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;

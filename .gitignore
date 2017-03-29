@@ -15,5 +15,6 @@ target/
 
 # Project
 resource-test
+build
 .idea
 
