@@ -1,23 +1,33 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
+/*
+ * Copyright (c) 2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import org.joml.Vector3f;
 
 /**
- * @Author Marc (Created on: 17.03.2016)
+ * A box representing an Axis aligned object.
  */
 public class AABox {
 
-    Vector3f corner;
+    private Vector3f corner;
 
-    float x, y, z;
+    private float x;
+    private float y;
+    private float z;
 
-    Vector3f[] points = new Vector3f[8];
+    private Vector3f[] points = new Vector3f[8];
 
     public AABox (Vector3f corner, float x, float y, float z) {
         setBox(corner, x, y, z);
     }
 
-    void setBox (Vector3f corner, float x, float y, float z) {
+    private void setBox(Vector3f corner, float x, float y, float z) {
         this.corner = new Vector3f(corner);
 
         if (x < 0.0) {
@@ -42,8 +52,7 @@ public class AABox {
         updatePoints();
     }
 
-    private void updatePoints()
-    {
+    private void updatePoints() {
         int i = 0;
         points[i++] = getMinCorner();
         points[i++] = getMinCorner().add(getX(), 0, 0);
@@ -52,44 +61,30 @@ public class AABox {
         points[i++] = getMinCorner().add(0, 0, getZ());
         points[i++] = getMinCorner().add(getX(), 0, getZ());
         points[i++] = getMinCorner().add(getX(), getY(), getZ());
-        points[i++] = getMinCorner().add(0, getY(), getZ());
+        points[i] = getMinCorner().add(0, getY(), getZ());
     }
 
-    public Vector3f getMinCorner()
-    {
+    Vector3f getMinCorner() {
         return new Vector3f(corner);
     }
 
-    public float getX()
-    {
+    float getX() {
         return x;
     }
 
-    public float getY()
-    {
+    float getY() {
         return y;
     }
 
-    public float getZ()
-    {
+    float getZ() {
         return z;
     }
 
-    public AABox()
-    {
-        corner.x = 0;
-        corner.y = 0;
-        corner.z = 0;
-
-        x = 1.0f;
-        y = 1.0f;
-        z = 1.0f;
+    Vector3f getMaxCorner() {
+        return corner.add(getX(), getY(), getZ(), new Vector3f());
     }
 
-    public Vector3f getMaxCorner() { return corner.add(getX(), getY(), getZ(), new Vector3f()); }
-
-    public Vector3f[] getPoints()
-    {
+    public Vector3f[] getPoints() {
         return points;
     }
 }
