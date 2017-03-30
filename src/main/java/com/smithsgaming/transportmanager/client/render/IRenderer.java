@@ -1,9 +1,13 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render;
 
 /**
  * Main interface used for rendering Objects into the current GL Context.
  *
- * @Author Marc (Created on: 06.03.2016)
+ *  ------ Class not Documented ------
  */
 public interface IRenderer {
 

@@ -1,5 +1,9 @@
 
 
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -21,7 +25,7 @@ import static org.lwjgl.opengl.GL11.glTexSubImage2D;
 /**
  * CLass that holds wrapper methods for rendering in OpenGL.
  *
- * @Author Marc (Created on: 05.03.2016)
+ *  ------ Class not Documented ------
  */
 public class OpenGLUtil {
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -14,7 +18,7 @@ import java.nio.FloatBuffer;
 import java.util.Stack;
 
 /**
- * @Author Marc (Created on: 17.03.2016)
+ *  ------ Class not Documented ------
  */
 public class Camera {
 

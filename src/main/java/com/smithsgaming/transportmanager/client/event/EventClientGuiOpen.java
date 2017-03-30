@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.event;
 
 import com.smithsgaming.transportmanager.client.gui.GuiScreen;
@@ -5,7 +9,7 @@ import com.smithsgaming.transportmanager.client.render.RenderHandler;
 import com.smithsgaming.transportmanager.util.network.Side;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public class EventClientGuiOpen extends TMClientEvent {
 

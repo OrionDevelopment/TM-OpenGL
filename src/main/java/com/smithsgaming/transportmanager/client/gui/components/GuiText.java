@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -11,7 +15,7 @@ import java.awt.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * @Author Marc (Created on: 27.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiText extends GuiComponent {
 

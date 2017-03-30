@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.world.chunk;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -26,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @Author Marc (Created on: 04.04.2016)
+ *  ------ Class not Documented ------
  */
 public class ChunkTileGeometry extends Geometry implements IRenderer {
 

@@ -1,12 +1,16 @@
 
 
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.util;
 
 import java.awt.*;
 import java.nio.FloatBuffer;
 
 /**
- * @Author Marc (Created on: 05.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GraphicUtil {
 

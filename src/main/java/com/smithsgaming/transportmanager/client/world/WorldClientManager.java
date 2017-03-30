@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.world;
 
 import com.smithsgaming.transportmanager.main.world.World;
@@ -6,7 +10,7 @@ import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationDa
 import javafx.util.Pair;
 
 /**
- * @Author Marc (Created on: 15.03.2016)
+ *  ------ Class not Documented ------
  */
 public class WorldClientManager {
     public static WorldClientManager instance = new WorldClientManager();

@@ -1,8 +1,12 @@
 
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.core;
 
 /**
- * @Author Marc (Created on: 06.03.2016)
+ *  ------ Class not Documented ------
  */
 public class TexturedVertex {
 

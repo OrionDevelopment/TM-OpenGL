@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.input;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -7,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 
 /**
- * @Author Marc (Created on: 28.03.2016)
+ *  ------ Class not Documented ------
  */
 public class WorldInputHandler implements KeyboardInputHandler.IKeyInputHandler, MouseInputHandler.IScrollInputHandler {
 

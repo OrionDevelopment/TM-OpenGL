@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.network.message;
 
 import com.smithsgaming.transportmanager.main.core.WorldManager;
@@ -7,7 +11,7 @@ import io.netty.channel.Channel;
 import java.io.Serializable;
 
 /**
- * @Author Marc (Created on: 15.03.2016)
+ *  ------ Class not Documented ------
  */
 public class CrudeDataRequestMessage extends TMNetworkingMessage {
     DataType type;

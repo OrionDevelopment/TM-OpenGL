@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render;
 
 import com.smithsgaming.transportmanager.client.graphics.SkyBox;
@@ -7,7 +11,7 @@ import com.smithsgaming.transportmanager.client.render.test.StitchedTextureRende
 import com.smithsgaming.transportmanager.client.render.world.WorldRenderer;
 
 /**
- * @Author Marc (Created on: 06.03.2016)
+ *  ------ Class not Documented ------
  */
 public class RenderHandler {
     static WorldRenderer worldRenderer = new WorldRenderer();

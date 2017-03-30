@@ -1,10 +1,14 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.core.textures;
 
 import com.smithsgaming.transportmanager.client.registries.TextureRegistry;
 import com.smithsgaming.transportmanager.util.ResourceUtil;
 
 /**
- * @Author Marc (Created on: 31.03.2016)
+ *  ------ Class not Documented ------
  */
 public class StandardTileTexture extends Texture {
 

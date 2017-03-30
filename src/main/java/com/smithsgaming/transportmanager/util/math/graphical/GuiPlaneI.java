@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.util.math.graphical;
 
 import com.smithsgaming.transportmanager.client.graphics.GuiScale;
@@ -5,7 +9,7 @@ import com.smithsgaming.transportmanager.client.input.MouseInputHandler;
 import com.smithsgaming.transportmanager.util.math.Vector2i;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiPlaneI {
 
@@ -31,6 +35,28 @@ public class GuiPlaneI {
         this.height = toCopy.getHeight();
 
         this.centerCoord = toCopy.getCenterCoord().copy();
+    }
+
+    public GuiPlaneI() {
+        this(new Vector2i((int) -(GuiScale.FWVGA.getHorizontalResolution() / 2), (int) (GuiScale.FWVGA.getVerticalResolution() / 2)),
+                new Vector2i((int) (GuiScale.FWVGA.getHorizontalResolution() / 2), (int) -(GuiScale.FWVGA.getVerticalResolution() / 2)));
+    }
+
+    public GuiPlaneI(Vector2i topLeftCoordinate, Vector2i lowerRightCoordinate) {
+        if (topLeftCoordinate.x > lowerRightCoordinate.x || topLeftCoordinate.y < lowerRightCoordinate.y) {
+            throw new IllegalArgumentException("Coordinate order is not correct. Top Left first!");
+        }
+
+        this.topLeftCoordinate = topLeftCoordinate;
+        this.lowerRightCoordinate = lowerRightCoordinate;
+
+        this.lowerLeftCoordinate = new Vector2i(topLeftCoordinate.x, lowerRightCoordinate.y);
+        this.topRightCoordinate = new Vector2i(lowerRightCoordinate.x, topLeftCoordinate.y);
+
+        this.width = lowerRightCoordinate.x - topLeftCoordinate.x;
+        this.height = topLeftCoordinate.y - lowerRightCoordinate.y;
+
+        this.centerCoord = new Vector2i(topLeftCoordinate.x + (width / 2), topLeftCoordinate.y - (height / 2));
     }
 
     public Vector2i getTopLeftCoordinate() {
@@ -60,31 +86,6 @@ public class GuiPlaneI {
 
     public Vector2i getCenterCoord() {
         return centerCoord;
-    }
-
-    public GuiPlaneI()
-    {
-        this(new Vector2i((int) -(GuiScale.FWVGA.getHorizontalResolution() / 2), (int) (GuiScale.FWVGA.getVerticalResolution() / 2)),
-          new Vector2i((int) (GuiScale.FWVGA.getHorizontalResolution() / 2), (int) -(GuiScale.FWVGA.getVerticalResolution() / 2)));
-    }
-
-    public GuiPlaneI(Vector2i topLeftCoordinate, Vector2i lowerRightCoordinate)
-    {
-        if (topLeftCoordinate.x > lowerRightCoordinate.x || topLeftCoordinate.y < lowerRightCoordinate.y)
-        {
-            throw new IllegalArgumentException("Coordinate order is not correct. Top Left first!");
-        }
-
-        this.topLeftCoordinate = topLeftCoordinate;
-        this.lowerRightCoordinate = lowerRightCoordinate;
-
-        this.lowerLeftCoordinate = new Vector2i(topLeftCoordinate.x, lowerRightCoordinate.y);
-        this.topRightCoordinate = new Vector2i(lowerRightCoordinate.x, topLeftCoordinate.y);
-
-        this.width = lowerRightCoordinate.x - topLeftCoordinate.x;
-        this.height = topLeftCoordinate.y - lowerRightCoordinate.y;
-
-        this.centerCoord = new Vector2i(topLeftCoordinate.x + (width / 2), topLeftCoordinate.y - (height / 2));
     }
 
     public boolean isMouseInPlane() {

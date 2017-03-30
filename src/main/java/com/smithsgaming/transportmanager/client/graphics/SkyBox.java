@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.registries.GeometryRegistry;
@@ -10,7 +14,7 @@ import com.smithsgaming.transportmanager.client.render.core.geometry.Geometry;
 import com.smithsgaming.transportmanager.util.OpenGLUtil;
 
 /**
- * @Author Marc (Created on: 17.03.2016)
+ *  ------ Class not Documented ------
  */
 public class SkyBox implements IRenderer {
 

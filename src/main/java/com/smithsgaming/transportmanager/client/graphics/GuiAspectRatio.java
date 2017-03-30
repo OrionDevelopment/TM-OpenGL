@@ -1,7 +1,11 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 /**
- * @Author Marc (Created on: 30.03.2016)
+ *  ------ Class not Documented ------
  */
 public enum GuiAspectRatio {
     HD(16f, 9f);

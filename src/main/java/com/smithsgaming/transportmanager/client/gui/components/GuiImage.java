@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -15,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiImage extends GuiComponent {
 

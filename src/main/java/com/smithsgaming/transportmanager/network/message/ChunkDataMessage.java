@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.network.message;
 
 import com.google.common.base.Stopwatch;
@@ -16,7 +20,7 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author Marc (Created on: 15.03.2016)
+ *  ------ Class not Documented ------
  */
 public class ChunkDataMessage extends TMNetworkingMessage implements Serializable {
 

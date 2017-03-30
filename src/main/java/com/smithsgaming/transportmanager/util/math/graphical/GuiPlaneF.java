@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.util.math.graphical;
 
 import com.smithsgaming.transportmanager.client.graphics.GuiScale;
@@ -6,7 +10,7 @@ import com.smithsgaming.transportmanager.util.math.MathUtil;
 import org.joml.Vector2f;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiPlaneF {
 
@@ -38,18 +42,17 @@ public class GuiPlaneF {
         this.centerCoord = new Vector2f(topLeftCoordinate.x + ( width / 2 ), topLeftCoordinate.y - ( height / 2 ));
     }
 
+    public GuiPlaneF() {
+        this(new Vector2f(-(GuiScale.FWVGA.getHorizontalResolution() / 2f), (GuiScale.FWVGA.getVerticalResolution() / 2f)),
+                new Vector2f((GuiScale.FWVGA.getHorizontalResolution() / 2f), -(GuiScale.FWVGA.getVerticalResolution() / 2f)));
+    }
+
     public Vector2f getTopLeftCoordinate () {
         return topLeftCoordinate;
     }
 
     public Vector2f getLowerRightCoordinate () {
         return lowerRightCoordinate;
-    }
-
-    public GuiPlaneF()
-    {
-        this(new Vector2f(-(GuiScale.FWVGA.getHorizontalResolution() / 2f), (GuiScale.FWVGA.getVerticalResolution() / 2f)),
-          new Vector2f((GuiScale.FWVGA.getHorizontalResolution() / 2f), -(GuiScale.FWVGA.getVerticalResolution() / 2f)));
     }
 
     public Vector2f getTopRightCoordinate () {

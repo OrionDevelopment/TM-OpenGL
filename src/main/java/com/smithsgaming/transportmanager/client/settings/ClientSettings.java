@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.settings;
 
 import com.smithsgaming.transportmanager.client.graphics.GuiAspectRatio;
@@ -6,7 +10,7 @@ import com.smithsgaming.transportmanager.client.graphics.GuiScale;
 import java.io.File;
 
 /**
- * @Author Marc (Created on: 30.03.2016)
+ *  ------ Class not Documented ------
  */
 public class ClientSettings {
 

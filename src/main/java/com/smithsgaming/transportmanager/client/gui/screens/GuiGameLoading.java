@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui.screens;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -12,7 +16,7 @@ import com.smithsgaming.transportmanager.util.math.graphical.GuiPlaneI;
 import java.awt.*;
 
 /**
- * @Author Marc (Created on: 25.03.200.25f6)
+ *  ------ Class not Documented ------
  */
 public class GuiGameLoading extends GuiScreen {
 

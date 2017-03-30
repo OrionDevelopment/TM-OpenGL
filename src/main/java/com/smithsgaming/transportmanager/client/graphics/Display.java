@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -39,7 +43,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Main class that handles the Rendering of the Game.
  *
- * @Author Marc (Created on: 05.03.2016)
+ *  ------ Class not Documented ------
  */
 public class Display implements Runnable, IEventController
 {

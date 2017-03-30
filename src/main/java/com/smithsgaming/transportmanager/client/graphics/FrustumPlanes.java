@@ -1,10 +1,14 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import org.joml.Math;
 import org.joml.Vector3f;
 
 /**
- * @Author Marc (Created on: 17.03.2016)
+ *  ------ Class not Documented ------
  */
 class FrustumPlanes {
 

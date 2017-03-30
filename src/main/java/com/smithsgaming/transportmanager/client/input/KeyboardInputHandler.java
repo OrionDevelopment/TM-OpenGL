@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.input;
 
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -6,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @Author Marc (Created on: 28.03.2016)
+ *  ------ Class not Documented ------
  */
 public class KeyboardInputHandler {
 

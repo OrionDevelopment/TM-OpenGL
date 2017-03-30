@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.test;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -18,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @Author Marc (Created on: 05.04.2016)
+ *  ------ Class not Documented ------
  */
 public class ResetIndexedRenderer implements IRenderer {
 

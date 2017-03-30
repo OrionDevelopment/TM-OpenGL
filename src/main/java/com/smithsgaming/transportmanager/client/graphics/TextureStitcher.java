@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.graphics;
 
 import com.google.common.collect.Lists;
@@ -15,7 +19,7 @@ import java.util.*;
  * has some modifications as our textures work a bit differently. Has no limits to textures set programmatically. The
  * GPU has to be queried how big a texture can be.
  *
- * @Author Marc (Created on: 20.03.2016)
+ *  ------ Class not Documented ------
  */
 public class TextureStitcher {
     private final Set<Holder> textureHolders = new HashSet<>();

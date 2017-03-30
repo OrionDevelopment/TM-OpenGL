@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.world;
 
 import com.google.common.base.Stopwatch;
@@ -22,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Class used to render the world.
  *
- * @Author Marc (Created on: 06.03.2016)
+ *  ------ Class not Documented ------
  */
 public class WorldRenderer implements IRenderer {
 

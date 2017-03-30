@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.world.chunk;
 
 import com.smithsgaming.transportmanager.client.graphics.AABox;
@@ -8,7 +12,7 @@ import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 import org.joml.Vector3f;
 
 /**
- * @Author Marc (Created on: 15.03.2016)
+ *  ------ Class not Documented ------
  */
 public class ChunkClient extends Chunk {
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -12,7 +16,7 @@ import org.joml.Vector3f;
 import java.awt.*;
 
 /**
- * @Author Marc (Created on: 27.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiFlatArea extends GuiComponent {
     GuiPlaneI area;

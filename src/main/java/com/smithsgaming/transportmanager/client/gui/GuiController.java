@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -11,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiController implements IRenderer, MouseInputHandler.IMouseInputHandler {
 

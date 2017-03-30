@@ -1,4 +1,8 @@
 /*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
+/*
  * Copyright (c)  2015-2017, SmithsGaming Inc.
  */
 
@@ -15,7 +19,7 @@ import com.smithsgaming.transportmanager.util.OSUtil;
  * Main class for the TransportManager game, responsible for starting and running an instance of the TransportManager
  * class.
  *
- * @Author Marc (Created on: 05.03.2016)
+ *  ------ Class not Documented ------
  */
 public class Main {
     static TransportManagerClient client;

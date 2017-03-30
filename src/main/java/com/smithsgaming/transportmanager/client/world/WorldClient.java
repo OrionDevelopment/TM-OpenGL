@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.world;
 
 import com.smithsgaming.transportmanager.client.world.chunk.ChunkClient;
@@ -9,7 +13,7 @@ import com.smithsgaming.transportmanager.main.world.generation.WorldGenerationDa
 import com.smithsgaming.transportmanager.main.world.tiles.Tile;
 
 /**
- * @Author Marc (Created on: 15.03.2016)
+ *  ------ Class not Documented ------
  */
 public class WorldClient extends World {
 

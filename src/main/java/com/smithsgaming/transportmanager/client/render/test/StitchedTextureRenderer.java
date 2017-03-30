@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.render.test;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -9,7 +13,7 @@ import com.smithsgaming.transportmanager.util.OpenGLUtil;
 import org.joml.Vector3f;
 
 /**
- * @Author Marc (Created on: 11.04.2016)
+ *  ------ Class not Documented ------
  */
 public class StitchedTextureRenderer implements IRenderer {
     @Override

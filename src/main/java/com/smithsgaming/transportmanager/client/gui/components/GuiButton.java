@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui.components;
 
 import com.smithsgaming.transportmanager.client.graphics.Camera;
@@ -13,7 +17,7 @@ import org.lwjgl.glfw.GLFW;
 import java.awt.*;
 
 /**
- * @Author Marc (Created on: 31.03.2016)
+ *  ------ Class not Documented ------
  */
 public class GuiButton extends GuiComponent implements IMouseInputComponent {
 

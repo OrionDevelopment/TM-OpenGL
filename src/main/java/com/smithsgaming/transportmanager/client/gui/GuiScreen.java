@@ -1,3 +1,7 @@
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client.gui;
 
 import com.smithsgaming.transportmanager.client.render.IRenderer;
@@ -5,7 +9,7 @@ import com.smithsgaming.transportmanager.client.render.IRenderer;
 import java.util.ArrayList;
 
 /**
- * @Author Marc (Created on: 25.03.2016)
+ *  ------ Class not Documented ------
  */
 public abstract class GuiScreen extends GuiComponent implements IRenderer {
 

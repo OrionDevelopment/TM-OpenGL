@@ -1,4 +1,8 @@
 
+/*
+ * Copyright (c)  2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.util;
 
 import com.smithsgaming.transportmanager.client.TransportManagerClient;
@@ -13,7 +17,7 @@ import java.nio.ByteBuffer;
 import java.util.Scanner;
 
 /**
- * @Author Marc (Created on: 05.03.2016)
+ *  ------ Class not Documented ------
  */
 public class ResourceUtil {
 
