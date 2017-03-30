@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2015-2017 SmithsGaming Inc.
+ */
+
+/*
+ * Copyright (c) 2015-2017 SmithsGaming Inc.
+ */
+
 package com.smithsgaming.transportmanager.client;
 
 import com.smithsgaming.transportmanager.client.graphics.Display;
@@ -67,8 +75,7 @@ public class TransportManagerClient implements Runnable, IEventController {
      *
      * @return The system time in milliseconds
      */
-    public static long getTime()
-    {
+    public static long getTime() {
         return System.nanoTime() / 1000000;
     }
 
@@ -119,8 +126,7 @@ public class TransportManagerClient implements Runnable, IEventController {
         }
     }
 
-    private void updateClient()
-    {
+    private void updateClient() {
     }
 
     public void startConnection() {
@@ -142,9 +148,9 @@ public class TransportManagerClient implements Runnable, IEventController {
     }
 
     public void loadGraphics() {
-        //TODO: Implement a proper split between client and server with sideonly registries!
-        //TODO: Then remove this!
-        while(!TransportManager.isInitialized) {
+        //TODO(Marc Hermans): Implement a proper split between client and server with sideonly registries!
+        //TODO(Marc Hermans): Then remove this!
+        while (!TransportManager.isInitialized) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

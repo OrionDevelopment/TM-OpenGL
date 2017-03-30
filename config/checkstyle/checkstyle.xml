@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+  ~ Copyright (c) 2015-2017 SmithsGaming Inc.
+  -->
+
+<!--
   ~ Copyright (c)  2015-2017, SmithsGaming Inc.
   -->
 
@@ -200,7 +204,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
 
         <module name="LineLength">
             <!-- Checks if a line is too long. -->
-            <property name="max" value="${com.puppycrawl.tools.checkstyle.checks.sizes.LineLength.max}" default="100"/>
+            <property name="max" value="${com.puppycrawl.tools.checkstyle.checks.sizes.LineLength.max}" default="250"/>
             <property name="severity" value="error"/>
 
             <!--
